@@ -70,21 +70,22 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //实例化IntentFilter对象
-        IntentFilter filter=new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction("the.search");
         //注册广播接收
-        srearchreceiver=new SrearchReceiver();
-        if(getActivity()!=null){
-            getActivity().registerReceiver(srearchreceiver,filter);
+        srearchreceiver = new SrearchReceiver();
+        if (getActivity() != null) {
+            getActivity().registerReceiver(srearchreceiver, filter);
         }
-        IntentFilter deleteFilter=new IntentFilter();
+        IntentFilter deleteFilter = new IntentFilter();
         deleteFilter.addAction("two.fragment.delete");
         //注册广播接收
-        deleteReceiver=new DeleteReceiver();
-        if(getActivity()!=null){
-            getActivity().registerReceiver(deleteReceiver,deleteFilter);
+        deleteReceiver = new DeleteReceiver();
+        if (getActivity() != null) {
+            getActivity().registerReceiver(deleteReceiver, deleteFilter);
         }
     }
+
     class DeleteReceiver extends BroadcastReceiver {
 
         @Override
@@ -92,18 +93,22 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
             initData();
         }
     }
+
     class SrearchReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            initData();
+            downloadListAdapter.setData(getDownloadListData());
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE || (recyclerView.isComputingLayout() == false)) {
+                downloadListAdapter.notifyDataSetChanged();
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             getActivity().unregisterReceiver(srearchreceiver);
             getActivity().unregisterReceiver(deleteReceiver);
         }
@@ -128,8 +133,8 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     }
 
     private List<MyBusinessInfoDid> getDownloadListData() {
-        List<MyBusinessInfoDid> myBusinessInfos= DataSupport.findAll(MyBusinessInfoDid.class);
-        if(myBusinessInfos.size()>0){
+        List<MyBusinessInfoDid> myBusinessInfos = DataSupport.findAll(MyBusinessInfoDid.class);
+        if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;
     }
@@ -139,8 +144,8 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list2, container, false);
         recyclerView = view.findViewById(R.id.rv);
-        tvFile=view.findViewById(R.id.tvFile);
-        tvFile.setText("存储路径:"+ Urls.getFilePath());
+        tvFile = view.findViewById(R.id.tvFile);
+        tvFile.setText("存储路径:" + Urls.getFilePath());
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();

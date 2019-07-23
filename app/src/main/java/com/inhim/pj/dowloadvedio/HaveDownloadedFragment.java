@@ -70,7 +70,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         super.onCreate(savedInstanceState);
         //实例化IntentFilter对象
         IntentFilter filter=new IntentFilter();
-        filter.addAction("the.search.data");
+        filter.addAction("the.search.data.dowload");
         //注册广播接收
         srearchreceiver=new SrearchReceiver();
         if(getActivity()!=null){
@@ -106,7 +106,8 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            initData();
+            downloadListAdapter.setData(getDownloadListData());
+            downloadListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -131,13 +132,10 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         downloadListAdapter = new DownloadListAdapter(getActivity());
         downloadListAdapter.setData(getDownloadListData());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(downloadListAdapter);
-
-
     }
 
     private List<MyBusinessInfo> getDownloadListData() {

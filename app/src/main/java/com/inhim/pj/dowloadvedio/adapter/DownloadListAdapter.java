@@ -325,7 +325,7 @@ public class DownloadListAdapter extends
                                 infos.get(position).delete();
                                 setData(infos);
                                 Intent intent = new Intent();
-                                intent.setAction("the.search.data");
+                                intent.setAction("the.search.data.dowload");
                                 context.sendBroadcast(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
