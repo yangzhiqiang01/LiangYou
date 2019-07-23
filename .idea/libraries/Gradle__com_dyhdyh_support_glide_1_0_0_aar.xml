@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.dyhdyh.support:glide:1.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e97c30eda1c3bccc08b9495d4efaca59/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e97c30eda1c3bccc08b9495d4efaca59/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.dyhdyh.support/glide/1.0.0/f4fc29eb987c44e414dccea99cb9de53e4df2241/glide-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
