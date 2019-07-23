@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="20.0dip" >
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                style="@style/dialog_text_green"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/wechart"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:drawablePadding="@dimen/magin"
+                android:text="微信好友" />
+
+            <TextView
+                android:id="@+id/tv_dete"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/circle_friends"
+                android:gravity="center"
+                android:drawablePadding="@dimen/magin"
+                style="@style/dialog_text_green"
+                android:text="朋友圈" />
+
+  
+</LinearLayout>

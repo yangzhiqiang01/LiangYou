@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".activity.HomeActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,Orientation">
+
+        <RelativeLayout
+            android:id="@+id/rela_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_1"
+            android:layout_marginTop="@dimen/base_dimen_1"
+            android:layout_marginBottom="@dimen/base_dimen_1"
+            android:layout_weight="1"
+            android:background="@drawable/background_home_search">
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="@dimen/base_dimen_17"
+                android:layout_height="@dimen/base_dimen_17"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/base_dimen_5dp"
+                android:src="@mipmap/sousuo" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/base_dimen_1"
+            android:src="@mipmap/more"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints">
+
+        <RadioButton
+            android:id="@+id/radio1"
+            style="@style/tab_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/reading" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            style="@style/tab_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/video" />
+
+        <RadioButton
+            android:id="@+id/radio3"
+            style="@style/tab_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/listen_to_the" />
+
+    </RadioGroup>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:ignore="MissingConstraints">
+
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

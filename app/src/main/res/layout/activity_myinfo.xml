@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dividing_line_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+    <include layout="@layout/dividing_line" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/lin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/base_dimen_0"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/info_photo" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/iv_photo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/ic_launcher" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/base_dimen_0"
+                    android:src="@mipmap/xiangyoujiantou"
+
+                    />
+
+
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/user_name" />
+
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_name" />
+
+                <EditText
+                    android:id="@+id/ed_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_ethnic" />
+
+                <EditText
+                    android:id="@+id/ed_ethnic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_telephone" />
+
+                <TextView
+                    android:id="@+id/tv_telephone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_email" />
+
+                <EditText
+                    android:id="@+id/ed_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/dividing_line_backgroud"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_belief" />
+
+                <TextView
+                    android:id="@+id/tv_belief"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_believing_year" />
+
+                <TextView
+                    android:id="@+id/ed_believing_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_bebaptized_year" />
+
+                <TextView
+                    android:id="@+id/ed_bebaptized_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_marriage" />
+
+                <TextView
+                    android:id="@+id/tv_marriage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_kiddo" />
+
+                <TextView
+                    android:id="@+id/tv_kiddo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_education" />
+
+                <TextView
+                    android:id="@+id/tv_education"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/text_size_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/magin"
+                    android:text="@string/info_occupation" />
+
+                <EditText
+                    android:id="@+id/ed_zhiye"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:layout_marginRight="@dimen/magin"
+                    android:background="@null"
+                    android:drawableRight="@mipmap/xiangyoujiantou"
+                    android:gravity="right|center"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/textsize16" />
+            </LinearLayout>
+
+            <include layout="@layout/dividing_line2" />
+            <Button
+                android:id="@+id/btn_submit"
+                android:onClick="onClick"
+                style="@style/btn_login_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/submit"
+                android:layout_margin="@dimen/base_dimen_1"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

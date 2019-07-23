@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/activity_main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  >
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/white"
+      >
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/base_dimen_0"
+        android:src="@mipmap/back"
+        android:gravity="start|center"
+        android:layout_gravity="center"
+        android:onClick="onClick"
+        />
+    <TextView
+        android:id="@+id/tvCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:paddingBottom="12dp"
+        android:paddingLeft="@dimen/base_dimen_0"
+        android:paddingRight="@dimen/base_dimen_0"
+        android:paddingTop="12dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_18" />
+    <TextView
+        android:id="@+id/tv_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/base_dimen_0"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/color333"
+        android:layout_centerVertical="true"
+        android:text="编辑"/>
+  </RelativeLayout>
+
+  <RadioGroup
+      android:id="@+id/radiog"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center|center_horizontal"
+      android:layout_marginTop="@dimen/magin"
+      android:layout_marginLeft="@dimen/title_height"
+      android:layout_marginRight="@dimen/title_height"
+      android:gravity="center_horizontal"
+      android:orientation="horizontal"
+      android:background="@drawable/post_backgroud"
+      >
+    <RadioButton
+        android:id="@+id/radiobutton0"
+        style="@style/post_read"
+        android:layout_width="0.0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:checked="true"
+        android:onClick="onClick"
+        android:text="正在下载" />
+
+    <RadioButton
+        android:id="@+id/radiobutton1"
+        style="@style/post_unread"
+        android:layout_width="0.0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        android:text="已下载" />
+
+
+  </RadioGroup>
+  <android.support.v4.view.ViewPager
+      android:id="@+id/viewpager"
+      android:layout_width="match_parent"
+      android:layout_marginTop="@dimen/magin"
+      android:layout_height="0.0dip"
+      android:layout_weight="1" >
+  </android.support.v4.view.ViewPager>
+
+</LinearLayout>

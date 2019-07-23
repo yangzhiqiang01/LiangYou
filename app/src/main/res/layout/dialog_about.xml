@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="vertical"  
+    android:padding="20.0dip" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/magin"
+            android:background="@color/dialog_backgroud"
+            android:layout_marginRight="@dimen/base_dimen_0"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/text_size_18"
+                android:layout_marginTop="@dimen/base_dimen_1"
+                android:gravity="center"
+                android:text="遇到问题" />
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/textsize16"
+                android:layout_margin="@dimen/magin"
+                android:text="使用“InHim”过程中，遇到任何问题，请及时联系我们。"
+                />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/textsize16"
+                android:layout_margin="@dimen/magin"
+                android:text="邮箱：6648013@qq.com"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btn_ok"
+                    android:layout_width="@dimen/base_dimen_100"
+                    android:layout_height="wrap_content"
+                    style="@style/btn_login_style"
+                    android:layout_marginTop="@dimen/base_dimen_1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/base_dimen_1"
+                    android:text="@string/ok"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+</FrameLayout>  

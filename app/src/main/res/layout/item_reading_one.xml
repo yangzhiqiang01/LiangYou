@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/item_lin"
+    android:orientation="vertical">
+
+    <com.inhim.pj.view.CustomRoundAngleImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/iv_title"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="@dimen/base_dimen_0"
+        android:layout_marginRight="@dimen/base_dimen_0"
+        android:layout_toRightOf="@+id/iv_title"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_height="wrap_content"
+            android:text="@string/login_agreement" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_dimen_0"
+            >
+
+            <ImageView
+                android:id="@+id/iv_glasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/base_dimen_0"
+                android:src="@mipmap/glasses" />
+
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/base_dimen_0"
+                android:layout_toRightOf="@+id/iv_glasses"
+                android:text="@string/login" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/base_dimen_0"
+                android:text="@string/login" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/base_dimen_0"
+        android:layout_marginLeft="@dimen/base_dimen_0"
+        android:layout_marginRight="@dimen/base_dimen_0"
+        android:background="@color/dividing_line_backgroud"
+        />
+</LinearLayout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constran"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_dimen_80"
+        android:layout_marginTop="@dimen/base_dimen_0"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <com.inhim.pj.view.CustomRoundAngleImageView
+            android:id="@+id/iv_title"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_marginTop="@dimen/base_dimen_0"
+            android:layout_marginRight="@dimen/base_dimen_0"
+            android:layout_marginBottom="@dimen/base_dimen_0"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toTopOf="@+id/lin_1"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:ignore="MissingConstraints" />
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/yinyue_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_title"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_title"
+            app:layout_constraintRight_toRightOf="@+id/iv_title"
+            app:layout_constraintTop_toTopOf="@+id/iv_title" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_marginRight="@dimen/base_dimen_0"
+            android:text="@string/login_agreement"
+            app:layout_constraintLeft_toRightOf="@+id/iv_title"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="MissingConstraints" />
+        <ImageView
+            android:id="@+id/iv_glasses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_content"
+            app:layout_constraintLeft_toRightOf="@+id/iv_title"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:src="@mipmap/glasses"/>
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_marginTop="@dimen/base_dimen_0"
+            android:layout_toRightOf="@+id/iv_glasses"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/login"
+            app:layout_constraintBottom_toTopOf="@+id/lin_1"
+            app:layout_constraintLeft_toRightOf="@+id/iv_glasses"
+            android:layout_marginBottom="@dimen/base_dimen_0"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/base_dimen_0"
+            android:text="@string/login"
+            android:layout_marginBottom="@dimen/base_dimen_0"
+            app:layout_constraintBottom_toTopOf="@+id/lin_1"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <LinearLayout
+            android:id="@+id/lin_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:layout_marginTop="@dimen/base_dimen_1"
+            android:layout_marginRight="@dimen/base_dimen_0"
+            android:background="@color/dividing_line_backgroud"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingConstraints,Orientation" />
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

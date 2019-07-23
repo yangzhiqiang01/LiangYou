@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layoutManager="LinearLayoutManager"
+    tools:listitem="@layout/fragment_item" >
+    <TextView
+        android:id="@+id/tvFile"
+        android:layout_width="match_parent"
+        android:drawableLeft="@mipmap/tishi_icon"
+        android:layout_marginTop="@dimen/magin"
+        android:layout_marginBottom="@dimen/magin"
+        android:drawablePadding="@dimen/base_dimen_5dp"
+        android:layout_marginRight="@dimen/magin"
+        android:layout_marginLeft="@dimen/base_dimen_5"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

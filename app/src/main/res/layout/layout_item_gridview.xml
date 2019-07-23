@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/base_dimen_5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <TextView
+            android:id="@+id/idGridviewTextview"
+            android:layout_width="@dimen/base_dimen_100"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_15"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="@dimen/base_dimen_5dp"
+            android:paddingBottom="@dimen/base_dimen_5dp"
+            android:layout_marginTop="@dimen/base_dimen_5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/background_radio_seleted"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/idGridviewTextview1"
+            android:layout_width="@dimen/base_dimen_100"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_15"
+            android:textColor="@color/color6666"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingTop="@dimen/base_dimen_5dp"
+            android:paddingBottom="@dimen/base_dimen_5dp"
+            android:layout_marginTop="@dimen/base_dimen_5dp"
+            android:background="@drawable/background_radio_uncheck"
+            tools:ignore="MissingConstraints" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".activity.ProjectActivity">
+
+    <ImageView
+        android:id="@+id/iv_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_dimen_150"
+        android:src="@mipmap/ic_launcher"
+        tools:ignore="MissingConstraints" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_dimen_1"
+        android:layout_marginRight="@dimen/base_dimen_1"
+        android:background="@drawable/backgroud_button_getcode"
+        app:layout_constraintBottom_toTopOf="@+id/iv_title"
+        app:layout_constraintTop_toBottomOf="@+id/iv_title"
+        app:layout_constraintVertical_bias="0.3"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_dimen_0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_18"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_dimen_0"
+            android:text="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_dimen_0"
+            android:layout_marginBottom="@dimen/base_dimen_0"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content">
+
+            <View
+                android:layout_width="@dimen/base_dimen_70"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/base_dimen_0"
+                android:background="@color/dividing_line_backgroud"/>
+
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+
+            <View
+                android:layout_width="@dimen/base_dimen_70"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/base_dimen_0"
+                android:layout_gravity="center"
+                android:background="@color/dividing_line_backgroud"/>
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <org.yczbj.ycrefreshviewlib.view.YCRefreshView
+        android:id="@+id/ycRefreshView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </org.yczbj.ycrefreshviewlib.view.YCRefreshView>
+
+</android.support.constraint.ConstraintLayout>

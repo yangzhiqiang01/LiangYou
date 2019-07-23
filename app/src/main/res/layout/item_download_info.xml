@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/rl_item"
+    android:layout_height="@dimen/base_dimen_102">
+
+  <android.support.constraint.ConstraintLayout
+      android:id="@+id/constran"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/base_dimen_102"
+      android:background="@color/white">
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_dimen_15"
+        android:background="@drawable/checkbox_deletes"
+        android:button="@null"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <com.inhim.pj.view.CustomRoundAngleImageView
+        android:id="@+id/imageview1"
+        android:layout_width="@dimen/base_dimen_110"
+        android:layout_height="@dimen/base_dimen_72"
+        android:layout_marginLeft="@dimen/base_dimen_0"
+        android:layout_marginTop="@dimen/base_dimen_0"
+        android:layout_marginBottom="@dimen/base_dimen_0"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/weixin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_download"
+        app:layout_constraintBottom_toTopOf="@+id/imageview1"
+        app:layout_constraintLeft_toRightOf="@+id/imageview1"
+        app:layout_constraintRight_toLeftOf="@+id/imageview1"
+        app:layout_constraintTop_toBottomOf="@+id/imageview1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_dimen_0"
+        android:layout_marginTop="@dimen/base_dimen_0"
+        android:layout_marginRight="@dimen/base_dimen_0"
+        android:textColor="@color/color333"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintLeft_toRightOf="@+id/imageview1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:lines="2"
+        android:ellipsize="end"
+        tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:layout_margin="@dimen/base_dimen_0"
+        android:max="100"
+        android:progressDrawable="@drawable/progress_shape"
+        app:layout_constraintLeft_toRightOf="@+id/imageview1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_size"
+        tools:ignore="MissingConstraints"
+        tools:progress="30" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_dimen_0"
+        android:layout_marginBottom="@dimen/base_padding_3dp"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/color6666"
+        app:layout_constraintBottom_toBottomOf="@+id/imageview1"
+        app:layout_constraintLeft_toRightOf="@+id/imageview1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/base_dimen_0"
+        android:layout_marginBottom="@dimen/base_padding_3dp"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/color6666"
+        app:layout_constraintBottom_toBottomOf="@+id/imageview1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/base_dimen_0"
+        android:background="@color/dividing_line_backgroud"
+        app:layout_constraintTop_toBottomOf="@+id/imageview1"
+        tools:ignore="MissingConstraints" />
+  </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
