@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ public class DownloadListDidAdapter extends
     private final Context context;
     private final DownloadManager downloadManager;
     private DBController dbController;
-
+    private boolean isCheck,isAll;
     public DownloadListDidAdapter(Context context) {
         super(context);
         this.context = context;
@@ -52,7 +53,10 @@ public class DownloadListDidAdapter extends
             e.printStackTrace();
         }
     }
-
+    public void setCheck(boolean isCheck,boolean isAll){
+        this.isCheck=isCheck;
+        this.isAll=isAll;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(context).inflate(
@@ -83,6 +87,7 @@ public class DownloadListDidAdapter extends
         private DownloadInfo downloadInfo;
         private LinearLayout rl_item;
         private ImageView imageview1, imageview2;
+        private CheckBox checkbox;
 
         public ViewHolder(View view) {
             super(view);
@@ -93,6 +98,7 @@ public class DownloadListDidAdapter extends
             rl_item = view.findViewById(R.id.rl_item);
             imageview1 = view.findViewById(R.id.imageview1);
             imageview2 = view.findViewById(R.id.imageview2);
+            checkbox = view.findViewById(R.id.checkbox);
         }
 
         @SuppressWarnings("unchecked")
@@ -101,6 +107,16 @@ public class DownloadListDidAdapter extends
             GlideUtils.displayFromUrl(data.getCover(), imageview1);
             imageview2.setImageResource(R.mipmap.icon_video);
             downloadInfo = downloadManager.getDownloadById(data.getUrl().hashCode());
+            if(isCheck){
+                checkbox.setVisibility(View.VISIBLE);
+            }else{
+                checkbox.setVisibility(View.GONE);
+            }
+            if(isAll){
+                checkbox.setChecked(true);
+            }else{
+                checkbox.setChecked(false);
+            }
             // Set a download listener
             if (downloadInfo != null) {
                 downloadInfo

@@ -122,7 +122,7 @@ public class AllCategoriesAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
                         Intent intent=new Intent(context, ProjectListActivity.class);
-                        intent.putExtra("readerTypeId",list2.get(realPosition).getReaderTypeId());
+                        intent.putExtra("ReaderTypeList",list2.get(realPosition));
                         context.startActivity(intent);
                     }
                 });
@@ -139,7 +139,7 @@ public class AllCategoriesAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
                         Intent intent=new Intent(context, ProjectListActivity.class);
-                        intent.putExtra("readerTypeId",list4.get(realPosition).getReaderTypeId());
+                        intent.putExtra("ReaderTypeList",list4.get(realPosition));
                         context.startActivity(intent);
                     }
                 });

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,21 +14,32 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.inhim.downloader.DownloadService;
+import com.inhim.downloader.callback.DownloadManager;
 import com.inhim.downloader.config.Config;
+import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
 import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerViewAdapter;
 import com.inhim.pj.dowloadvedio.adapter.DownloadListAdapter;
+import com.inhim.pj.dowloadvedio.db.DBController;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.dummy.DummyContent;
 import com.inhim.pj.http.Urls;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -51,6 +63,8 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     private TextView tvFile;
     private boolean isCheck;
     private LinearLayout lin_caozuo;
+    private TextView textview1, textview2;
+
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static HaveDownloadedFragment newInstance(int columnCount) {
@@ -61,27 +75,23 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         return fragment;
     }
 
-    public void initListener() {
-        downloadListAdapter.setOnItemClickListener(this);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //实例化IntentFilter对象
-        IntentFilter filter=new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction("the.search.data.dowload");
         //注册广播接收
-        srearchreceiver=new SrearchReceiver();
-        if(getActivity()!=null){
-            getActivity().registerReceiver(srearchreceiver,filter);
+        srearchreceiver = new SrearchReceiver();
+        if (getActivity() != null) {
+            getActivity().registerReceiver(srearchreceiver, filter);
         }
-        IntentFilter deleteFilter=new IntentFilter();
+        IntentFilter deleteFilter = new IntentFilter();
         deleteFilter.addAction("one.fragment.delete");
         //注册广播接收
-        deleteReceiver=new DeleteReceiver();
-        if(getActivity()!=null){
-            getActivity().registerReceiver(deleteReceiver,deleteFilter);
+        deleteReceiver = new DeleteReceiver();
+        if (getActivity() != null) {
+            getActivity().registerReceiver(deleteReceiver, deleteFilter);
         }
     }
 
@@ -89,19 +99,20 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!isCheck){
-                isCheck=true;
-                downloadListAdapter.setCheck(isCheck,false);
+            if (!isCheck) {
+                isCheck = true;
+                downloadListAdapter.setCheck(isCheck, false);
                 downloadListAdapter.notifyDataSetChanged();
                 lin_caozuo.setVisibility(View.VISIBLE);
-            }else{
-                isCheck=false;
-                downloadListAdapter.setCheck(isCheck,false);
+            } else {
+                isCheck = false;
+                downloadListAdapter.setCheck(isCheck, false);
                 downloadListAdapter.notifyDataSetChanged();
                 lin_caozuo.setVisibility(View.GONE);
             }
         }
     }
+
     class SrearchReceiver extends BroadcastReceiver {
 
         @Override
@@ -114,7 +125,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             getActivity().unregisterReceiver(srearchreceiver);
             getActivity().unregisterReceiver(deleteReceiver);
         }
@@ -139,19 +150,50 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     }
 
     private List<MyBusinessInfo> getDownloadListData() {
-        List<MyBusinessInfo> myBusinessInfos= DataSupport.findAll(MyBusinessInfo.class);
-        if(myBusinessInfos.size()>0){
+        List<MyBusinessInfo> myBusinessInfos = DataSupport.findAll(MyBusinessInfo.class);
+        if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         recyclerView = view.findViewById(R.id.rv);
-        lin_caozuo=view.findViewById(R.id.lin_caozuo);
-        tvFile=view.findViewById(R.id.tvFile);
-        tvFile.setText("存储路径:"+ Urls.getFilePath());
+        lin_caozuo = view.findViewById(R.id.lin_caozuo);
+        tvFile = view.findViewById(R.id.tvFile);
+        textview1 = view.findViewById(R.id.textview1);
+        textview2 = view.findViewById(R.id.textview2);
+        textview1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadListAdapter.setCheck(true, true);
+                downloadListAdapter.notifyDataSetChanged();
+            }
+        });
+        textview2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
+                List<MyBusinessInfo> listInfo = getDownloadListData();
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+
+                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
+                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
+
+                    mDeviceHeaderMap.put(i, checkBox.isChecked());
+                    if (checkBox.isChecked()) {
+                        File file = new File(listInfo.get(i).getFilePath());
+                        file.delete();
+                        listInfo.get(i).delete();
+                        listInfo.remove(i);
+                    }
+                }
+                downloadListAdapter.deleteFile(listInfo);
+            }
+        });
+        tvFile.setText("存储路径:" + Urls.getFilePath());
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -164,7 +206,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         initData();
-        //initListener();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }

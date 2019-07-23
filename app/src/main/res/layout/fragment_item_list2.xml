@@ -16,12 +16,62 @@
         android:layout_marginBottom="@dimen/magin"
         android:drawablePadding="@dimen/base_dimen_5dp"
         android:layout_marginRight="@dimen/magin"
+        android:text="温馨提示：已下载视频播放时，不会使用流量"
         android:layout_marginLeft="@dimen/base_dimen_5"
         android:layout_height="wrap_content" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
     </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/lin_caozuo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividing_line_backgroud" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/base_dimen_0">
+
+            <TextView
+                android:id="@+id/textview1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="全选"
+                android:textColor="@color/color333"
+                android:textSize="@dimen/text_size_18"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="@dimen/base_dimen_30"
+                android:background="@color/dividing_line_backgroud" />
+
+            <TextView
+                android:id="@+id/textview2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="删除"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/text_size_18"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

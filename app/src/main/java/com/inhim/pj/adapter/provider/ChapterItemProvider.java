@@ -50,7 +50,7 @@ public class ChapterItemProvider extends BaseItemProvider<ReaderTypeList, BaseVi
                 @Override
                 public void onItemClick(View view, int position) {
                 Intent intent=new Intent(context, ProjectListActivity.class);
-                intent.putExtra("readerTypeId",news.getPage().getList().get(position).getReaderTypeId());
+                intent.putExtra("ReaderTypeList",news.getPage().getList().get(position));
                 context.startActivity(intent);
                 }
 

@@ -45,7 +45,7 @@ public class DownloadListAdapter extends
     private final Context context;
     private final DownloadManager downloadManager;
     private DBController dbController;
-    private boolean isCheck,isAll;
+    private boolean isCheck, isAll;
 
     public DownloadListAdapter(Context context) {
         super(context);
@@ -57,10 +57,12 @@ public class DownloadListAdapter extends
             e.printStackTrace();
         }
     }
-    public void setCheck(boolean isCheck,boolean isAll){
-        this.isCheck=isCheck;
-        this.isAll=isAll;
+
+    public void setCheck(boolean isCheck, boolean isAll) {
+        this.isCheck = isCheck;
+        this.isAll = isAll;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(context).inflate(
@@ -109,14 +111,14 @@ public class DownloadListAdapter extends
 
         @SuppressWarnings("unchecked")
         public void bindData(final MyBusinessInfo data, final int position, final Context context) {
-            if(isCheck){
+            if (isCheck) {
                 checkbox.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 checkbox.setVisibility(View.GONE);
             }
-            if(isAll){
+            if (isAll) {
                 checkbox.setChecked(true);
-            }else{
+            } else {
                 checkbox.setChecked(false);
             }
             tv_name.setText(data.getTitle());
@@ -175,6 +177,7 @@ public class DownloadListAdapter extends
         }
       });*/
 
+
 //      Download button
             imageview1.setOnClickListener(new OnClickListener() {
                 @Override
@@ -197,14 +200,7 @@ public class DownloadListAdapter extends
                                 //pause downloadInfo
                                 downloadManager.pause(downloadInfo);
                                 break;
-             /*case DownloadInfo.STATUS_COMPLETED:
-                 downloadManager.remove(downloadInfo);
-                List<MyBusinessInfo> date = DataSupport.findAll(MyBusinessInfo.class);
-                if(date.size()>0){
-                  date.get(position).delete();
-                }
-                notifyDataSetChanged();
-                break;*/
+
                         }
                     } else {
                         downloadInfo = new DownloadInfo.Builder().setUrl(data.getUrl())
@@ -266,18 +262,18 @@ public class DownloadListAdapter extends
                 switch (downloadInfo.getStatus()) {
                     case DownloadInfo.STATUS_NONE:
                         //bt_action.setText("Download");
-                        tv_status.setText("点击开始");
+                        tv_status.setText(FileUtil.formatFileSize(downloadInfo.getProgress()));
                         break;
                     case DownloadInfo.STATUS_PAUSED:
                     case DownloadInfo.STATUS_ERROR:
                         // bt_action.setText("Continue");
-                        tv_status.setText("点击开始");
+                        tv_status.setText(FileUtil.formatFileSize(downloadInfo.getProgress()));
                         try {
                             pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
+                        tv_size.setText(FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
                         imageview2.setImageResource(R.mipmap.icon_download);
                         break;
@@ -290,27 +286,22 @@ public class DownloadListAdapter extends
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
+                        tv_size.setText(FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
-                        tv_status.setText("点击暂停");
+                        tv_status.setText(FileUtil.formatFileSize(downloadInfo.getProgress()));
                         imageview2.setImageResource(R.mipmap.icon_puse);
                         break;
                     case DownloadInfo.STATUS_COMPLETED:
                         imageview2.setImageResource(R.mipmap.icon_puse);
-                        //bt_action.setText("Delete");
                         try {
                             pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-//            tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
-//                .formatFileSize(downloadInfo.getSize()));
 
                         List<MyBusinessInfo> infos = DataSupport.findAll(MyBusinessInfo.class);
                         if (infos.size() > 0) {
                             try {
-//                String name, String icon, String audioUrl, String videoUrl, String content,
-//                int chapterCode, String chapterName
                                 MyBusinessInfoDid infosDid = new MyBusinessInfoDid();
                                 infosDid.setContent(infos.get(position).getContent());
                                 infosDid.setCover(infos.get(position).getCover());
@@ -330,20 +321,18 @@ public class DownloadListAdapter extends
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        } else {
-                            setData(infos);
                         }
                         break;
                     case DownloadInfo.STATUS_REMOVED:
-                        tv_size.setText("");
+                        tv_size.setText(FileUtil
+                                .formatFileSize(downloadInfo.getSize()));
                         pb.setProgress(0);
-                        //bt_action.setText("Download");
-                        tv_status.setText("点击开始");
+                        tv_status.setText("0KB");
                         imageview2.setImageResource(R.mipmap.icon_download);
                     case DownloadInfo.STATUS_WAIT:
-                        tv_size.setText("");
+                        tv_size.setText(FileUtil
+                                .formatFileSize(downloadInfo.getSize()));
                         pb.setProgress(0);
-                        //bt_action.setText("Pause");
                         tv_status.setText("等待中");
                         imageview2.setImageResource(R.mipmap.icon_download);
                         break;
@@ -351,5 +340,23 @@ public class DownloadListAdapter extends
 
             }
         }
+    }
+
+    public void deleteFile(List<MyBusinessInfo>  infos){
+        if(infos.size()>0){
+            try{
+                DBController instance =  DBController.getInstance(context);
+                for(int i=0;i<instance.findAllDownloaded().size();i++){
+                    instance.delete(instance.findAllDownloaded().get(i));
+                }
+                setData(infos);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            setData(infos);
+        }
+
     }
 }

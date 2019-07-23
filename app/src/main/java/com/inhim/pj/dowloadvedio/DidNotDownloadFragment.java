@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +14,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 import com.inhim.downloader.DownloadService;
 import com.inhim.downloader.config.Config;
+import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerDidViewAdapter;
 import com.inhim.pj.dowloadvedio.adapter.DownloadListDidAdapter;
+import com.inhim.pj.dowloadvedio.db.DBController;
+import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.dummy.DummyContent;
 import com.inhim.pj.http.Urls;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -50,8 +60,9 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     private DownloadListDidAdapter downloadListAdapter;
     private SrearchReceiver srearchreceiver;
     private DeleteReceiver deleteReceiver;
-    private TextView tvFile;
-
+    private LinearLayout lin_caozuo;
+    private TextView textview1, textview2;
+    private boolean isCheck, isAll;
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static HaveDownloadedFragment newInstance(int columnCount) {
@@ -90,7 +101,17 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            initData();
+            if (!isCheck) {
+                isCheck = true;
+                downloadListAdapter.setCheck(isCheck, false);
+                downloadListAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.VISIBLE);
+            } else {
+                isCheck = false;
+                downloadListAdapter.setCheck(isCheck, false);
+                downloadListAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -144,8 +165,38 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list2, container, false);
         recyclerView = view.findViewById(R.id.rv);
-        tvFile = view.findViewById(R.id.tvFile);
-        tvFile.setText("存储路径:" + Urls.getFilePath());
+        textview1 = view.findViewById(R.id.textview1);
+        textview2 = view.findViewById(R.id.textview2);
+        lin_caozuo = view.findViewById(R.id.lin_caozuo);
+        textview1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadListAdapter.setCheck(true, true);
+                downloadListAdapter.notifyDataSetChanged();
+            }
+        });
+        textview2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
+                List<MyBusinessInfoDid> listInfo = getDownloadListData();
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+
+                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
+                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
+
+                    mDeviceHeaderMap.put(i, checkBox.isChecked());
+                    if (checkBox.isChecked()) {
+                        File file = new File(listInfo.get(i).getFilePath());
+                        file.delete();
+                        listInfo.get(i).delete();
+                        listInfo.remove(i);
+                    }
+                }
+                downloadListAdapter.setData(listInfo);
+                downloadListAdapter.notifyDataSetChanged();
+            }
+        });
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -163,7 +214,6 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
         }
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

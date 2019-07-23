@@ -14,6 +14,7 @@ import com.inhim.pj.adapter.ProjectListAdapter;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
+import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 
@@ -32,8 +33,8 @@ import okhttp3.RequestBody;
 public class ProjectListActivity extends BaseActivity {
     private YCRefreshView ycRefreshView;
     private ReaderStyle.List readerstyle;
+    private ReaderTypeList.List readerType;
     private ProjectListAdapter mAdapter;
-    private int readerTypeId;
     private int mPageNum=1;
     private Boolean refresh=true;
     private int totalPage;
@@ -52,7 +53,7 @@ public class ProjectListActivity extends BaseActivity {
         });
         ycRefreshView=findViewById(R.id.ycRefreshView);
         readerstyle= (ReaderStyle.List) getIntent().getSerializableExtra("ReaderStyle");
-        readerTypeId=getIntent().getIntExtra("readerTypeId",0);
+        readerType= (ReaderTypeList.List) getIntent().getSerializableExtra("ReaderTypeList");
         initAdapter();
         getReaderList();
     }
@@ -99,7 +100,7 @@ public class ProjectListActivity extends BaseActivity {
         showLoading("加载中");
         HashMap postMap=new HashMap();
         if(readerstyle==null){
-            postMap.put("readerTypeId",String.valueOf(readerTypeId));
+            postMap.put("readerTypeId",String.valueOf(readerType.getReaderTypeId()));
         }else{
             postMap.put("readerStyleId",String.valueOf(readerstyle.getReaderStyleValue().getReaderStyleId()));
             postMap.put("readerStyleValueId",String.valueOf(readerstyle.getReaderStyleValue().getReaderStyleValueId()));
@@ -126,7 +127,11 @@ public class ProjectListActivity extends BaseActivity {
                     if(mPageNum>=totalPage){
                         mAdapter.pauseMore();
                     }
-                    mAdapter.setReaderStyle(readerstyle);
+                    if(readerstyle!=null){
+                        mAdapter.setReaderStyle(readerstyle);
+                    }else{
+                        mAdapter.setReaderType(readerType);
+                    }
                 }
                 mAdapter.notifyDataSetChanged();
             }

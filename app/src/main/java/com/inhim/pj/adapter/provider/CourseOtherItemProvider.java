@@ -56,7 +56,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             tv_num.setText(String.valueOf(news.getReadAmount()));
             tv_title.setText(news.getTitle());
             if(news.getTimeText()!=null){
-                tv_time.setText(news.getCreateTime());
+                tv_time.setText(news.getTimeText());
             }
 
             ConstraintLayout constran=helper.getView(R.id.constran);

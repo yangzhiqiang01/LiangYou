@@ -11,6 +11,7 @@ import com.inhim.pj.adapter.provider.CourseOnerItemProvider;
 import com.inhim.pj.adapter.provider.CourseOtherItemProvider;
 import com.inhim.pj.adapter.provider.ReaderTypeProvider;
 import com.inhim.pj.adapter.provider.StyleTitleProvider;
+import com.inhim.pj.adapter.provider.VideoTypeItemProvider;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
@@ -63,7 +64,9 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
             return CHAPTER_ITEM;
         } else if (news instanceof ReaderList.List) {
             return COURSE_OTHER;
-        } else {
+        }/*else if (news instanceof ReaderTypeList.List) {
+            return CHAPTER_ITEM;
+        } */else {
             return 0;
         }
     }
@@ -76,7 +79,9 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
         mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));
         mProviderDelegate.registerProvider(new ReaderTypeProvider());
+        //圆形类别 如牧师讲道
         mProviderDelegate.registerProvider(new ChapterItemProvider(context));
+        //mProviderDelegate.registerProvider(new VideoTypeItemProvider(context));
     }
 }
 

@@ -81,9 +81,8 @@ public class ListenFragment extends Fragment {
          "title": "string"
          }*/
         HashMap postMap = new HashMap();
-        postMap.put("readerStyleId",readerStyleValue.getReaderStyleId());
-        postMap.put("readerStyleValueId",readerStyleValue.getReaderStyleValueId());
-        MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(0, 100, readerStyleValue.getType()), postMap, new MyOkHttpClient.HttpCallBack() {
+        String url=Urls.getReaderTypeList(1, 10, "3");
+        MyOkHttpClient.getInstance().asyncJsonPost(url, postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 

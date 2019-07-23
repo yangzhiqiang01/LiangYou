@@ -79,7 +79,8 @@ public class VideoFragment extends Fragment {
          "title": "string"
          }*/
         HashMap postMap = new HashMap();
-        MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(0, 10, readerStyleValue.getType()), postMap, new MyOkHttpClient.HttpCallBack() {
+        String url=Urls.getReaderTypeList(1, 10, "2");
+        MyOkHttpClient.getInstance().asyncJsonPost(url, postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 
@@ -108,6 +109,9 @@ public class VideoFragment extends Fragment {
         HashMap postMap = new HashMap();
         postMap.put("readerStyleValueId", readerStyleValue.getReaderStyleValueId());
         postMap.put("readerStyleId", readerStyleValue.getReaderStyleId());
+        //postMap.put("type", readerStyleValue.getType());
+        //1: 推荐 0：不推荐
+        postMap.put("intRecommend",1);
         String url=Urls.getReaderList(1, 10,"desc");
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(url,postMap, new MyOkHttpClient.HttpCallBack() {
             @Override

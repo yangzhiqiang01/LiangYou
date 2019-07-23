@@ -98,7 +98,7 @@ public class ReadingTwoFragment extends Fragment {
         HashMap postMap = new HashMap();
         postMap.put("readerStyleValueId", rederType.getReaderStyleValue().getReaderStyleValueId());
         postMap.put("readerStyleId", rederType.getReaderStyleValue().getReaderStyleId());
-        MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(0, 20,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(1, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 
@@ -122,8 +122,9 @@ public class ReadingTwoFragment extends Fragment {
          获取每日推荐文章
          }*/
         HashMap postMap = new HashMap();
+         postMap.put("readerStyleValueId", readerStyleValue.getReaderStyleValueId());
         postMap.put("readerStyleId", readerStyleValue.getReaderStyleId());
-        postMap.put("readerStyleValueId", readerStyleValue.getReaderStyleValueId());
+        //postMap.put("type", readerStyleValue.getType());
         //1: 推荐 0：不推荐
         postMap.put("intRecommend",1);
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(1, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
