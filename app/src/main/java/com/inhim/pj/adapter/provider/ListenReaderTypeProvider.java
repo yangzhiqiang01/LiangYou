@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
 import com.inhim.pj.R;
-import com.inhim.pj.activity.ChapterActivity;
 import com.inhim.pj.activity.ProjectListActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderTypeList;

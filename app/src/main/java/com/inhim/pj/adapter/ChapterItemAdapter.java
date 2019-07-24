@@ -1,5 +1,6 @@
 package com.inhim.pj.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,16 +10,17 @@ import android.widget.TextView;
 
 import com.inhim.pj.R;
 import com.inhim.pj.entity.ReaderTypeList;
-import com.inhim.pj.utils.GlideUtils;
+import com.inhim.pj.utils.GlideCircleUtils;
 import com.inhim.pj.view.CircleImageView;
 
 import java.util.List;
 
 public class ChapterItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ReaderTypeList.List> datas;
-
-    public ChapterItemAdapter(ReaderTypeList datas) {
+    private Context context;
+    public ChapterItemAdapter(ReaderTypeList datas, Context context) {
         this.datas = datas.getPage().getList();
+        this.context=context;
     }
 
     @NonNull
@@ -32,7 +34,8 @@ public class ChapterItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof PersonViewHolder) {
             try{
-                GlideUtils.displayFromUrl(datas.get(position).getIcon(),((PersonViewHolder) viewHolder).circleImageView);
+                GlideCircleUtils.displayFromUrl(datas.get(position).getIcon(),
+                        ((PersonViewHolder) viewHolder).circleImageView,context);
                 ((PersonViewHolder) viewHolder).textview.setText(datas.get(position).getName());
             }catch (Exception e){
                 e.printStackTrace();

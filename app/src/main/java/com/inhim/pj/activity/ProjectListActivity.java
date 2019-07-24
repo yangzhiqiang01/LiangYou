@@ -60,6 +60,7 @@ public class ProjectListActivity extends BaseActivity {
     private void initAdapter() {
         mAdapter = new ProjectListAdapter(ProjectListActivity.this);
         ycRefreshView.setLayoutManager(new LinearLayoutManager(ProjectListActivity.this));
+        ycRefreshView.setEmptyView(R.layout.empty_view_layout);
         ycRefreshView.setAdapter(mAdapter);
         //设置上拉加载更多时布局，以及监听事件
         mAdapter.setMore(R.layout.view_more, new OnLoadMoreListener() {

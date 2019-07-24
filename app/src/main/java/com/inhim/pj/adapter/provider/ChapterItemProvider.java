@@ -37,7 +37,7 @@ public class ChapterItemProvider extends BaseItemProvider<ReaderTypeList, BaseVi
         try{
             //处理相关业务逻辑
             RecyclerView recyclerView = helper.getView(R.id.recyclerView);
-            ChapterItemAdapter adapter = new ChapterItemAdapter(news);
+            ChapterItemAdapter adapter = new ChapterItemAdapter(news,context);
             recyclerView.setAdapter(adapter);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             /**

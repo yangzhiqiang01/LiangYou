@@ -37,8 +37,6 @@
 
         <activity android:name=".activity.ArticleActivity"></activity>
         <activity android:name=".activity.ProjectActivity" />
-        <activity android:name=".activity.CourseActivity" />
-        <activity android:name=".activity.ChapterActivity" />
         <activity android:name=".activity.WebViewActivity" />
         <activity android:name=".activity.CollectionActivity" />
         <activity android:name=".activity.SettingActivity" />
@@ -62,7 +60,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.ReplacePhoneActivity" />
-        <activity android:name=".activity.RecommendedDailyActivity" />
         <activity android:name=".activity.ProjectListActivity" />
         <activity android:name=".dowloadvedio.DownloadDetailActivity" />
         <activity

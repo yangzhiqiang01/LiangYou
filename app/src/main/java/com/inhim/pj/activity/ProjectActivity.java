@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.ProjectAdapter;
-import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
@@ -26,11 +28,21 @@ public class ProjectActivity extends AppCompatActivity {
     private YCRefreshView ycRefreshView;
     private List<ReaderStyle.List> typeList;
     private ProjectAdapter mAdapter;
+    private TextView tvCourse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
         ycRefreshView=findViewById(R.id.ycRefreshView);
+        tvCourse=findViewById(R.id.tvCourse);
+        tvCourse.setText("系列专题");
+        ImageView iv_back=findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         typeList=new ArrayList();
         initAdapter();
         getReaderStyle();
@@ -39,6 +51,7 @@ public class ProjectActivity extends AppCompatActivity {
         typeList=new ArrayList();
         mAdapter = new ProjectAdapter(ProjectActivity.this);
         ycRefreshView.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
+        ycRefreshView.setEmptyView(R.layout.empty_view_layout);
         ycRefreshView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

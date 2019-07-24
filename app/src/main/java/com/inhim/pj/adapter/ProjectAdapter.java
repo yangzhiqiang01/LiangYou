@@ -7,9 +7,11 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.inhim.pj.R;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.entity.ReaderStyle;
+import com.inhim.pj.utils.GlideCircleUtils;
 import com.inhim.pj.utils.GlideUtils;
 
 import org.yczbj.ycrefreshviewlib.adapter.RecyclerArrayAdapter;
@@ -17,9 +19,10 @@ import org.yczbj.ycrefreshviewlib.holder.BaseViewHolder;
 
 public class ProjectAdapter extends RecyclerArrayAdapter<ReaderStyle.List> {
 
-
+    private Context context;
     public ProjectAdapter(Context context) {
         super(context);
+        this.context=context;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class ProjectAdapter extends RecyclerArrayAdapter<ReaderStyle.List> {
         @Override
         public void setData(ReaderStyle.List data) {
             super.setData(data);
-            GlideUtils.displayFromUrl(data.getReaderStyleValue().getCover(),iv_title);
+            Glide.with(context).load(data.getReaderStyleValue().getCover()).into(iv_title);
             tv_num.setText("共"+data.getTotal()+"篇文章");
             tv_title.setText(data.getReaderStyleValue().getValue());
             tv_content.setText(data.getReaderStyleValue().getSynopsis());

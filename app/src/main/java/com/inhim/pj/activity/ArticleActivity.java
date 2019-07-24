@@ -4,20 +4,26 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
-import com.inhim.pj.utils.GlideUtils;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CustomRoundAngleImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 
 import okhttp3.Request;
 
@@ -43,6 +49,37 @@ public class ArticleActivity extends BaseActivity {
 
     private void initView() {
         checkbox = findViewById(R.id.checkbox);
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoading("收藏中");
+                MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
+                myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
+                        new MyOkHttpClient.HttpCallBack() {
+                            @Override
+                            public void onError(Request request, IOException e) {
+                                hideLoading();
+                                checkbox.setChecked(false);
+                                BToast.showText("收藏失败",false);
+                            }
+
+                            @Override
+                            public void onSuccess(Request request, String result) {
+                                hideLoading();
+                                try {
+                                    JSONObject jsonObject=new JSONObject(result);
+                                    if(jsonObject.getInt("code")!=0){
+                                        BToast.showText(jsonObject.getString("msg"),false);
+                                        checkbox.setChecked(false);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+            }
+        });
         textview1 = findViewById(R.id.textview1);
         textview2 = findViewById(R.id.textview2);
         textview3 = findViewById(R.id.textview3);
@@ -71,10 +108,11 @@ public class ArticleActivity extends BaseActivity {
             public void onSuccess(Request request, String result) {
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 readerInfo=readerInfos.getReader();
-                GlideUtils.displayFromUrl(readerInfo.getCover(),custImageview);
+                //GlideUtils.displayFromUrl(readerInfo.getCover(),custImageview,ArticleActivity.this);
+                Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
                 checkbox.setChecked(readerInfo.getCollectionStatus());
                 textview1.setText(readerInfo.getTitle());
-                textview2.setText(readerInfo.getTagName());
+                textview2.setText("类别："+readerInfo.getReaderTypeText());
                 textview3.setText(String.valueOf(readerInfo.getReadAmount()));
                 textview4.setText(readerInfo.getTimeText());
                 content=readerInfo.getContent();

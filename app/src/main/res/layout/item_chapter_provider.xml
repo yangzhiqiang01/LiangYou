@@ -7,7 +7,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/base_dimen_100"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints"/>
     <LinearLayout
@@ -17,6 +17,6 @@
         android:layout_marginLeft="@dimen/base_dimen_0"
         android:layout_marginRight="@dimen/base_dimen_0"
         android:background="@color/dividing_line_backgroud"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
         tools:ignore="MissingConstraints" />
 </android.support.constraint.ConstraintLayout>

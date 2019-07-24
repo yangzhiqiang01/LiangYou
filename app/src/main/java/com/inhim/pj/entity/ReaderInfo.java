@@ -72,7 +72,6 @@ public class ReaderInfo implements Serializable {
 
     }
 /*=================================*/
-
     public class Reader implements Serializable {
         private int readerId;
 
@@ -112,7 +111,7 @@ public class ReaderInfo implements Serializable {
 
         private String timeText;
 
-        private String typeText;
+        private String readerTypeText;
 
         private List<ReaderAttrList> readerAttrList ;
 
@@ -230,11 +229,11 @@ public class ReaderInfo implements Serializable {
         public String getTimeText(){
             return this.timeText;
         }
-        public void setTypeText(String typeText){
-            this.typeText = typeText;
+        public void setReaderTypeText(String readerTypeText){
+            this.readerTypeText = readerTypeText;
         }
-        public String getTypeText(){
-            return this.typeText;
+        public String getReaderTypeText(){
+            return this.readerTypeText;
         }
         public void setReaderAttrList(List<ReaderAttrList> readerAttrList){
             this.readerAttrList = readerAttrList;

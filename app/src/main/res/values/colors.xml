@@ -25,7 +25,7 @@
     <color name="gray_text">#686868</color>
     <color name="colorf5">#F5F5F5</color>
     <color name="acyion_text_color">#FF9800</color>
-
+    <color name="translucent_white">#80FFFFFF</color>
     <color name="main_bg">#288df5</color>
     <color name="menu_bottom_bg">#288df5</color>
     <color name="menu_bottom_text">#f2f8ff</color>

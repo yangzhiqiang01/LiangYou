@@ -122,7 +122,7 @@ public class DownloadListAdapter extends
                 checkbox.setChecked(false);
             }
             tv_name.setText(data.getTitle());
-            GlideUtils.displayFromUrl(data.getCover(), imageview1);
+            GlideUtils.displayFromUrl(data.getCover(), imageview1,context);
             if (data != null) {
                 // Get download task status
                 if (data.getUrl() == null || data.getUrl().equals("")) {

@@ -1,5 +1,6 @@
 package com.inhim.pj.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -7,11 +8,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.inhim.pj.app.MyApplication;
 
 public class GlideUtils {
-    public static void displayFromUrl(String url, final ImageView imageView){
-        Glide.with(MyApplication.getContext()).load(url
+    public static void displayFromUrl(String url, final ImageView imageView, Context context){
+        Glide.with(context).load(url
         ).asBitmap().diskCacheStrategy(DiskCacheStrategy.ALL).into(new BitmapImageViewTarget(imageView) {
             @Override
             protected void setResource(Bitmap resource) {

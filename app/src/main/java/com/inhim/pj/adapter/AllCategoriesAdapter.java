@@ -3,7 +3,6 @@ package com.inhim.pj.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.inhim.pj.R;
-import com.inhim.pj.activity.ProjectActivity;
 import com.inhim.pj.activity.ProjectListActivity;
 import com.inhim.pj.base.ModeType;
 import com.inhim.pj.entity.ReaderTypeList;
-import com.inhim.pj.view.MyPopuwindow;
-
-import org.yczbj.ycrefreshviewlib.adapter.RecyclerArrayAdapter;
-import org.yczbj.ycrefreshviewlib.holder.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AllCategoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

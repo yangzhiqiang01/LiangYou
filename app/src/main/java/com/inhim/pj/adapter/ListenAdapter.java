@@ -77,7 +77,7 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
     public void registerItemProvider() {
         //注册itemProvider
         mProviderDelegate.registerProvider(new BannerItemProvider());
-        mProviderDelegate.registerProvider(new StyleTitleProvider());
+        mProviderDelegate.registerProvider(new StyleTitleProvider(context));
         mProviderDelegate.registerProvider(new StyleItemProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
         mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));

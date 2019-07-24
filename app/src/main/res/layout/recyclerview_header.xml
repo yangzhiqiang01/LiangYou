@@ -13,12 +13,6 @@
          app:indicatorAlign="center">
 
      </com.zhouwei.mzbanner.MZBannerView>
-    <!--<com.bigkoo.convenientbanner.ConvenientBanner
-        android:id="@+id/bannerView"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginBottom="@dimen/base_dimen_0"
-        app:canLoop="true" />-->
 
     <LinearLayout
         android:layout_below="@+id/bannerView"

@@ -48,7 +48,7 @@ public class StyleItemProvider extends BaseItemProvider<ReaderStyle.List, BaseVi
                     context.startActivity(intent);
                 }
             });
-            GlideUtils.displayFromUrl(news.getReaderStyleValue().getCover(),iv_title);
+            GlideUtils.displayFromUrl(news.getReaderStyleValue().getCover(),iv_title,context);
             tv_num.setText(String.valueOf(news.getTotal()));
             tv_title.setText(news.getReaderStyleValue().getValue());
             tv_time.setText(news.getReaderStyleValue().getUpdateTime());

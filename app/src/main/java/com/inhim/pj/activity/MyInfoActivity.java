@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.entity.CommonDictEntity;
 import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
@@ -61,8 +62,10 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
             ed_email, user_name;
     private TextView tv_belief, tv_marriage, tv_kiddo, tv_education, ed_believing_year, ed_bebaptized_year, tv_telephone;
     private String name, ethnic, believing_year, bebaptized_year, others, telephone, email, address,
-            postcode, belief, marriage, kiddo, education;
-    private List beliefList, marriageList, kiddoList, educationList;
+            postcode, belief, marriage, education;
+    private int kiddo=-1;
+    private List<CommonDictEntity.List> beliefList, marriageList, educationList;
+    private List beliefStringList,kiddoList, marriageStringList, educationStringList;
     private LinearLayout lin;
     private ChooseDialog chooseDialog;
     private ImageView iv_photo;
@@ -75,55 +78,23 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private TextView tvCourse;
     private Button btn_submit;
     private Calendar calendar;
-    Gson gson;
-
+    private Gson gson;
+    private int resultCode=100;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_myinfo);
         gson = new Gson();
         initView();
-        setPopuWindows();
+        beliefStringList = new ArrayList();
+        marriageStringList = new ArrayList();
+        educationStringList = new ArrayList();
+        kiddoList = new ArrayList();
+        kiddoList.add("没有");
+        kiddoList.add("有");
         calendar = Calendar.getInstance();
         setLinear();
         getInfo();
-    }
-
-    private void setPopuWindows() {
-        beliefList = new ArrayList();
-        beliefList.add("基督教");
-        beliefList.add("基督教-有参与教会侍奉");
-        beliefList.add("基督教-教牧同工");
-        beliefList.add("非基督教-有兴趣认识基督教");
-        beliefList.add("非基督教-天主教");
-        beliefList.add("非基督教-佛教");
-        beliefList.add("非基督教-道教");
-        beliefList.add("非基督教-伊斯兰教");
-        beliefList.add("非基督教-印度教");
-        beliefList.add("非基督教-无神论");
-        beliefList.add("非基督教-其他");
-
-
-        marriageList = new ArrayList();
-        marriageList.add("未婚");
-        marriageList.add("已婚");
-        marriageList.add("离婚");
-        marriageList.add("丧偶");
-        marriageList.add("再婚");
-
-
-        kiddoList = new ArrayList();
-        kiddoList.add("有");
-        kiddoList.add("没有");
-
-
-        educationList = new ArrayList();
-        educationList.add("未有入学");
-        educationList.add("小学");
-        educationList.add("初中");
-        educationList.add("高中");
-        educationList.add("大专以上");
-
     }
 
     private void getInfo() {
@@ -146,7 +117,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initView() {
-        btn_submit=findViewById(R.id.btn_submit);
+        btn_submit = findViewById(R.id.btn_submit);
         btn_submit.setOnClickListener(this);
         user_name = findViewById(R.id.user_name);
         ed_name = findViewById(R.id.ed_name);
@@ -179,41 +150,103 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         ViewShowUtils.show(user_name, userInfoEntity.getUsername());
         ViewShowUtils.show(ed_zhiye, userInfoEntity.getUsername());
         ViewShowUtils.show(ed_name, userInfoEntity.getUsername());
-        ViewShowUtils.show(ed_ethnic, userInfoEntity.getUsername());
+        //ViewShowUtils.show(ed_ethnic, userInfoEntity.getUsername());
         ViewShowUtils.show(ed_believing_year, userInfoEntity.getUsername());
         ViewShowUtils.show(ed_bebaptized_year, userInfoEntity.getUsername());
         ViewShowUtils.show(tv_telephone, userInfoEntity.getMobile());
         ViewShowUtils.show(ed_email, userInfoEntity.getMail());
-        ViewShowUtils.show(tv_belief, userInfoEntity.getOccupation());
-        ViewShowUtils.show(tv_marriage, userInfoEntity.getUsername());
-        ViewShowUtils.show(tv_kiddo, userInfoEntity.getChildrenStatus());
-        ViewShowUtils.show(tv_education, userInfoEntity.getEducationLevel());
+        //ViewShowUtils.show(tv_belief, userInfoEntity.getOccupation());
+        //ViewShowUtils.show(tv_marriage, userInfoEntity.getUsername());
+       // ViewShowUtils.show(tv_kiddo, userInfoEntity.getChildrenStatus());
+        //ViewShowUtils.show(tv_education, userInfoEntity.getEducationLevel());
+    }
+
+    private void getCommonDict(final String TAGs, String code) {
+        showLoading("加载中");
+        MyOkHttpClient.getInstance().asyncGet(Urls.getCommonDict(code), new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                hideLoading();
+                BToast.showText("请求失败", false);
+            }
+
+            @Override
+            public void onSuccess(Request request, String result) {
+                hideLoading();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        CommonDictEntity commonDictEntity = gson.fromJson(result, CommonDictEntity.class);
+                        if (TAGs.equals("belief")) {
+                            beliefList = commonDictEntity.getList();
+                            for(int i=0;i<beliefList.size();i++){
+                                beliefStringList.add(beliefList.get(i).getName());
+                            }
+                            setDiaglog(beliefStringList, tv_belief, TAGs);
+                        } else if (TAGs.equals("educationLevel")) {
+                            educationList = commonDictEntity.getList();
+                            for(int i=0;i<educationList.size();i++){
+                                educationStringList.add(educationList.get(i).getName());
+                            }
+                            setDiaglog(educationStringList, tv_education, TAGs);
+                        } else if (TAGs.equals("marital")) {
+                            marriageList = commonDictEntity.getList();
+                            for(int i=0;i<marriageList.size();i++){
+                                marriageStringList.add(marriageList.get(i).getName());
+                            }
+                            setDiaglog(marriageStringList, tv_marriage, TAGs);
+                        }
+
+                    } else {
+                        BToast.showText(jsonObject.getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private void setLinear() {
-
+        //信仰状况 vip.faith
         tv_belief.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setDiaglog(beliefList, tv_belief);
+                if (beliefStringList.size() == 0) {
+                    getCommonDict("belief", "vip.faith");
+                } else {
+                    setDiaglog(beliefStringList, tv_belief, "belief");
+                }
             }
         });
+        //教育程度 vip.educationLevel
         tv_education.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setDiaglog(educationList, tv_education);
+                if (educationStringList.size() == 0) {
+                    getCommonDict("educationLevel", "vip.educationLevel");
+                } else {
+                    setDiaglog(educationStringList, tv_education, "educationLevel");
+                }
             }
         });
+        //子女 1 有 0没有
         tv_kiddo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setDiaglog(kiddoList, tv_kiddo);
+                setDiaglog(kiddoList, tv_kiddo, "kiddo");
             }
         });
+        //婚姻状况 vip.marital
         tv_marriage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setDiaglog(marriageList, tv_marriage);
+                if (marriageStringList.size() == 0) {
+                    getCommonDict("marital", "vip.marital");
+                } else {
+                    setDiaglog(marriageStringList, tv_marriage, "marital");
+                }
             }
         });
 
@@ -332,6 +365,8 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
             if (cropPicTmp != null) {
                 upLoad(new File(cropPicTmp));
             }
+        }else if(requestCode==resultCode){
+            ViewShowUtils.show(tv_telephone, data.getStringExtra("phoneNumber"));
         }
     }
 
@@ -348,9 +383,9 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 hideLoading();
                 //iv_photo.setImageBitmap(bm);
                 /**"msg":"success",
-                        "code":0,
-                        "url":
-                "http://ad-yp-easylife-image.oss-cn-shenzhen.aliyuncs.com/20190720/fee699df575d4b55a030cf2001f38760.png"*/
+                 "code":0,
+                 "url":
+                 "http://ad-yp-easylife-image.oss-cn-shenzhen.aliyuncs.com/20190720/fee699df575d4b55a030cf2001f38760.png"*/
             }
         });
         okhttpUploadUtils.upLoad(Urls.fileUpload, uploadFile);
@@ -426,7 +461,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         chooseDialog.show();//显示对话框
     }
 
-    private void setDiaglog(List list, final TextView textView) {
+    private void setDiaglog(List list, final TextView textView, final String TAGs) {
         View outerView = LayoutInflater.from(MyInfoActivity.this).inflate(R.layout.dialog_choose, null);
         final WheelView wv = outerView.findViewById(R.id.wheel_view_wv);
         TextView tv_cancel = outerView.findViewById(R.id.tv_cancel);
@@ -435,7 +470,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         wv.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index, String item) {
-                //tv_belief.setText(item);
+                //选择是执行
             }
         });
 
@@ -443,8 +478,18 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         tv_dete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                chooseDialog.dismiss();
                 textView.setText(wv.getSelectedItem());
+                int index=wv.getSelectedPosition();
+                if (TAGs.equals("belief")) {
+                    belief = beliefList.get(index).getValue();
+                } else if (TAGs.equals("educationLevel")) {
+                    education = educationList.get(index).getValue();
+                } else if (TAGs.equals("marital")) {
+                    marriage = marriageList.get(index).getValue();
+                } else if (TAGs.equals("kiddo")) {
+                    kiddo = index;
+                }
+                chooseDialog.dismiss();
             }
         });
         //点击取消
@@ -473,7 +518,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.tv_telephone:
                 Intent intent = new Intent(MyInfoActivity.this, ReplacePhoneActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,resultCode);
                 break;
             case R.id.btn_submit:
                 updateInfo();
@@ -499,7 +544,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                             JSONObject jsonObject = new JSONObject(result);
                             if (jsonObject.getInt("code") == 0) {
                                 BToast.showText("更改成功", true);
-                                //finish();
+                                finish();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -547,55 +592,47 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         name = ed_name.getText().toString();
         ethnic = ed_ethnic.getText().toString();
         believing_year = ed_believing_year.getText().toString();
-
         bebaptized_year = ed_bebaptized_year.getText().toString();
         telephone = tv_telephone.getText().toString();
         email = ed_email.getText().toString();
-        belief = tv_belief.getText().toString();
-        marriage = tv_marriage.getText().toString();
-        kiddo = tv_kiddo.getText().toString();
-        education = tv_education.getText().toString();
-        HashMap jsonObject=new HashMap();
-        HashMap build = new HashMap();
-            try {
-                if (!bebaptized_year.equals("") && bebaptized_year != null) {
+        HashMap jsonObject = new HashMap();
+        try {
+            /*if (!bebaptized_year.equals("") && bebaptized_year != null) {
                 jsonObject.put("baptismTime", bebaptized_year);
-                }
-                if (!kiddo.equals("") && kiddo != null) {
-                    jsonObject.put("childrenStatus", kiddo);
-                }
-                if (!education.equals("") && education != null) {
-                    jsonObject.put("educationLevel", education);
-                }
-                if (!email.equals("") && email != null) {
-                    jsonObject.put("mail", email);
-                }
-                if (!belief.equals("") && belief != null) {
-                    jsonObject.put("faithStatus", belief);
-                }
-                //不确定是否正确
-                if (!name.equals("") && name != null) {
-                    jsonObject.put("realname", name);
-                }
-                if (!believing_year.equals("") && believing_year != null) {
-                    jsonObject.put("faithTime", believing_year);
-                }
-                if (!marriage.equals("") && marriage != null) {
-                    jsonObject.put("maritalStatus", marriage);
-                }
-                if (!others.equals("") && others != null) {
-                    jsonObject.put("occupation", others);
-                }
-                if (!telephone.equals("") && telephone != null) {
-                    jsonObject.put("mobile", telephone);
-                }
-                jsonObject.put("userCode", PrefUtils.getString("userCode", ""));
-                jsonObject.put("userName", ed_name.getText().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
+            }*/
+            if (!tv_kiddo.getText().toString().equals("")&&kiddo!=-1) {
+                jsonObject.put("childrenStatus", kiddo);
             }
-        build.put("user",jsonObject);
+            if (!tv_education.getText().toString().equals("")&&education!=null) {
+                jsonObject.put("educationLevel", education);
+            }
+            if (!email.equals("") && email != null) {
+                jsonObject.put("mail", email);
+            }
+            if (!tv_belief.getText().toString().equals("")&&belief!=null) {
+                jsonObject.put("faithStatus", belief);
+            }
+            //不确定是否正确
+            if (!name.equals("") && name != null) {
+                jsonObject.put("realname", name);
+            }
+            /*if (!believing_year.equals("") && believing_year != null) {
+                jsonObject.put("faithTime", believing_year);
+            }*/
+            if (!tv_marriage.getText().toString().equals("")&&marriage!=null) {
+                jsonObject.put("maritalStatus", marriage);
+            }
+            if (!others.equals("") && others != null) {
+                jsonObject.put("occupation", others);
+            }
+            if (!telephone.equals("") && telephone != null) {
+                jsonObject.put("mobile", telephone);
+            }
+            jsonObject.put("username", ed_name.getText().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return build;
+        return jsonObject;
     }
 }

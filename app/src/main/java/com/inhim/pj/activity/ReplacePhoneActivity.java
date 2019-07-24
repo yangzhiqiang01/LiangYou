@@ -43,7 +43,7 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
     private TextView tv_encounter_problem;
     private Button btn_login, btn_gecode;
     private Gson gson;
-
+    private int resultCode=100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,9 +162,10 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
                             JSONObject jsonObject = new JSONObject(result);
                             if (jsonObject.getInt("code") == 0) {
                                 BToast.showText("更改成功", true);
+                                Intent intent=new Intent();
+                                intent.putExtra("phoneNumber",ed_mobile.getText().toString());
+                                setResult(resultCode,intent);
                                 finish();
-                                /*Intent intent=new Intent(ReplacePhoneActivity.this,LoginActivity.class);
-                                startActivity(intent);*/
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

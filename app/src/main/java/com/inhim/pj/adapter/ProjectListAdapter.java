@@ -22,9 +22,10 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
 
     private ReaderStyle.List readerStyle;
     private ReaderTypeList.List readerType;
+    private Context context;
     public ProjectListAdapter(Context context) {
         super(context);
-
+        this.context=context;
     }
     public void  setReaderStyle(ReaderStyle.List readerStyle){
         this.readerStyle=readerStyle;
@@ -42,7 +43,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            GlideUtils.displayFromUrl(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title);
+            GlideUtils.displayFromUrl(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title,context);
             titleHolder.tv_num.setText("共"+readerStyle.getTotal()+"篇文章");
             titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getValue());
             titleHolder.tv_title.setText("专题");
@@ -56,7 +57,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            GlideUtils.displayFromUrl(readerType.getIcon(),titleHolder.iv_title);
+            GlideUtils.displayFromUrl(readerType.getIcon(),titleHolder.iv_title,context);
             titleHolder.tv_title.setText(readerType.getName());
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
@@ -105,10 +106,12 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
         @Override
         public void setData(ReaderList.List data) {
             super.setData(data);
-            GlideUtils.displayFromUrl(data.getCover(),iv_title);
+            GlideUtils.displayFromUrl(data.getCover(),iv_title,context);
             tv_title.setText(data.getTitle());
             tv_content.setText(String.valueOf(data.getReadAmount()));
-            tv_num.setText(data.getCreateTime().substring(0,10));
+            if(data.getTimeText()!=null){
+                tv_num.setText(data.getTimeText());
+            }
             //1文章 2视频 3音频
             if(data.getType().equals("2")){
                 iv_icon.setVisibility(View.VISIBLE);

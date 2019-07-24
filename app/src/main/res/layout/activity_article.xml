@@ -4,66 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activity.ArticleActivity">
 
     <TextView
         android:id="@+id/textview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_cancel"
-        android:textColor="@color/color_c1"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="@dimen/base_dimen_0"
+        android:textColor="@color/color_c1"
         android:textSize="@dimen/text_size_18"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/textview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/base_dimen_0"
-        android:layout_marginBottom="@dimen/base_dimen_0"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="@dimen/base_dimen_0"
+        android:layout_marginBottom="@dimen/base_dimen_0"
         android:layout_toRightOf="@+id/iv_glasses"
         android:text="@string/login"
-        android:textSize="@dimen/text_size_14"
         android:textColor="@color/color6666"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview1"
         tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/textview3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/base_dimen_0"
-        app:layout_constraintTop_toBottomOf="@+id/textview1"
-        app:layout_constraintRight_toLeftOf="@+id/textview4"
-        android:text="@string/dialog_cancel"
-        android:drawableLeft="@mipmap/glasses"
         android:layout_marginTop="@dimen/base_dimen_0"
         android:layout_marginRight="@dimen/base_dimen_0"
-        android:textSize="@dimen/text_size_14"
+        android:drawableLeft="@mipmap/glasses"
+        android:text="@string/dialog_cancel"
         android:textColor="@color/color6666"
+        android:textSize="@dimen/text_size_12"
+        app:layout_constraintRight_toLeftOf="@+id/textview4"
+        app:layout_constraintTop_toBottomOf="@+id/textview1"
         tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/textview4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textview1"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="@dimen/base_dimen_0"
         android:layout_marginTop="@dimen/base_dimen_0"
-        android:textSize="@dimen/text_size_14"
+        android:layout_marginRight="@dimen/base_dimen_0"
         android:textColor="@color/color6666"
+        android:textSize="@dimen/text_size_12"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview1"
         tools:ignore="MissingConstraints" />
 
     <com.inhim.pj.view.CustomRoundAngleImageView
         android:id="@+id/custImageview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/base_dimen_140"
         android:layout_margin="@dimen/base_dimen_0"
         android:layout_marginRight="@dimen/base_dimen_0"
         android:layout_weight="1"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintTop_toBottomOf="@+id/textview2"
         tools:ignore="MissingConstraints" />
@@ -72,8 +75,9 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/base_dimen_0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_title1"
+        app:layout_constraintTop_toBottomOf="@+id/custImageview"
         tools:ignore="MissingConstraints">
 
     </WebView>
@@ -85,32 +89,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#d5d5d5" />
+
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/base_dimen_0"
-            android:src="@mipmap/back"
             android:layout_centerVertical="true"
-            />
+            android:padding="@dimen/base_dimen_1"
+            android:src="@mipmap/back" />
+
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@null"
-            android:background="@drawable/checkbox_collection"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_share"
-            />
+            android:background="@drawable/checkbox_collection"
+            android:button="@null" />
+
         <ImageView
             android:id="@+id/iv_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/base_dimen_0"
-            android:src="@mipmap/share"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/base_dimen_0"
-            />
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:src="@mipmap/share" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

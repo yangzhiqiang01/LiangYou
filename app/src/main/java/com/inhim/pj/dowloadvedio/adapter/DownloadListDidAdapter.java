@@ -21,15 +21,9 @@ import com.inhim.pj.dowloadvedio.callback.MyDownloadListener;
 import com.inhim.pj.dowloadvedio.db.DBController;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.FileUtil;
-import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.GlideUtils;
-
-import org.litepal.crud.DataSupport;
-
-import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
-import java.util.List;
 
 
 /**
@@ -104,7 +98,7 @@ public class DownloadListDidAdapter extends
         @SuppressWarnings("unchecked")
         public void bindData(final MyBusinessInfoDid data, final int position) {
             tv_name.setText(data.getTitle());
-            GlideUtils.displayFromUrl(data.getCover(), imageview1);
+            GlideUtils.displayFromUrl(data.getCover(), imageview1,context);
             imageview2.setImageResource(R.mipmap.icon_video);
             downloadInfo = downloadManager.getDownloadById(data.getUrl().hashCode());
             if(isCheck){

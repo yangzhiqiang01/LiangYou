@@ -17,22 +17,23 @@ public class Urls {
         }
         return name;
     }
-    public static void getSDPath(){
+
+    public static void getSDPath() {
         File sdDir = null;
         File sdDir1 = null;
         File sdDir2 = null;
         boolean sdCardExist = Environment.getExternalStorageState()
                 .equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
-        if (sdCardExist)
-        {
+        if (sdCardExist) {
             sdDir = Environment.getExternalStorageDirectory();//获取跟目录
             sdDir1 = Environment.getDataDirectory();
-            sdDir2 =Environment.getRootDirectory();
+            sdDir2 = Environment.getRootDirectory();
         }
-        System.out.println("getExternalStorageDirectory(): "+sdDir.toString());
-        System.out.println("getDataDirectory(): "+sdDir1.toString());
-        System.out.println("getRootDirectory(): "+sdDir2.toString());
+        System.out.println("getExternalStorageDirectory(): " + sdDir.toString());
+        System.out.println("getDataDirectory(): " + sdDir1.toString());
+        System.out.println("getRootDirectory(): " + sdDir2.toString());
     }
+
     private static String urlPath = "http://39.105.154.75:9091/api/";
     //登录
     public static String onLogin = urlPath + "login";
@@ -107,8 +108,12 @@ public class Urls {
      * POST /collection/list/{page}/{limit}
      * 获取个人收藏列表
      */
-    public static String getCollectionList(int page, int limit, String type) {
-        return urlPath + "collection/list/" + page + "/" + limit + "?type=" + type;
+    public static String getCollectionList(int page, int limit, int type) {
+        if (type == 0) {
+            return urlPath + "collection/list/" + page + "/" + limit;
+        } else {
+            return urlPath + "collection/list/" + page + "/" + limit + "?typeId=" + type;
+        }
     }
 
     /**
@@ -167,10 +172,26 @@ public class Urls {
      */
     public static String deleteAllHistory = urlPath + "browsingHistory/delete/all";
 
-    /**DELETE /browsingHistory/delete
-            删除个人浏览记录*/
+    /**
+     * DELETE /browsingHistory/delete
+     * 删除个人浏览记录
+     */
     public static String deleteHistory = urlPath + "browsingHistory/delete";
-    /**POST /common/file/upload
-            文件上传*/
+    /**
+     * POST /common/file/upload
+     * 文件上传
+     */
     public static String fileUpload = urlPath + "common/file/upload";
+
+    /**
+     * GET /common/dict/{code}
+     * 民族  vip.nation
+     * 信仰状况 vip.faith
+     * 婚姻状况 vip.marital
+     * 教育程度 vip.educationLevel
+     * 数据字典值
+     */
+    public static String getCommonDict(String code) {
+        return urlPath + "common/dict/" + code;
+    }
 }

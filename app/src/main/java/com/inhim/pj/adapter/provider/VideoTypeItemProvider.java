@@ -41,7 +41,7 @@ public class VideoTypeItemProvider extends BaseItemProvider<ReaderTypeList.List,
             ImageView iv_title = helper.getView(R.id.iv_title);
             TextView tv_title = helper.getView(R.id.tv_title);
             TextView tv_time = helper.getView(R.id.tv_time);
-            GlideUtils.displayFromUrl(news.getIcon(),iv_title);
+            GlideUtils.displayFromUrl(news.getIcon(),iv_title,context);
             tv_title.setText(news.getName());
             tv_time.setText(news.getCreateTime());
             ConstraintLayout constran=helper.getView(R.id.constran);

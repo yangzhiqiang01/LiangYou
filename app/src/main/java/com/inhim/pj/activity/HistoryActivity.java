@@ -1,23 +1,25 @@
 package com.inhim.pj.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.CollectionAdapter;
+import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
 
-import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
 
@@ -30,7 +32,7 @@ import java.util.Map;
 import okhttp3.FormBody;
 import okhttp3.Request;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends BaseActivity {
     Gson gson=new Gson();
     private CollectionAdapter adapter;
     private YCRefreshView mRecyclerView;
@@ -38,6 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
     private Boolean refresh=true;
     private int totalPage;
     private TextView tv_clean;
+    private ImageView iv_back;
     private List<CollectionList.List> historyList;
     private Map vipCollectionIdsMap;
     @Override
@@ -51,6 +54,13 @@ public class HistoryActivity extends AppCompatActivity {
                 deleteAllHistory();
             }
         });
+        iv_back=findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRecyclerView=findViewById(R.id.onceTask_member_ycView);
         historyList=new ArrayList<>();
         vipCollectionIdsMap=new HashMap();
@@ -58,28 +68,42 @@ public class HistoryActivity extends AppCompatActivity {
         getHistoryList();
     }
     private void deleteAllHistory() {
+        showLoading("删除中");
         FormBody.Builder formBody=new FormBody.Builder();
         MyOkHttpClient.getInstance().doDelete(Urls.deleteAllHistory, formBody.build(), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                BToast.showText("删除失败");
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
-                Log.e("result",result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.getInt("code") == 0) {
+                        getHistoryList();
+                    } else {
+                        BToast.showText(jsonObject.getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
     private void getHistoryList() {
+        showLoading("加载中");
         MyOkHttpClient.getInstance().asyncGet(Urls.browsingHistory(mPageNum, 10), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                BToast.showText("请求失败");
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                hideLoading();
                 CollectionList historyEntity = gson.fromJson(result, CollectionList.class);
                 if (historyEntity.getCode() == 0) {
                     totalPage=historyEntity.getPage().getTotalPage();
@@ -128,14 +152,5 @@ public class HistoryActivity extends AppCompatActivity {
                 getHistoryList();
             }
         });
-        /*adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                CollectionList.List history=adapter.getAllData().get(position);
-                Intent intent=new Intent(HistoryActivity.this, VideoActivity.class);
-                intent.putExtra("ReaderId",history.getReaderId());
-                startActivity(intent);
-            }
-        });*/
     }
 }

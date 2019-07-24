@@ -1,5 +1,6 @@
 package com.inhim.pj.adapter.provider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.inhim.pj.activity.ProjectListActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.utils.GlideUtils;
+import com.inhim.pj.view.CustomRoundAngleImageView;
 
 /**
  * @author ChayChan
@@ -22,8 +24,9 @@ import com.inhim.pj.utils.GlideUtils;
 
 public class StyleTitleProvider extends BaseItemProvider<ReaderStyle.List, BaseViewHolder> {
 
-
-    public StyleTitleProvider() {
+    private Context context;
+    public StyleTitleProvider(Context context) {
+        this.context=context;
     }
 
     @Override
@@ -34,12 +37,12 @@ public class StyleTitleProvider extends BaseItemProvider<ReaderStyle.List, BaseV
         }
         try{
             //处理相关业务逻辑
-            ImageView imageview = helper.getView(R.id.imageview);
-            GlideUtils.displayFromUrl(news.getReaderStyleValue().getCover(),imageview);
+            CustomRoundAngleImageView imageview = helper.getView(R.id.imageview);
+            GlideUtils.displayFromUrl(news.getReaderStyleValue().getCover(),imageview,context);
             ConstraintLayout constran = helper.getView(R.id.constran);
             constran.getBackground().setAlpha(100);//0~255透明度值
             TextView textview1 = helper.getView(R.id.textview1);
-            textview1.setText(news.getReaderStyleValue().getReaderStyleName());
+            textview1.setText(news.getReaderStyleValue().getValue());
             TextView textview2 = helper.getView(R.id.textview2);
             textview2.setText("共"+news.getTotal()+"篇文章");
             constran.setOnClickListener(new View.OnClickListener() {

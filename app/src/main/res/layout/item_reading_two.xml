@@ -16,13 +16,13 @@
 
         <com.inhim.pj.view.CustomRoundAngleImageView
             android:id="@+id/iv_title1"
-            android:layout_width="@dimen/base_dimen_150"
-            android:layout_height="@dimen/base_dimen_72"
+            android:layout_width="@dimen/base_dimen_110"
+            android:layout_height="@dimen/base_dimen_80"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:layout_margin="@dimen/base_dimen_0"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:layout_toRightOf="@+id/iv_title"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/base_dimen_0"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="@dimen/text_size_18"
+            android:textSize="@dimen/text_size_16"
             android:textColor="@color/color333"
             app:layout_constraintLeft_toRightOf="@+id/iv_title1"
             app:layout_constraintRight_toRightOf="parent"
@@ -67,8 +67,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/base_dimen_5dp"
-            android:layout_marginBottom="@dimen/base_dimen_0"
+            android:layout_marginBottom="@dimen/base_padding_3dp"
             android:layout_toRightOf="@+id/iv_glasses"
+            android:textColor="@color/color6666"
+            android:textSize="@dimen/text_size_10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/iv_glasses1"
             tools:ignore="MissingConstraints" />
@@ -79,6 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/base_dimen_0"
+            android:textColor="@color/color6666"
+            android:textSize="@dimen/text_size_10"
             app:layout_constraintBottom_toTopOf="@+id/tv_num1"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_num1"
@@ -86,6 +90,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/lin_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/base_dimen_0"
@@ -93,5 +98,6 @@
         android:layout_marginRight="@dimen/base_dimen_0"
         android:background="@color/dividing_line_backgroud"
         app:layout_constraintTop_toBottomOf="@+id/constran"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:orientation="horizontal" />
 </android.support.constraint.ConstraintLayout>

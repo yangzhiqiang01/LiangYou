@@ -38,7 +38,7 @@ public class CourseOnerItemProvider extends BaseItemProvider<ReaderList.List, Ba
             TextView tv_title = helper.getView(R.id.tv_title);
             TextView tv_num = helper.getView(R.id.tv_num);
             TextView tv_time = helper.getView(R.id.tv_time);
-            GlideUtils.displayFromUrl(news.getCover(),iv_title);
+            GlideUtils.displayFromUrl(news.getCover(),iv_title,context);
             tv_num.setText(news.getReadAmount());
             tv_title.setText(news.getTitle());
             tv_time.setText(news.getCreateTime());

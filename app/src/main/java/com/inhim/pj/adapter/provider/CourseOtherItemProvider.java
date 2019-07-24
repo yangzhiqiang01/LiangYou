@@ -42,7 +42,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             TextView tv_num = helper.getView(R.id.tv_num1);
             TextView tv_time = helper.getView(R.id.tv_time1);
             ImageView iv_icon=helper.getView(R.id.iv_icon);
-            GlideUtils.displayFromUrl(news.getCover(),iv_title);
+            GlideUtils.displayFromUrl(news.getCover(),iv_title,context);
             //1文章 2视频 3音频
             if(news.getType().equals("2")){
                 iv_icon.setVisibility(View.VISIBLE);
@@ -58,7 +58,6 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             if(news.getTimeText()!=null){
                 tv_time.setText(news.getTimeText());
             }
-
             ConstraintLayout constran=helper.getView(R.id.constran);
             constran.setOnClickListener(new View.OnClickListener() {
                 @Override
