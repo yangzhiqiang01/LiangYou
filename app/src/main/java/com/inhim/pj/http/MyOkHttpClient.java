@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.google.gson.Gson;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.view.BToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,7 @@ public class MyOkHttpClient {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            BToast.showText("请求失败", false);
                             httpCallBack.onError(request, fe);
                         }
                     });

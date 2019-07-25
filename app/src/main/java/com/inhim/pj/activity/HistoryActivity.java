@@ -1,5 +1,6 @@
 package com.inhim.pj.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.inhim.pj.view.BToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
 
@@ -150,6 +152,23 @@ public class HistoryActivity extends BaseActivity {
                 mPageNum++;
                 refresh=false;
                 getHistoryList();
+            }
+        });
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                CollectionList.List data=adapter.getAllData().get(position);
+                Intent intent;
+                if(data.getReaderEntity().getType().equals("2")){
+                    intent=new Intent(HistoryActivity.this, VideoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                }else if(data.getReaderEntity().getType().equals("3")){
+                    intent=new Intent(HistoryActivity.this, RadioActivity.class);
+                }else{
+                    intent=new Intent(HistoryActivity.this, ArticleActivity.class);
+                }
+                intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
+                startActivity(intent);
             }
         });
     }

@@ -18,6 +18,7 @@ import com.inhim.pj.utils.GlideUtils;
  * @author ChayChan
  * @description: 头部banner
  * @date 2018/3/22  14:48
+ * 未使用
  */
 
 public class CourseOnerItemProvider extends BaseItemProvider<ReaderList.List, BaseViewHolder> {

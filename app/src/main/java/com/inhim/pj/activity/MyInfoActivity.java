@@ -40,6 +40,7 @@ import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.ChooseDialog;
 import com.inhim.pj.view.MonPickerDialog;
 import com.inhim.pj.wheelview.WheelView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +63,6 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private EditText ed_name, ed_ethnic,
             ed_email, user_name;
     private TextView tv_belief, tv_marriage, tv_kiddo, tv_education, ed_believing_year, ed_bebaptized_year, tv_telephone;
-    private String name,  believing_year, bebaptized_year, others, telephone, email;
     private List beliefStringList,kiddoList, marriageStringList, educationStringList;
     private ChooseDialog chooseDialog;
     private ImageView iv_photo;
@@ -84,6 +84,8 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_myinfo);
         gson = new Gson();
         initView();
+        userInfo= (UserInfo.User) getIntent().getSerializableExtra("result");
+        setView(userInfo);
         beliefStringList = new ArrayList();
         marriageStringList = new ArrayList();
         educationStringList = new ArrayList();
@@ -92,29 +94,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         kiddoList.add("有");
         calendar = Calendar.getInstance();
         setLinear();
-        getInfo();
     }
-
-    private void getInfo() {
-        String examUrl = Urls.getUserInfo;
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
-            @Override
-            public void onError(Request request, IOException e) {
-            }
-
-            @Override
-            public void onSuccess(Request request, String results) {
-                UserInfo smsResult = gson.fromJson(results, UserInfo.class);
-                if (smsResult.getCode()==0) {
-                    userInfo=smsResult.getUser();
-                    setView(userInfo);
-                } else {
-                    BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
-                }
-            }
-        });
-    }
-
     private void initView() {
         btn_submit = findViewById(R.id.btn_submit);
         btn_submit.setOnClickListener(this);
@@ -140,7 +120,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         ViewShowUtils.show(user_name, userInfoEntity.getUsername());
         ViewShowUtils.show(ed_zhiye, userInfoEntity.getOccupation());
         ViewShowUtils.show(ed_name, userInfoEntity.getRealname());
-        ViewShowUtils.show(ed_ethnic, userInfoEntity.getBaptismTime());
+        ViewShowUtils.show(ed_ethnic, userInfoEntity.getNation());
         ViewShowUtils.show(ed_believing_year, userInfoEntity.getFaithTime());
         ViewShowUtils.show(ed_bebaptized_year, userInfoEntity.getBaptismTime());
         ViewShowUtils.show(tv_telephone, userInfoEntity.getMobile());
@@ -149,7 +129,8 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         ViewShowUtils.show(tv_marriage, userInfoEntity.getMaritalStatus());
         ViewShowUtils.show(tv_kiddo, userInfoEntity.getChildrenStatus());
         ViewShowUtils.show(tv_education, userInfoEntity.getEducationLevel());
-        GlideCircleUtils.displayFromUrl(userInfoEntity.getHeadimgurl(),iv_photo,MyInfoActivity.this);
+        ImageLoader.getInstance().displayImage(userInfoEntity.getHeadimgurl(),iv_photo);
+        //GlideCircleUtils.displayFromUrl(userInfoEntity.getHeadimgurl(),iv_photo,MyInfoActivity.this);
     }
 
     private void getCommonDict(final String TAGs, String code) {
@@ -407,8 +388,8 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         intent.putExtra("crop", "true");// 进行修剪
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 600);
-        intent.putExtra("outputY", 600);
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
         //cropPicTmp = getPicPath(listPaths.size() + 1);
         cropPicTmp = Urls.getFilePath() + System.currentTimeMillis() + ".jpg";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -589,19 +570,16 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         },
             "wechatUserId": 0
         }*/
-        others = ed_zhiye.getText().toString();
-        name = ed_name.getText().toString();
-        believing_year = ed_believing_year.getText().toString();
-        bebaptized_year = ed_bebaptized_year.getText().toString();
-        telephone = tv_telephone.getText().toString();
-        email = ed_email.getText().toString();
         HashMap jsonObject = new HashMap();
         try {
+            if(!"".equals(ed_ethnic.getText().toString())){
+                jsonObject.put("nation", ed_ethnic.getText().toString());
+            }
             if(headimgurl!=null&&!headimgurl.equals("")){
                 jsonObject.put("headimgurl", headimgurl);
             }
-            if (!bebaptized_year.equals("")) {
-                jsonObject.put("baptismTime", bebaptized_year.equals(""));
+            if (!ed_bebaptized_year.getText().toString().equals("")) {
+                jsonObject.put("baptismTime", ed_bebaptized_year.getText().toString());
             }
             if (!tv_kiddo.getText().toString().equals("")) {
                 jsonObject.put("childrenStatus", tv_kiddo.getText().toString());
@@ -609,35 +587,35 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
             if (!tv_education.getText().toString().equals("")) {
                 jsonObject.put("educationLevel", tv_education.getText().toString());
             }
-            if (!email.equals("") && email != null) {
-                jsonObject.put("mail", email);
+            if (!ed_email.getText().toString().equals("")) {
+                jsonObject.put("mail", ed_email.getText().toString());
             }
             if (!tv_belief.getText().toString().equals("")) {
                 jsonObject.put("faithStatus", tv_belief.getText().toString());
             }
             //不确定是否正确
-            if (!name.equals("") && name != null) {
-                jsonObject.put("realname", name);
+            if (!ed_name.getText().toString().equals("")) {
+                jsonObject.put("realname", ed_name.getText().toString());
             }
-            if (!believing_year.equals("")) {
-                jsonObject.put("faithTime", believing_year);
+            if (!ed_believing_year.getText().toString().equals("")) {
+                jsonObject.put("faithTime", ed_believing_year.getText().toString());
             }
             if (!tv_marriage.getText().toString().equals("")) {
                 jsonObject.put("maritalStatus", tv_marriage.getText().toString());
             }
-            if (!others.equals("") && others != null) {
-                jsonObject.put("occupation", others);
+            if (!ed_zhiye.getText().toString().equals("")) {
+                jsonObject.put("occupation", ed_zhiye.getText().toString());
             }
-            if (!telephone.equals("") && telephone != null) {
-                jsonObject.put("mobile", telephone);
+            if (!tv_telephone.getText().toString().equals("")) {
+                jsonObject.put("mobile", tv_telephone.getText().toString());
             }
-            if(!"".equals(ed_name.getText().toString()))
-            jsonObject.put("username", ed_name.getText().toString());
+            if(!"".equals(ed_name.getText().toString())){
+                jsonObject.put("username", user_name.getText().toString());
+            }
             jsonObject.put("vipUserId",userInfo.getVipUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return jsonObject;
     }
 }

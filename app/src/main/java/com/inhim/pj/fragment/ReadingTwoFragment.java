@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
+import com.inhim.pj.base.ClassicsHeader;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
@@ -19,6 +20,12 @@ import com.inhim.pj.entity.TitleAndSize;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.LoadingView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +47,11 @@ public class ReadingTwoFragment extends Fragment {
     private Gson gson;
     private List homeList;
     private ReaderStyle.ReaderStyleValue readerStyleValue;
+    private SmartRefreshLayout home_SwipeRefreshLayout;
+    private int mPageNum = 1;
+    private Boolean refresh = true;
+    private ReaderStyle.List rederType;
+    private LoadingView loadingView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +74,30 @@ public class ReadingTwoFragment extends Fragment {
 
     private void initView(View view) {
         mRecyclerView = view.findViewById(R.id.recyclerview);
+        home_SwipeRefreshLayout = view.findViewById(R.id.home_SwipeRefreshLayout);
+        home_SwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                mPageNum = 1;
+                refresh = true;
+                //请求数据
+                home_SwipeRefreshLayout.finishRefresh();  //刷新完成
+                getBannerList();
+            }
+        });
+        home_SwipeRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                //加载
+                home_SwipeRefreshLayout.finishLoadmore();      //加载完成
+                getReaderList(rederType);
+            }
+        });
+        /**
+         * 设置不同的头部、底部样式
+         */
+        home_SwipeRefreshLayout.setRefreshHeader( new ClassicsHeader(getActivity()));
+        home_SwipeRefreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
     }
 
     private void initAdapter() {
@@ -75,7 +111,7 @@ public class ReadingTwoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncGet(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                loadingView.hideLoading();
             }
 
             @Override
@@ -83,10 +119,10 @@ public class ReadingTwoFragment extends Fragment {
                 ReaderStyle readerStyle=gson.fromJson(result,ReaderStyle.class);
                 if(readerStyle.getCode()==0){
                     homeList.add("系列专题");
-                    homeList.add(readerStyle.getList().get(0));
-                    getReaderList(readerStyle.getList().get(0));
+                    rederType=readerStyle.getList().get(0);
+                    homeList.add(rederType);
+                    getReaderList(rederType);
                 }
-                mAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -98,21 +134,23 @@ public class ReadingTwoFragment extends Fragment {
         HashMap postMap = new HashMap();
         postMap.put("readerStyleValueId", rederType.getReaderStyleValue().getReaderStyleValueId());
         postMap.put("readerStyleId", rederType.getReaderStyleValue().getReaderStyleId());
-        MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(1, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(mPageNum, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                loadingView.hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                loadingView.hideLoading();
+                mPageNum++;
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0) {
                     homeList.addAll(readerList.getPage().getList());
-                    mAdapter.notifyDataSetChanged();
                 } else {
                     BToast.showText(readerList.getMsg(), false);
                 }
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -130,7 +168,7 @@ public class ReadingTwoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(1, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                getReaderStyle();
             }
 
             @Override
@@ -149,15 +187,23 @@ public class ReadingTwoFragment extends Fragment {
     }
 
     private void getBannerList() {
+        loadingView=new LoadingView();
+        loadingView.showLoading("加载中",getActivity());
         MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(1), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                BToast.showText("请求失败", false);
+                getReaderList();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
                 bannerList = gson.fromJson(result, BannerList.class);
+                if(refresh){
+                    refresh=false;
+                    mPageNum=1;
+                    homeList.clear();
+                }
                 if (bannerList.getCode() == 0) {
                     homeList.add(bannerList);
                 } else {

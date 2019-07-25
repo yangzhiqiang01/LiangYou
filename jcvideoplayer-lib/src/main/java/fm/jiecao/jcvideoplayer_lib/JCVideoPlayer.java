@@ -104,7 +104,6 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
     protected int mGestureDownVolume;
     protected float mGestureDownBrightness;
     protected int mSeekTimePosition;
-    private boolean isOne;
 
     public JCVideoPlayer(Context context) {
         super(context);
@@ -118,7 +117,7 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
 
     public void init(Context context) {
         View.inflate(context, getLayoutId(), this);
-        startButton = (ImageView) findViewById(R.id.start);
+        startButton = (ImageView) findViewById(R.id.iv_start);
         fullscreenButton = (ImageView) findViewById(R.id.fullscreen);
         progressBar = (SeekBar) findViewById(R.id.bottom_seek_progress);
         currentTimeTextView = (TextView) findViewById(R.id.current);
@@ -126,7 +125,6 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
         bottomContainer = (ViewGroup) findViewById(R.id.layout_bottom);
         textureViewContainer = (ViewGroup) findViewById(R.id.surface_container);
         topContainer = (ViewGroup) findViewById(R.id.layout_top);
-        isOne=true;
         startButton.setOnClickListener(this);
         fullscreenButton.setOnClickListener(this);
         progressBar.setOnSeekBarChangeListener(this);
@@ -154,11 +152,7 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.start) {
-            if(isOne){
-                isOne=false;
-
-            }
+        if (i == R.id.iv_start) {
             Log.i(TAG, "onClick start [" + this.hashCode() + "] ");
             if (TextUtils.isEmpty(url)) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
@@ -199,10 +193,6 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
             Log.i(TAG, "onClick surfaceContainer State=Error [" + this.hashCode() + "] ");
             prepareMediaPlayer();
         }
-    }
-
-    private  void chapterPay(){
-
     }
 
     public void prepareMediaPlayer() {
@@ -481,7 +471,9 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
         //save position
         if (currentState == CURRENT_STATE_PLAYING || currentState == CURRENT_STATE_PAUSE) {
             int position = getCurrentPositionWhenPlaying();
-//            int duration = getDuration();
+            //获取当前播放进度
+            int duration = getDuration();
+            Log.e("position","==="+duration);
             JCUtils.saveProgress(getContext(), url, position);
         }
         cancelProgressTimer();

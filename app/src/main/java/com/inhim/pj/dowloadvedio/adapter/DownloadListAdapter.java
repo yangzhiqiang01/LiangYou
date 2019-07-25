@@ -33,6 +33,7 @@ import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -103,7 +104,6 @@ public class DownloadListAdapter extends
             tv_status = view.findViewById(R.id.tv_status);
             pb = view.findViewById(R.id.pb);
             tv_name = view.findViewById(R.id.tv_name);
-            rl_item = view.findViewById(R.id.rl_item);
             imageview1 = view.findViewById(R.id.imageview1);
             imageview2 = view.findViewById(R.id.imageview2);
             checkbox = view.findViewById(R.id.checkbox);
@@ -122,12 +122,11 @@ public class DownloadListAdapter extends
                 checkbox.setChecked(false);
             }
             tv_name.setText(data.getTitle());
-            GlideUtils.displayFromUrl(data.getCover(), imageview1,context);
+            GlideUtils.displayFromUrl(data.getCover(), imageview1, context);
             if (data != null) {
                 // Get download task status
-                if (data.getUrl() == null || data.getUrl().equals("")) {
-                    downloadInfo = downloadManager.getDownloadById(data.getUrl().hashCode());
-                }
+                //记录了下载状态等信息
+                downloadInfo = downloadManager.getDownloadById(data.getUrl().hashCode());
             }
 
             // Set a download listener
@@ -147,35 +146,6 @@ public class DownloadListAdapter extends
             }
 
             refresh(position);
-
-     /* iv_deldete.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          List<MyBusinessInfo> infos = DataSupport.findAll(MyBusinessInfo.class);
-          if(infos.size()>0){
-            try{
-              DBController instance =  DBController.getInstance(context);
-              for(int i=0;i<instance.findAllDownloaded().size();i++){
-                instance.delete(instance.findAllDownloaded().get(i));
-              }
-
-              tv_size.setText("");
-              pb.setProgress(0);
-              infos.get(position).delete();
-              String video= Urls.getFilePath()+data.getName();
-              File file=new File(video);
-              file.delete();
-              setData(infos);
-
-            }catch (Exception e){
-              e.printStackTrace();
-            }
-          }else{
-            setData(infos);
-          }
-
-        }
-      });*/
 
 
 //      Download button
@@ -312,6 +282,7 @@ public class DownloadListAdapter extends
                                 infosDid.setTitle(infos.get(position).getTitle());
                                 infosDid.setUrl(infos.get(position).getUrl());
                                 infosDid.setSynopsis(infos.get(position).getSynopsis());
+                                infosDid.setType(infos.get(position).getType());
                                 infosDid.save();
                                 infos.get(position).delete();
                                 setData(infos);
@@ -342,21 +313,28 @@ public class DownloadListAdapter extends
         }
     }
 
-    public void deleteFile(List<MyBusinessInfo>  infos){
-        if(infos.size()>0){
-            try{
-                DBController instance =  DBController.getInstance(context);
-                for(int i=0;i<instance.findAllDownloaded().size();i++){
+    public void deleteFiles(Map<Integer, Boolean> deleteMap){
+        List<MyBusinessInfo> listInfo = getDownloadListData();
+        for(int i=0;i<deleteMap.size();i++){
+            if (deleteMap.get(i)) {
+                File file = new File(listInfo.get(i).getFilePath());
+                file.delete();
+                listInfo.get(i).delete();
+                listInfo.remove(i);
+                try {
+                    DBController instance =  DBController.getInstance(context);
                     instance.delete(instance.findAllDownloaded().get(i));
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-                setData(infos);
-
-            }catch (Exception e){
-                e.printStackTrace();
             }
-        }else{
-            setData(infos);
         }
-
+        setData(listInfo);
+    }
+    private List<MyBusinessInfo> getDownloadListData() {
+        List<MyBusinessInfo> myBusinessInfos = DataSupport.findAll(MyBusinessInfo.class);
+        if (myBusinessInfos.size() > 0) {
+        }
+        return myBusinessInfos;
     }
 }

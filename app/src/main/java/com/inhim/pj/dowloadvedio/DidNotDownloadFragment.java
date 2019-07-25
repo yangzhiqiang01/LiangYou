@@ -23,6 +23,7 @@ import com.inhim.downloader.DownloadService;
 import com.inhim.downloader.config.Config;
 import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
+import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerDidViewAdapter;
 import com.inhim.pj.dowloadvedio.adapter.DownloadListDidAdapter;
@@ -179,22 +180,12 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
             @Override
             public void onClick(View v) {
                 Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
-                List<MyBusinessInfoDid> listInfo = getDownloadListData();
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
-
                     ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
                     CheckBox checkBox = layout.findViewById(R.id.checkbox);
-
                     mDeviceHeaderMap.put(i, checkBox.isChecked());
-                    if (checkBox.isChecked()) {
-                        File file = new File(listInfo.get(i).getFilePath());
-                        file.delete();
-                        listInfo.get(i).delete();
-                        listInfo.remove(i);
-                    }
+                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
                 }
-                downloadListAdapter.setData(listInfo);
-                downloadListAdapter.notifyDataSetChanged();
             }
         });
         // Set the adapter
@@ -228,8 +219,14 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
 
     @Override
     public void onItemClick(int position) {
+        Intent intent;
         MyBusinessInfoDid data = downloadListAdapter.getData(position);
-        Intent intent = new Intent(getActivity(), VideoActivity.class);
+        if(data.getType()==2){
+            intent=new Intent(getActivity(), VideoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }else {
+            intent=new Intent(getActivity(), RadioActivity.class);
+        }
         intent.putExtra("result", data);
         startActivityForResult(intent, REQUEST_DOWNLOAD_DETAIL_PAGE);
     }

@@ -16,12 +16,18 @@
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="-4dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="4dp"
         android:background="#000000"
         android:scaleType="fitCenter" />
 
@@ -85,15 +91,6 @@
         android:layout_alignParentBottom="true"
         android:max="100"
         android:progressDrawable="@drawable/jc_bottom_progress" />
-
-    <!--<ImageView
-        android:id="@+id/back_tiny"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/jc_click_back_tiny_selector"
-        android:visibility="visible" />-->
 
     <LinearLayout
         android:id="@+id/layout_top"
@@ -169,12 +166,15 @@
         android:visibility="invisible" />
 
     <ImageView
-        android:id="@+id/start"
+        android:id="@+id/iv_start"
         android:layout_width="@dimen/jc_start_button_w_h_normal"
         android:layout_height="@dimen/jc_start_button_w_h_normal"
-        android:layout_centerHorizontal="true"
+        android:layout_alignEnd="@+id/loading"
+        android:layout_alignRight="@+id/loading"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
         android:src="@drawable/jc_click_play_selector" />
 
     <ImageView

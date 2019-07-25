@@ -4,7 +4,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CustomRoundAngleImageView;
+import com.inhim.pj.view.MyScrollView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +38,7 @@ public class ArticleActivity extends BaseActivity {
     String content;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
+    private MyScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class ArticleActivity extends BaseActivity {
     }
 
     private void initView() {
+        scrollView=findViewById(R.id.scrollView);
         checkbox = findViewById(R.id.checkbox);
         checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +61,11 @@ public class ArticleActivity extends BaseActivity {
                             @Override
                             public void onError(Request request, IOException e) {
                                 hideLoading();
-                                checkbox.setChecked(false);
-                                BToast.showText("收藏失败",false);
+                                if(checkbox.isChecked()){
+                                    checkbox.setChecked(false);
+                                }else{
+                                    checkbox.setChecked(true);
+                                }
                             }
 
                             @Override
@@ -70,7 +75,11 @@ public class ArticleActivity extends BaseActivity {
                                     JSONObject jsonObject=new JSONObject(result);
                                     if(jsonObject.getInt("code")!=0){
                                         BToast.showText(jsonObject.getString("msg"),false);
-                                        checkbox.setChecked(false);
+                                        if(checkbox.isChecked()){
+                                            checkbox.setChecked(false);
+                                        }else{
+                                            checkbox.setChecked(true);
+                                        }
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -97,35 +106,42 @@ public class ArticleActivity extends BaseActivity {
     }
 
     private void getReaderInfo(int readerId) {
+        showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                hideLoading();
+                BToast.showText("网络错误",false);
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                hideLoading();
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
-                readerInfo=readerInfos.getReader();
-                //GlideUtils.displayFromUrl(readerInfo.getCover(),custImageview,ArticleActivity.this);
-                Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
-                checkbox.setChecked(readerInfo.getCollectionStatus());
-                textview1.setText(readerInfo.getTitle());
-                textview2.setText("类别："+readerInfo.getReaderTypeText());
-                textview3.setText(String.valueOf(readerInfo.getReadAmount()));
-                textview4.setText(readerInfo.getTimeText());
-                content=readerInfo.getContent();
-                webView.getSettings().setJavaScriptEnabled(true);
-                //设置 缓存模式
-                webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-                // 开启 DOM storage API 功能
-                webView.getSettings().setDomStorageEnabled(true);
-                if (content == null || content.length() == 0) {
-                    content = "暂无内容";
+                if(readerInfos.getCode()==0){
+                    readerInfo=readerInfos.getReader();
+                    //GlideUtils.displayFromUrl(readerInfo.getCover(),custImageview,ArticleActivity.this);
+                    Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
+                    checkbox.setChecked(readerInfo.getCollectionStatus());
+                    textview1.setText(readerInfo.getTitle());
+                    textview2.setText("类别："+readerInfo.getReaderTypeText());
+                    textview3.setText(String.valueOf(readerInfo.getReadAmount()));
+                    textview4.setText(readerInfo.getTimeText());
+                    content=readerInfo.getContent();
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    //设置 缓存模式
+                    webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+                    // 开启 DOM storage API 功能
+                    webView.getSettings().setDomStorageEnabled(true);
+                    if (content == null || content.length() == 0) {
+                        content = "暂无内容";
+                    }
+                    webView.loadDataWithBaseURL(null, content, mimeType, encoding, null);
+                    webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+                }else{
+                    BToast.showText(readerInfos.getMsg(),false);
                 }
-                webView.loadDataWithBaseURL(null, content, mimeType, encoding, null);
-                webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             }
         });
     }

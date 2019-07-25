@@ -2,6 +2,7 @@ package com.inhim.pj.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import com.inhim.pj.view.MyGridView;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.yczbj.ycrefreshviewlib.inter.OnItemChildClickListener;
+import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
+import org.yczbj.ycrefreshviewlib.inter.OnItemLongClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
 
@@ -54,7 +57,6 @@ public class CollectionActivity extends BaseActivity {
     private List<CollectionList.List> colleList;
     private int totalPage;
     private CheckBox cb_doload;
-    private TextView tv_editor;
     private boolean isCheck;
     private LinearLayout lin_caozuo;
     private TextView textview1, textview2;
@@ -70,7 +72,6 @@ public class CollectionActivity extends BaseActivity {
         setContentView(R.layout.activity_collection);
         mRecyclerView = findViewById(R.id.onceTask_member_ycView);
         cb_doload = findViewById(R.id.cb_doload);
-        tv_editor = findViewById(R.id.tv_editor);
         lin_caozuo = findViewById(R.id.lin_caozuo);
         textview1 = findViewById(R.id.textview1);
         textview2 = findViewById(R.id.textview2);
@@ -104,22 +105,6 @@ public class CollectionActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 deleteCollection();
-            }
-        });
-        tv_editor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isCheck) {
-                    isCheck = true;
-                    mAdapter.setCheck(isCheck, false);
-                    mAdapter.notifyDataSetChanged();
-                    lin_caozuo.setVisibility(View.VISIBLE);
-                } else {
-                    isCheck = false;
-                    mAdapter.setCheck(isCheck, false);
-                    mAdapter.notifyDataSetChanged();
-                    lin_caozuo.setVisibility(View.GONE);
-                }
             }
         });
         ImageView iv_back = findViewById(R.id.iv_back);
@@ -260,6 +245,40 @@ public class CollectionActivity extends BaseActivity {
                 mPageNum++;
                 refresh = false;
                 getCollectionList(TypeId);
+            }
+        });
+        mAdapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(int position) {
+                if (!isCheck) {
+                    isCheck = true;
+                    mAdapter.setCheck(isCheck, false);
+                    mAdapter.notifyDataSetChanged();
+                    lin_caozuo.setVisibility(View.VISIBLE);
+                } else {
+                    isCheck = false;
+                    mAdapter.setCheck(isCheck, false);
+                    mAdapter.notifyDataSetChanged();
+                    lin_caozuo.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                CollectionList.List data=mAdapter.getAllData().get(position);
+                Intent intent;
+                if(data.getReaderEntity().getType().equals("2")){
+                    intent=new Intent(CollectionActivity.this, VideoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                }else if(data.getReaderEntity().getType().equals("3")){
+                    intent=new Intent(CollectionActivity.this, RadioActivity.class);
+                }else{
+                    intent=new Intent(CollectionActivity.this, ArticleActivity.class);
+                }
+                intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
+                startActivity(intent);
             }
         });
 

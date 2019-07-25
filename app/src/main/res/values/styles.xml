@@ -27,7 +27,7 @@
     </style>
     <style name="btn_login_style">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">16.0sp</item>
+        <item name="android:textSize">18.0sp</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:background">@drawable/button_color</item>
     </style>
@@ -39,7 +39,7 @@
     </style>
     <style name="btn_logout_style">
         <item name="android:textColor">@color/color333</item>
-        <item name="android:textSize">16.0sp</item>
+        <item name="android:textSize">18.0sp</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:background">@drawable/button_logout_color</item>
     </style>

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
 import com.inhim.pj.R;
@@ -14,6 +17,7 @@ import com.inhim.pj.adapter.ChapterItemAdapter;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.listener.RecyclerViewClickListener;
+import com.inhim.pj.utils.ScreenUtils;
 
 /**
  * @author ChayChan

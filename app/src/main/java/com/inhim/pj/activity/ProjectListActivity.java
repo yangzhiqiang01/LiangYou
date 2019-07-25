@@ -85,9 +85,11 @@ public class ProjectListActivity extends BaseActivity {
             public void onItemClick(int position) {
                 ReaderList.List reader=mAdapter.getAllData().get(position);
                 Intent intent;
-                if(reader.getType().equals("2")||reader.getType().equals("3")){
+                if(reader.getType().equals("2")){
                     intent=new Intent(ProjectListActivity.this, VideoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                }else if(reader.getType().equals("3")){
+                    intent=new Intent(ProjectListActivity.this, RadioActivity.class);
                 }else{
                     intent=new Intent(ProjectListActivity.this, ArticleActivity.class);
                 }

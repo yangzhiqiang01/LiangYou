@@ -1,7 +1,9 @@
 package com.inhim.pj.entity;
 
-public class UserInfo {
-    public class User {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable {
+    public class User implements Serializable{
         private int vipUserId;
 
         private String username;

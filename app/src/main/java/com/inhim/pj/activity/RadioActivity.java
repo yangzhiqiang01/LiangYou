@@ -16,7 +16,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
@@ -42,21 +45,18 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
 import fm.jiecao.jcvideoplayer_lib.JCUserAction;
 import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
-import fm.jiecao.jcvideoplayer_lib.JCUtils;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.Request;
 
 //单个章节
 @SuppressLint("SetJavaScriptEnabled")
-public class VideoActivity extends BaseActivity implements OnClickListener,
+public class RadioActivity extends BaseActivity implements
         JCVideoPlayerStandard.DowloadVedioListener, MuluFragment.OnVideoLinear {
 
     ImageView iv_back;
@@ -66,9 +66,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     JCVideoPlayerStandard mJcVideoPlayerStandard;
     private boolean mIsLiveStreaming;
-    private ViewPager viewPager;
-    private ArrayList<Fragment> fs;
-    private RadioButton jiangyi, mulu;
     Long id;
     String videoUrl, videoPath;
     File videoFile;
@@ -81,13 +78,17 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private CheckBox checkbox;
     private Gson gson;
     private MyBusinessInfoDid businessInfoDid;
+    WebView webView;
+    String content;
+    final String mimeType = "text/html";
+    final String encoding = "UTF-8";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gson = new Gson();
         instance = this;
-        setContentView(R.layout.activity_video);
+        setContentView(R.layout.activity_radio);
         initView();
         srearchreceiver = new FullScreenReceiver();
         IntentFilter finishfilter1 = new IntentFilter();
@@ -95,9 +96,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         registerReceiver(srearchreceiver, finishfilter1);
         businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
-        if (businessInfoDid != null&& (new File(businessInfoDid.getFilePath())).exists()) {
+        if (businessInfoDid != null && (new File(businessInfoDid.getFilePath())).exists()) {
             loadDownloadContent(businessInfoDid);
-        }else{
+        } else {
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0), true);
         }
     }
@@ -116,39 +117,25 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                 hideLoading();
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 if (readerInfos.getCode() == 000) {
-                    results=result;
-                    loadContent(readerInfos, isOne);
+                    results = result;
+                    loadContent(readerInfos);
                 }
             }
         });
     }
-    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid){
+
+    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid) {
+        checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
         name = businessInfoDid.getTitle();
         contents = businessInfoDid.getContent();
         photoUrl = businessInfoDid.getCover();
         videoPath = businessInfoDid.getFilePath();
-        videoUrl=businessInfoDid.getUrl();
+        videoUrl = businessInfoDid.getUrl();
         videoFile = new File(videoPath);
-        checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
         setVideo();
-        Bundle jiangyiBl = new Bundle();
-        jiangyiBl.putString("content", contents);
-        Bundle muluBl = new Bundle();
-        muluBl.putSerializable("ReaderTypeId", businessInfoDid.getReaderTypeId());
-        fs = new ArrayList<>();
-        JIangyiFragment jiangyiFm = new JIangyiFragment();
-        MuluFragment muluFragment = new MuluFragment();
-        muluFragment.setvedioLinear(VideoActivity.this);
-        jiangyiFm.setArguments(jiangyiBl);
-        muluFragment.setArguments(muluBl);
-        fs.add(jiangyiFm);
-        fs.add(muluFragment);
-        FragmentManager fm = getSupportFragmentManager();
-        MyPagerAdapter adapter = new MyPagerAdapter(fm);
-        viewPager.setAdapter(adapter);
-        setListener();
     }
-    private void loadContent(ReaderInfo readerInfos, boolean isOne) {
+
+    private void loadContent(ReaderInfo readerInfos) {
         readerInfo = readerInfos.getReader();
         checkbox.setChecked(readerInfo.getCollectionStatus());
         name = readerInfo.getTitle();
@@ -162,30 +149,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         videoFile = new File(videoPath);
         JCVideoPlayer.releaseAllVideos();
         setVideo();
-        if (isOne) {
-            Bundle jiangyiBl = new Bundle();
-            jiangyiBl.putString("content", contents);
-            Bundle muluBl = new Bundle();
-            muluBl.putSerializable("ReaderTypeId", readerInfo.getReaderTypeId());
-            fs = new ArrayList<>();
-            JIangyiFragment jiangyiFm = new JIangyiFragment();
-            MuluFragment muluFragment = new MuluFragment();
-            muluFragment.setvedioLinear(VideoActivity.this);
-            jiangyiFm.setArguments(jiangyiBl);
-            muluFragment.setArguments(muluBl);
-            fs.add(jiangyiFm);
-            fs.add(muluFragment);
-            FragmentManager fm = getSupportFragmentManager();
-            MyPagerAdapter adapter = new MyPagerAdapter(fm);
-            viewPager.setAdapter(adapter);
-            setListener();
-        } else {
-            Intent intent1 = new Intent();
-            intent1.setAction("refresh.fragment.content");
-            intent1.putExtra("content", contents);
-            sendBroadcast(intent1);
-        }
-
     }
 
     @Override
@@ -194,15 +157,15 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             BToast.showText("您已下载该视频");
         } else {
             try {
-                JSONObject jsonObject=new JSONObject(results);
+                JSONObject jsonObject = new JSONObject(results);
                 MyBusinessInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), MyBusinessInfo.class);
                 businessInfo.setFilePath(videoPath);
                 businessInfo.setProgress("0");
-                boolean istrue=businessInfo.save();
-                if(istrue){
-                    Intent intent = new Intent(VideoActivity.this, ListActivity.class);
+                boolean istrue = businessInfo.save();
+                if (istrue) {
+                    Intent intent = new Intent(RadioActivity.this, ListActivity.class);
                     startActivity(intent);
-                }else{
+                } else {
                     BToast.showText("下载失败");
                 }
 
@@ -237,75 +200,11 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.jiangyi:
-                viewPager.setCurrentItem(0);
-                break;
-            case R.id.mulu:
-                viewPager.setCurrentItem(1);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void setListener() {
-        // TODO Auto-generated method stub
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        jiangyi.setChecked(true);
-                        break;
-                    case 1:
-                        mulu.setChecked(true);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            public void onPageScrollStateChanged(int arg0) {
-
-            }
-        });
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        //当前播放进度
-        if(businessInfoDid!=null){
-            int position = mJcVideoPlayerStandard.getCurrentPositionWhenPlaying();
-            //获取当前播放进度
-            int duration = getDuration();
-            Log.e("position","==="+duration);
-            float num= (float)position/duration;
-            DecimalFormat df = new DecimalFormat("0.00");//格式化小数
-            String progressTime = df.format(num);//返回的是String类型
-            businessInfoDid.setProgress(progressTime);
-        }
+
         unregisterReceiver(srearchreceiver);
         JCVideoPlayer.releaseAllVideos();
-    }
-
-    public int getDuration() {
-        //视频总时间
-        int duration = 0;
-        if (JCMediaManager.instance().mediaPlayer == null) return duration;
-        try {
-            duration = JCMediaManager.instance().mediaPlayer.getDuration();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            return duration;
-        }
-        return duration;
     }
 
     class MyUserActionStandard implements JCUserActionStandard {
@@ -375,44 +274,27 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             }
         });
         checkbox = findViewById(R.id.checkbox);
-        mulu = findViewById(R.id.mulu);
-        jiangyi = findViewById(R.id.jiangyi);
-        viewPager = findViewById(R.id.viewpager);
         mJcVideoPlayerStandard = findViewById(R.id.jc_video);
-        mJcVideoPlayerStandard.setListener(VideoActivity.this);
+        mJcVideoPlayerStandard.setListener(RadioActivity.this);
+        webView = findViewById(R.id.webView1);
+        webView.getSettings().setJavaScriptEnabled(true);
+        //设置 缓存模式
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 开启 DOM storage API 功能
+        webView.getSettings().setDomStorageEnabled(true);
         checkbox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoading("收藏中");
                 MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
                 myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
                         new MyOkHttpClient.HttpCallBack() {
                             @Override
                             public void onError(Request request, IOException e) {
-                                hideLoading();
-                                if(checkbox.isChecked()){
-                                    checkbox.setChecked(false);
-                                }else{
-                                    checkbox.setChecked(true);
-                                }
+
                             }
 
                             @Override
                             public void onSuccess(Request request, String result) {
-                                hideLoading();
-                                try {
-                                    JSONObject jsonObject=new JSONObject(result);
-                                    if(jsonObject.getInt("code")!=0){
-                                        BToast.showText(jsonObject.getString("msg"),false);
-                                        if(checkbox.isChecked()){
-                                            checkbox.setChecked(false);
-                                        }else{
-                                            checkbox.setChecked(true);
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
                             }
                         });
             }
@@ -428,12 +310,16 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         super.onBackPressed();
     }
 
-
     private void setVideo() {
-        if(videoFile.exists()){
+        if (content == null || content.length() == 0) {
+            content = "暂无内容";
+        }
+        webView.loadDataWithBaseURL(null, contents, mimeType, encoding, null);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        if (videoFile.exists()) {
             mJcVideoPlayerStandard.setUp(videoPath
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
-        }else{
+        } else {
             mJcVideoPlayerStandard.setUp(videoUrl
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
         }
@@ -467,7 +353,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
 
 
-    private VideoActivity instance;
+    private RadioActivity instance;
     private boolean isFullScreen;
 
     /**
@@ -503,26 +389,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         } else {
             // 向右横屏
             instance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-        }
-    }
-
-    /**
-     * 自定义适配器  FragmentPagerAdapter
-     */
-    class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int arg0) {
-            return fs.get(arg0);
-        }
-
-        @Override
-        public int getCount() {
-            return fs.size();
         }
     }
 

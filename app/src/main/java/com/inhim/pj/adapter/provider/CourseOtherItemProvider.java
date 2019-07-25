@@ -11,6 +11,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.ArticleActivity;
+import com.inhim.pj.activity.RadioActivity;
+import com.inhim.pj.activity.SearchActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
@@ -63,9 +65,11 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
                 @Override
                 public void onClick(View v) {
                     Intent intent;
-                    if(news.getType().equals("2")||news.getType().equals("3")){
+                    if(news.getType().equals("2")){
                         intent=new Intent(context, VideoActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    }else if(news.getType().equals("3")){
+                        intent=new Intent(context, RadioActivity.class);
                     }else{
                         intent=new Intent(context, ArticleActivity.class);
                     }

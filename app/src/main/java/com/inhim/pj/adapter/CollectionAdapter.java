@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.inhim.pj.R;
 import com.inhim.pj.activity.ArticleActivity;
+import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.utils.GlideUtils;
@@ -43,7 +44,6 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
         TextView tv_num1;
         TextView tv_time1;
         CheckBox checkbox;
-        ConstraintLayout constran;
         PersonViewHolder(ViewGroup parent){
             super(parent, R.layout.item_collection);
             iv_title = getView(R.id.iv_title1);
@@ -52,7 +52,6 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
             tv_time1 = getView(R.id.tv_time1);
             checkbox=getView(R.id.checkbox);
             iv_icon=getView(R.id.iv_icon);
-            constran=getView(R.id.constran);
             //设置子View的点击事件
             addOnClickListener(R.id.checkbox);
         }
@@ -86,20 +85,6 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
                 checkbox.setChecked(false);
             }
 
-            constran.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent;
-                    if(data.getReaderEntity().getType().equals("2")||data.getReaderEntity().getType().equals("3")){
-                        intent=new Intent(context, VideoActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    }else{
-                        intent=new Intent(context, ArticleActivity.class);
-                    }
-                    intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 }

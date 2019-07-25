@@ -21,9 +21,16 @@ import com.inhim.pj.dowloadvedio.callback.MyDownloadListener;
 import com.inhim.pj.dowloadvedio.db.DBController;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.FileUtil;
+import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.GlideUtils;
+
+import org.litepal.crud.DataSupport;
+
+import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -89,7 +96,6 @@ public class DownloadListDidAdapter extends
             tv_size = view.findViewById(R.id.tv_size);
             tv_status = view.findViewById(R.id.tv_status);
             tv_name = view.findViewById(R.id.tv_name);
-            rl_item = view.findViewById(R.id.rl_item);
             imageview1 = view.findViewById(R.id.imageview1);
             imageview2 = view.findViewById(R.id.imageview2);
             checkbox = view.findViewById(R.id.checkbox);
@@ -98,6 +104,11 @@ public class DownloadListDidAdapter extends
         @SuppressWarnings("unchecked")
         public void bindData(final MyBusinessInfoDid data, final int position) {
             tv_name.setText(data.getTitle());
+            if(data.getProgress()!=null){
+                tv_status.setText(data.getProgress());
+            }else{
+                tv_status.setText("未播放");
+            }
             GlideUtils.displayFromUrl(data.getCover(), imageview1,context);
             imageview2.setImageResource(R.mipmap.icon_video);
             downloadInfo = downloadManager.getDownloadById(data.getUrl().hashCode());
@@ -129,54 +140,6 @@ public class DownloadListDidAdapter extends
 
             refresh(position);
 
-   /*   iv_deldete.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          List<MyBusinessInfoDid> infos = DataSupport.findAll(MyBusinessInfoDid.class);
-          if(infos.size()>0){
-            try{
-              DBController instance =  DBController.getInstance(context);
-              for(int i=0;i<instance.findAllDownloaded().size();i++){
-                instance.delete(instance.findAllDownloaded().get(i));
-              }
-
-              tv_size.setText("");
-              pb.setProgress(0);
-              infos.get(position).delete();
-              String video= Urls.getFilePath()+data.getName();
-              File file=new File(video);
-              file.delete();
-              setData(infos);
-
-            }catch (Exception e){
-              e.printStackTrace();
-            }
-          }else{
-            setData(infos);
-          }
-
-        }
-      });
-*/
-//      Download button
-     /* imageview1.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Intent intent=new Intent(context, VideoActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-          List<MyBusinessInfoDid> infos = DataSupport.findAll(MyBusinessInfoDid.class);
-          if(infos.size()>0){
-            try{
-              intent.putExtra("result",infos.get(position));
-              context.startActivity(intent);
-            }catch (Exception e){
-              e.printStackTrace();
-            }
-          }
-
-        }
-      });*/
-
         }
 
         private void notifyDownloadStatus() {
@@ -193,9 +156,32 @@ public class DownloadListDidAdapter extends
         private void refresh(int position) {
             if (downloadInfo != null) {
                 tv_size.setText(FileUtil.formatFileSize(downloadInfo.getSize()));
-                tv_status.setText(" 已完成");
-
             }
         }
     }
+    public void deleteFiles(Map<Integer, Boolean> deleteMap){
+        List<MyBusinessInfoDid> listInfo = getDownloadListData();
+        for(int i=0;i<deleteMap.size();i++){
+            if (deleteMap.get(i)) {
+                File file = new File(listInfo.get(i).getFilePath());
+                file.delete();
+                listInfo.get(i).delete();
+                listInfo.remove(i);
+                try {
+                    DBController instance =  DBController.getInstance(context);
+                    instance.delete(instance.findAllDownloaded().get(i));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        setData(listInfo);
+    }
+    private List<MyBusinessInfoDid> getDownloadListData() {
+        List<MyBusinessInfoDid> myBusinessInfos = DataSupport.findAll(MyBusinessInfoDid.class);
+        if (myBusinessInfos.size() > 0) {
+        }
+        return myBusinessInfos;
+    }
+
 }

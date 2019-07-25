@@ -6,7 +6,9 @@
     android:orientation="vertical">
 
     <include layout="@layout/title" />
+
     <include layout="@layout/dividing_line" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +31,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/info_photo" />
+                    android:text="@string/info_photo"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -52,22 +56,24 @@
 
                     />
 
-
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/user_name" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/user_name"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <EditText
                     android:id="@+id/user_name"
@@ -76,25 +82,28 @@
                     android:layout_marginLeft="@dimen/magin"
                     android:layout_marginRight="@dimen/magin"
                     android:background="@null"
-                    android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_name" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_name"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <EditText
                     android:id="@+id/ed_name"
@@ -103,25 +112,28 @@
                     android:layout_marginLeft="@dimen/magin"
                     android:layout_marginRight="@dimen/magin"
                     android:background="@null"
-                    android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_ethnic" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_ethnic"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <EditText
                     android:id="@+id/ed_ethnic"
@@ -130,24 +142,28 @@
                     android:layout_marginLeft="@dimen/magin"
                     android:layout_marginRight="@dimen/magin"
                     android:background="@null"
-                    android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_telephone" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_telephone"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/tv_telephone"
@@ -158,22 +174,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_email" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_email"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <EditText
                     android:id="@+id/ed_email"
@@ -182,28 +203,31 @@
                     android:layout_marginLeft="@dimen/magin"
                     android:layout_marginRight="@dimen/magin"
                     android:background="@null"
-                    android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/dividing_line_backgroud"
-                />
+                android:background="@color/dividing_line_backgroud" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_belief" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_belief"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/tv_belief"
@@ -214,23 +238,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_believing_year" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_believing_year"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/ed_believing_year"
@@ -241,23 +269,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_bebaptized_year" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_bebaptized_year"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/ed_bebaptized_year"
@@ -268,23 +300,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_marriage" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_marriage"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/tv_marriage"
@@ -295,23 +331,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_kiddo" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_kiddo"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/tv_kiddo"
@@ -322,23 +362,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_education" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_education"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <TextView
                     android:id="@+id/tv_education"
@@ -349,23 +393,27 @@
                     android:background="@null"
                     android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_dimen_60"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/text_size_14_black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/magin"
-                    android:text="@string/info_occupation" />
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/magin"
+                    android:gravity="center"
+                    android:text="@string/info_occupation"
+                    android:textColor="@color/color333"
+                    android:textSize="@dimen/text_size_18" />
 
                 <EditText
                     android:id="@+id/ed_zhiye"
@@ -374,23 +422,23 @@
                     android:layout_marginLeft="@dimen/magin"
                     android:layout_marginRight="@dimen/magin"
                     android:background="@null"
-                    android:drawableRight="@mipmap/xiangyoujiantou"
                     android:gravity="right|center"
+                    android:textColor="@color/color6666"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/textsize16" />
+                    android:textSize="@dimen/text_size_18" />
             </LinearLayout>
 
             <include layout="@layout/dividing_line2" />
+
             <Button
                 android:id="@+id/btn_submit"
-                android:onClick="onClick"
                 style="@style/btn_login_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/submit"
                 android:layout_margin="@dimen/base_dimen_1"
-                />
+                android:onClick="onClick"
+                android:text="@string/submit" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

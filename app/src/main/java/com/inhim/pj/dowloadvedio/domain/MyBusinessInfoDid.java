@@ -25,6 +25,20 @@ public class MyBusinessInfoDid extends DataSupport implements Serializable{
 
     //用来判断是否播放及播放进度是多少
     private String progress;
+    private String collectionStatus;
+    private int type;
+    public void setType(int type){
+        this.type = type;
+    }
+    public int getType(){
+        return this.type;
+    }
+    public void setCollectionStatus(String collectionStatus){
+        this.collectionStatus = collectionStatus;
+    }
+    public String getCollectionStatus(){
+        return this.collectionStatus;
+    }
     public void setReaderId(int readerId){
         this.readerId = readerId;
     }

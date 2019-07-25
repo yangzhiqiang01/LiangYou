@@ -4,10 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ReadingTwoFragment">
-
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/home_SwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </FrameLayout>

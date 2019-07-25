@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.CollectionActivity;
 import com.inhim.pj.activity.HistoryActivity;
@@ -22,13 +25,16 @@ import com.inhim.pj.activity.SettingActivity;
 import com.inhim.pj.activity.WebViewActivity;
 import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.dowloadvedio.ListActivity;
+import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.GlideCircleUtils;
 import com.inhim.pj.utils.PermissionUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.Util;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.WXShareDialog;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -60,7 +66,9 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private int mTargetScene1 = SendMessageToWX.Req.WXSceneTimeline;
     private IWXAPI api;
     private WXShareDialog wxShareDialog;
-
+    private UserInfo.User userInfo;
+    private ImageView iv_photo;
+    private TextView tv_name;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +86,45 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getInfo(false);
+    }
+
+    private void getInfo(final boolean isStart) {
+        String examUrl = Urls.getUserInfo;
+        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+            }
+
+            @Override
+            public void onSuccess(Request request, String results) {
+                Gson gson=new Gson();
+                UserInfo smsResult = gson.fromJson(results, UserInfo.class);
+                if (smsResult.getCode()==0) {
+                    userInfo=smsResult.getUser();
+                    if(isStart){
+                        Intent intent1=new Intent(mContext, MyInfoActivity.class);
+                        intent1.putExtra("result",userInfo);
+                        startActivity(intent1);
+                    }
+                    tv_name.setText(userInfo.getRealname());
+                    ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
+                    //GlideCircleUtils.displayFromUrl(userInfo.getHeadimgurl(),iv_photo,mContext);
+                } else {
+                    BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
+                }
+            }
+        });
+    }
+
     private void initView(View view) {
+        tv_name=view.findViewById(R.id.tv_name);
+        iv_photo=view.findViewById(R.id.iv_photo);
         tv_code=view.findViewById(R.id.tv_code);
-        tv_code.setText("V."+MyApplication.getVersion());
+        tv_code.setText("当前版本V."+MyApplication.getVersion());
         dowload_list=view.findViewById(R.id.dowload_list);
         dowload_list.setOnClickListener(this);
         lin_1=view.findViewById(R.id.lin_1);
@@ -114,8 +158,13 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.lin_1:
-                Intent intent1=new Intent(mContext, MyInfoActivity.class);
-                startActivity(intent1);
+                if(userInfo==null){
+                    getInfo(true);
+                }else{
+                    Intent intent1=new Intent(mContext, MyInfoActivity.class);
+                    intent1.putExtra("result",userInfo);
+                    startActivity(intent1);
+                }
                 break;
             case R.id.lin_2:
                 Intent intent2=new Intent(mContext, CollectionActivity.class);

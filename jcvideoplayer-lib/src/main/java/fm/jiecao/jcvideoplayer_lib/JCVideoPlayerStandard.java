@@ -69,8 +69,6 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
         //tinyBackImageView = (ImageView) findViewById(R.id.back_tiny);
         lin_shouchang = (LinearLayout) findViewById(R.id.lin_shouchang);
         lin_dowload = (LinearLayout)  findViewById(R.id.lin_dowload);
-        ImageView start= (ImageView) findViewById(R.id.start);
-        start.setOnClickListener(this);
         lin_shouchang.setOnClickListener(this);
         lin_dowload.setOnClickListener(this);
         thumbImageView.setOnClickListener(this);
@@ -217,15 +215,15 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     public void onClick(View v) {
         super.onClick(v);
         int i = v.getId();
-        if(i==R.id.start){
+        /*if(i==R.id.start){
             if(isOne){
                 isOne=false;
                 if (mListener != null) {
+                    //第一次进入页面记录播放次数
                     mListener.chapterPay();
                 }
             }
-        }
-        if (i == R.id.thumb) {
+        }else */if (i == R.id.thumb) {
 
 
             if (TextUtils.isEmpty(url)) {
@@ -243,7 +241,6 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
                 onClickUiToggle();
             }
         } else if (i == R.id.surface_container) {
-            Log.e("isone","false222");
             startDismissControlViewTimer();
         } else if (i == R.id.back) {
             backPress();

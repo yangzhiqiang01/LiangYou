@@ -132,8 +132,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(Request request, String results) {
                 SMSResult smsResult = gson.fromJson(results, SMSResult.class);
                 Log.e("code",String.valueOf(smsResult.getCode()));
-                if (smsResult.getMsg().equals("success")) {
-                }else{
+                Toast.makeText(LoginActivity.this,String.valueOf(smsResult.getCode()),Toast.LENGTH_LONG).show();
+                if (!smsResult.getMsg().equals("success")) {
                     btn_gecode.setEnabled(true);
                     btn_gecode.setTextAppearance(R.style.btn_getcode);
                     btn_gecode.setText("获取验证码");

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.AllCategoriesAdapter;
+import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.base.ClassicsHeader;
 import com.inhim.pj.base.ModeType;
 import com.inhim.pj.entity.ReaderTypeList;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 
 import okhttp3.Request;
 
-public class AllCategoriesActivity extends AppCompatActivity implements AllCategoriesAdapter.onClickLinear {
+public class AllCategoriesActivity extends BaseActivity implements AllCategoriesAdapter.onClickLinear {
     RecyclerView mRecyclerView;
     private AllCategoriesAdapter mAdapter;
     private Gson gson;
@@ -104,15 +105,17 @@ public class AllCategoriesActivity extends AppCompatActivity implements AllCateg
          "readerTypeId": "string",
          "title": "string"
          }*/
+        showLoading("加载中");
         HashMap postMap = new HashMap();
         MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(mPageNum, 2, ""), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                hideLoading();
                 ReaderTypeList readerTypeList = gson.fromJson(result, ReaderTypeList.class);
                 if (readerTypeList.getCode() == 0) {
                     if (refresh) {

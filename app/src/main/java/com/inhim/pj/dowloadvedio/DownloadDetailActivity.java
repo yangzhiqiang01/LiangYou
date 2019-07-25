@@ -34,7 +34,6 @@ public class DownloadDetailActivity extends BaseActivity {
     private ProgressBar pb;
     private TextView tv_name;
     private MyBusinessInfo data;
-    private LinearLayout rl_item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,6 @@ public class DownloadDetailActivity extends BaseActivity {
         tv_status = (TextView) findViewById(R.id.tv_status);
         pb = (ProgressBar) findViewById(R.id.pb);
         tv_name = (TextView) findViewById(R.id.tv_name);
-        rl_item = findViewById(R.id.rl_item);
     }
 
     @SuppressWarnings("unchecked")
@@ -76,7 +74,7 @@ public class DownloadDetailActivity extends BaseActivity {
 
         refresh();
 
-        rl_item.setOnClickListener(new OnClickListener() {
+        /**rl_item.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (downloadInfo != null) {
@@ -122,7 +120,7 @@ public class DownloadDetailActivity extends BaseActivity {
                     downloadManager.download(downloadInfo);
                 }
             }
-        });
+        });*/
     }
 
     private void refresh() {

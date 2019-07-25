@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,23 +30,12 @@
             android:textColor="@color/color333"
             android:textSize="@dimen/text_size_20" />
 
-        <TextView
-            android:id="@+id/tv_editor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/cb_doload"
-            android:padding="@dimen/base_dimen_0"
-            android:text="编辑"
-            android:textColor="@color/color333"
-            android:textSize="@dimen/textsize16" />
         <CheckBox
             android:id="@+id/cb_doload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/CustomCheckBoxTheme"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:padding="@dimen/base_dimen_0"
             />
     </RelativeLayout>
@@ -55,6 +44,7 @@
         android:id="@+id/onceTask_member_ycView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@+id/rela_title"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
@@ -64,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
         <View
@@ -106,4 +97,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

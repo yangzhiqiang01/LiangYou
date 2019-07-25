@@ -117,8 +117,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            downloadListAdapter.setData(getDownloadListData());
-            downloadListAdapter.notifyDataSetChanged();
+            initData();
         }
     }
 
@@ -176,21 +175,12 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
             @Override
             public void onClick(View v) {
                 Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
-                List<MyBusinessInfo> listInfo = getDownloadListData();
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
-
                     ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
                     CheckBox checkBox = layout.findViewById(R.id.checkbox);
-
                     mDeviceHeaderMap.put(i, checkBox.isChecked());
-                    if (checkBox.isChecked()) {
-                        File file = new File(listInfo.get(i).getFilePath());
-                        file.delete();
-                        listInfo.get(i).delete();
-                        listInfo.remove(i);
-                    }
+                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
                 }
-                downloadListAdapter.deleteFile(listInfo);
             }
         });
         tvFile.setText("存储路径:" + Urls.getFilePath());
@@ -226,10 +216,10 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
     @Override
     public void onItemClick(int position) {
-        MyBusinessInfo data = downloadListAdapter.getData(position);
+        /*MyBusinessInfo data = downloadListAdapter.getData(position);
         Intent intent = new Intent(getActivity(), DownloadDetailActivity.class);
         intent.putExtra(DownloadDetailActivity.DATA, data);
-        startActivityForResult(intent, REQUEST_DOWNLOAD_DETAIL_PAGE);
+        startActivityForResult(intent, REQUEST_DOWNLOAD_DETAIL_PAGE);*/
     }
 
     /**

@@ -125,9 +125,11 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                             Intent intent;
-                            if(resultData1.get(position).getType().equals("2")||resultData1.get(position).getType().equals("3")){
+                            if(resultData1.get(position).getType().equals("2")){
                                 intent=new Intent(SearchActivity.this, VideoActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            }else if(resultData1.get(position).getType().equals("3")){
+                                intent=new Intent(SearchActivity.this, RadioActivity.class);
                             }else{
                                 intent=new Intent(SearchActivity.this, ArticleActivity.class);
                             }

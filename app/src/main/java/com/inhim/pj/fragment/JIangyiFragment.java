@@ -14,7 +14,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.inhim.pj.R;
-import com.inhim.pj.dowloadvedio.HaveDownloadedFragment;
 
 
 /**

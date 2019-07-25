@@ -146,12 +146,11 @@ public class DownloadTaskImpl implements DownloadTask, GetFileInfoTask.OnGetFile
   public void onDownloadSuccess() {
     computerDownloadProgress();
     if (downloadInfo.getProgress() == downloadInfo.getSize()) {
-
-    }
-    downloadInfo.setStatus(DownloadInfo.STATUS_COMPLETED);
-    downloadResponse.onStatusChanged(downloadInfo);
-    if (downloadTaskListener != null) {
-      downloadTaskListener.onDownloadSuccess(downloadInfo);
+      downloadInfo.setStatus(DownloadInfo.STATUS_COMPLETED);
+      downloadResponse.onStatusChanged(downloadInfo);
+      if (downloadTaskListener != null) {
+        downloadTaskListener.onDownloadSuccess(downloadInfo);
+      }
     }
   }
 

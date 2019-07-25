@@ -58,6 +58,10 @@
             android:name=".activity.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard|screenLayout"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RadioActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard|screenLayout"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.ReplacePhoneActivity" />
         <activity android:name=".activity.ProjectListActivity" />

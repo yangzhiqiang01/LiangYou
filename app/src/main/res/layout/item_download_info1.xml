@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:id="@+id/rl_item"
-    android:layout_height="@dimen/base_dimen_102">
 
     <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/constran"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_dimen_102"
         android:background="@color/white">
-
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_15"
+            android:background="@drawable/checkbox_deletes"
+            android:button="@null"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <com.inhim.pj.view.CustomRoundAngleImageView
             android:id="@+id/imageview1"
             android:layout_width="@dimen/base_dimen_110"
@@ -22,9 +28,8 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/weixin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintLeft_toRightOf="@+id/checkbox"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:id="@+id/imageview2"
@@ -34,8 +39,7 @@
             app:layout_constraintBottom_toTopOf="@+id/imageview1"
             app:layout_constraintLeft_toRightOf="@+id/imageview1"
             app:layout_constraintRight_toLeftOf="@+id/imageview1"
-            app:layout_constraintTop_toBottomOf="@+id/imageview1"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toBottomOf="@+id/imageview1"/>
 
         <TextView
             android:id="@+id/tv_name"
@@ -50,8 +54,7 @@
             android:textSize="@dimen/text_size_16"
             app:layout_constraintLeft_toRightOf="@+id/imageview1"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_status"
@@ -62,8 +65,7 @@
             android:textSize="@dimen/text_size_12"
             android:textColor="@color/color6666"
             app:layout_constraintBottom_toBottomOf="@+id/imageview1"
-            app:layout_constraintLeft_toRightOf="@+id/imageview1"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintLeft_toRightOf="@+id/imageview1"/>
 
         <TextView
             android:id="@+id/tv_size"
@@ -74,16 +76,12 @@
             android:textSize="@dimen/text_size_12"
             android:textColor="@color/color6666"
             app:layout_constraintBottom_toBottomOf="@+id/imageview1"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="@dimen/base_dimen_0"
             android:background="@color/dividing_line_backgroud"
-            app:layout_constraintTop_toBottomOf="@+id/imageview1"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toBottomOf="@+id/imageview1" />
     </android.support.constraint.ConstraintLayout>
-
-</LinearLayout>
