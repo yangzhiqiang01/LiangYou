@@ -81,7 +81,6 @@
                 android:layout_marginRight="@dimen/base_dimen_0"
                 android:layout_weight="1"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher"
                 app:layout_constraintTop_toBottomOf="@+id/textview2"
                 tools:ignore="MissingConstraints" />
 

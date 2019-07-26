@@ -2,6 +2,7 @@ package com.inhim.pj.activity;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,11 +35,13 @@ import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.BToast;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +52,6 @@ import java.util.HashMap;
 import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
 import fm.jiecao.jcvideoplayer_lib.JCUserAction;
 import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
-import fm.jiecao.jcvideoplayer_lib.JCUtils;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.Request;
@@ -75,13 +77,12 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private String results;
     private FullScreenReceiver srearchreceiver;
     private String vedioName;
-    //下载得视频 课程
-    //private MyBusinessInfoDid resultDid;
     private ReaderInfo.Reader readerInfo;
     private CheckBox checkbox;
     private Gson gson;
+    //下载得视频 课程
     private MyBusinessInfoDid businessInfoDid;
-
+    private long busiID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +97,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
         if (businessInfoDid != null&& (new File(businessInfoDid.getFilePath())).exists()) {
+            busiID=getIntent().getLongExtra("busiID",0);
             loadDownloadContent(businessInfoDid);
         }else{
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0), true);
@@ -160,13 +162,12 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         photoUrl = readerInfo.getCover();
         videoPath = Urls.getFilePath() + vedioName;
         videoFile = new File(videoPath);
-        JCVideoPlayer.releaseAllVideos();
-        setVideo();
         if (isOne) {
             Bundle jiangyiBl = new Bundle();
             jiangyiBl.putString("content", contents);
             Bundle muluBl = new Bundle();
             muluBl.putSerializable("ReaderTypeId", readerInfo.getReaderTypeId());
+            muluBl.putSerializable("ReaderId", readerInfo.getReaderId());
             fs = new ArrayList<>();
             JIangyiFragment jiangyiFm = new JIangyiFragment();
             MuluFragment muluFragment = new MuluFragment();
@@ -180,12 +181,13 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             viewPager.setAdapter(adapter);
             setListener();
         } else {
+            JCVideoPlayer.releaseAllVideos();
             Intent intent1 = new Intent();
             intent1.setAction("refresh.fragment.content");
             intent1.putExtra("content", contents);
             sendBroadcast(intent1);
         }
-
+        setVideo();
     }
 
     @Override
@@ -289,7 +291,15 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             float num= (float)position/duration;
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             String progressTime = df.format(num);//返回的是String类型
-            businessInfoDid.setProgress(progressTime);
+            //格式化fat,保留两位小数, 得到一个string字符串
+            if(progressTime!=null&&!progressTime.equals("NaN")){
+                MyBusinessInfoDid infoDid=businessInfoDid;
+                DecimalFormat decimalFormat=new DecimalFormat(".00");
+                String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
+                infoDid.setProgress(proess+"%");
+                infoDid.save();
+                businessInfoDid.delete();
+            }
         }
         unregisterReceiver(srearchreceiver);
         JCVideoPlayer.releaseAllVideos();
@@ -437,10 +447,10 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             mJcVideoPlayerStandard.setUp(videoUrl
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
         }
-        Picasso.with(this)
+        /*Picasso.with(this)
                 .load(photoUrl)
-                .into(mJcVideoPlayerStandard.thumbImageView);
-
+                .into(mJcVideoPlayerStandard.thumbImageView);*/
+        ImageLoader.getInstance().displayImage(photoUrl,mJcVideoPlayerStandard.thumbImageView);
         JCVideoPlayer.setJcUserAction(new MyUserActionStandard());
         //屏幕保持常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

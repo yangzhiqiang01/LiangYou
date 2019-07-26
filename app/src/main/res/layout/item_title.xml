@@ -21,8 +21,7 @@
             android:textColor="@color/color333"
             android:padding="@dimen/base_dimen_0"
             android:layout_toRightOf="@+id/iv_lazu"
-            android:layout_gravity="center"
-            android:text="@string/login"/>
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/tv_lookall"

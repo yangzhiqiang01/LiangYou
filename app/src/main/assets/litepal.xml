@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="dongdong" ></dbname>
 
-    <version value="9" ></version>
+    <version value="1" ></version>
 
     <list>
         <mapping class="com.inhim.pj.dowloadvedio.domain.MyBusinessInfo"></mapping>

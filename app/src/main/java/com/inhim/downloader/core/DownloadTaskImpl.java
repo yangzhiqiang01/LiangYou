@@ -145,7 +145,7 @@ public class DownloadTaskImpl implements DownloadTask, GetFileInfoTask.OnGetFile
   @Override
   public void onDownloadSuccess() {
     computerDownloadProgress();
-    if (downloadInfo.getProgress() == downloadInfo.getSize()) {
+    if (downloadInfo.getProgress() >= downloadInfo.getSize()) {
       downloadInfo.setStatus(DownloadInfo.STATUS_COMPLETED);
       downloadResponse.onStatusChanged(downloadInfo);
       if (downloadTaskListener != null) {

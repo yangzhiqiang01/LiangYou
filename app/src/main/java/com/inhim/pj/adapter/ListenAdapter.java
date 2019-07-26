@@ -7,12 +7,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.MultipleItemRvAdapter;
 import com.inhim.pj.adapter.provider.BannerItemProvider;
 import com.inhim.pj.adapter.provider.ChapterItemProvider;
-import com.inhim.pj.adapter.provider.CourseOnerItemProvider;
 import com.inhim.pj.adapter.provider.CourseOtherItemProvider;
 import com.inhim.pj.adapter.provider.ListenReaderTypeProvider;
-import com.inhim.pj.adapter.provider.ReaderTypeProvider;
+import com.inhim.pj.adapter.provider.SeriesProvider;
 import com.inhim.pj.adapter.provider.StyleItemProvider;
-import com.inhim.pj.adapter.provider.StyleTitleProvider;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
@@ -29,10 +27,6 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
      * banner(广告)
      */
     public static final int BANNER = 100;
-    /**
-     * 章节标题
-     */
-    public static final int CHAPTER = 200;
     /**
      * 课程第一节布局区别于其他
      */
@@ -58,9 +52,7 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
     protected int getViewType(T news) {
         if (news instanceof BannerList) {
             return BANNER;
-        } else if (news instanceof TitleAndSize) {
-            return CHAPTER;
-        } else if (news instanceof String) {
+        }  else if (news instanceof String) {
             return STYLE_TITLE;
         } else if (news instanceof ReaderStyle.List) {
             return STYLE;
@@ -77,7 +69,6 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
     public void registerItemProvider() {
         //注册itemProvider
         mProviderDelegate.registerProvider(new BannerItemProvider());
-        mProviderDelegate.registerProvider(new StyleTitleProvider(context));
         mProviderDelegate.registerProvider(new StyleItemProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
         mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));

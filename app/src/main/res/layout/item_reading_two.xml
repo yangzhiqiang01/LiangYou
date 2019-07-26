@@ -23,7 +23,6 @@
             android:layout_margin="@dimen/base_dimen_0"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:layout_toRightOf="@+id/iv_title"
-            android:src="@mipmap/ic_launcher"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
 

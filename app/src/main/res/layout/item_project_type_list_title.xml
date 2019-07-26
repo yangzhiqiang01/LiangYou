@@ -10,7 +10,6 @@
         android:id="@+id/iv_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_dimen_150"
-        android:background="@mipmap/ic_launcher"
         tools:ignore="MissingConstraints" />
 
     <android.support.constraint.ConstraintLayout

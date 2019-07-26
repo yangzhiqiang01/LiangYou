@@ -50,7 +50,7 @@ public class ReadingTwoFragment extends Fragment {
     private SmartRefreshLayout home_SwipeRefreshLayout;
     private int mPageNum = 1;
     private Boolean refresh = true;
-    private ReaderStyle.List rederType;
+    private ReaderStyle rederType;
     private LoadingView loadingView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class ReadingTwoFragment extends Fragment {
             public void onLoadmore(RefreshLayout refreshlayout) {
                 //加载
                 home_SwipeRefreshLayout.finishLoadmore();      //加载完成
-                getReaderList(rederType);
+                getReaderList(rederType.getList().get(0));
             }
         });
         /**
@@ -116,12 +116,11 @@ public class ReadingTwoFragment extends Fragment {
 
             @Override
             public void onSuccess(Request request, String result) {
-                ReaderStyle readerStyle=gson.fromJson(result,ReaderStyle.class);
-                if(readerStyle.getCode()==0){
+                rederType=gson.fromJson(result,ReaderStyle.class);
+                if(rederType.getCode()==0){
                     homeList.add("系列专题");
-                    rederType=readerStyle.getList().get(0);
                     homeList.add(rederType);
-                    getReaderList(rederType);
+                    getReaderList(rederType.getList().get(0));
                 }
             }
         });
@@ -189,7 +188,7 @@ public class ReadingTwoFragment extends Fragment {
     private void getBannerList() {
         loadingView=new LoadingView();
         loadingView.showLoading("加载中",getActivity());
-        MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(1), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(2), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 BToast.showText("请求失败", false);

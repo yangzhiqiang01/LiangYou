@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="wrap_content"
+    android:id="@+id/constran"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.inhim.pj.view.CustomRoundAngleImageView
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@mipmap/ic_launcher"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/base_dimen_0"
         android:layout_marginLeft="@dimen/base_dimen_0"/>
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constran"
+        android:id="@+id/black_constran"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/base_dimen_0"
@@ -52,13 +52,4 @@
             />
     </android.support.constraint.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/base_dimen_0"
-        android:layout_marginLeft="@dimen/base_dimen_0"
-        android:layout_marginRight="@dimen/base_dimen_0"
-        android:background="@color/dividing_line_backgroud"
-        app:layout_constraintTop_toBottomOf="@+id/imageview"
-        tools:ignore="MissingConstraints" />
 </android.support.constraint.ConstraintLayout>

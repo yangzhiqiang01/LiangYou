@@ -1,6 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +29,8 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
     RecyclerView mRecyclerView;
     private AllCategoriesAdapter mAdapter;
     private Gson gson;
-    private ArrayList categoriesList1, categoriesList2, categoriesList3, categoriesList4;
+    private ArrayList categoriesList1, categoriesList2;
+    private ArrayList categoriesList3, categoriesList4;
     SmartRefreshLayout home_SwipeRefreshLayout;
     private int mPageNum = 1;
     private Boolean refresh = true;
@@ -51,7 +51,7 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
 
     private void initAdapter() {
         categoriesList1.add("全部分类");
-        categoriesList3.add("其他分类");
+        //categoriesList3.add("其他分类");
         mAdapter = new AllCategoriesAdapter(AllCategoriesActivity.this);
         mAdapter.setOnClickLinear(AllCategoriesActivity.this);
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -107,7 +107,7 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
          }*/
         showLoading("加载中");
         HashMap postMap = new HashMap();
-        MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(mPageNum, 2, ""), postMap, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(mPageNum, 10, ""), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 hideLoading();
@@ -122,13 +122,13 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
                         refresh=false;
                         mPageNum=1;
                         categoriesList2.clear();
-                        categoriesList4.clear();
+                        //categoriesList4.clear();
                         categoriesList2.addAll(readerTypeList.getPage().getList());
-                        categoriesList4.addAll(readerTypeList.getPage().getList());
+                        //categoriesList4.addAll(readerTypeList.getPage().getList());
                     } else {
                         mPageNum++;
                         categoriesList2.addAll(readerTypeList.getPage().getList());
-                        categoriesList4.addAll(readerTypeList.getPage().getList());
+                        //categoriesList4.addAll(readerTypeList.getPage().getList());
                     }
                     mAdapter.addList(categoriesList1, categoriesList2, categoriesList3, categoriesList4);
                     mAdapter.notifyDataSetChanged();

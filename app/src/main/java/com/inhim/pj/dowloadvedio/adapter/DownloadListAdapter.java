@@ -318,18 +318,22 @@ public class DownloadListAdapter extends
         for(int i=0;i<deleteMap.size();i++){
             if (deleteMap.get(i)) {
                 File file = new File(listInfo.get(i).getFilePath());
-                file.delete();
+                if(file.exists()){
+                    file.delete();
+                }
                 listInfo.get(i).delete();
-                listInfo.remove(i);
                 try {
                     DBController instance =  DBController.getInstance(context);
-                    instance.delete(instance.findAllDownloaded().get(i));
+                    List<DownloadInfo> list=instance.findAllDownloaded();
+                    for(int j=0;j<list.size();j++){
+                        instance.delete(instance.findAllDownloaded().get(j));
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }
-        setData(listInfo);
+        setData(getDownloadListData());
     }
     private List<MyBusinessInfo> getDownloadListData() {
         List<MyBusinessInfo> myBusinessInfos = DataSupport.findAll(MyBusinessInfo.class);

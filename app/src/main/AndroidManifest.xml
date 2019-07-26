@@ -41,7 +41,6 @@
         <activity android:name=".activity.CollectionActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.AllCategoriesActivity" />
-        <activity android:name=".activity.AgreementActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
@@ -51,9 +50,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.MyInfoActivity" />
+        <activity
+            android:name=".activity.MyInfoActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard|screenLayout"

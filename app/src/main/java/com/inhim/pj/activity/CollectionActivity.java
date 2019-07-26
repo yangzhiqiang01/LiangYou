@@ -8,9 +8,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -23,21 +25,29 @@ import com.inhim.pj.R;
 import com.inhim.pj.adapter.CollectionAdapter;
 import com.inhim.pj.adapter.RadioGridViewAdapter;
 import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.base.ClassicsHeader;
+import com.inhim.pj.dowloadvedio.db.DBController;
+import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
+import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.entity.CollectionTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.CenterDialog;
 import com.inhim.pj.view.MyGridView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 import org.yczbj.ycrefreshviewlib.inter.OnItemChildClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnItemLongClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +76,7 @@ public class CollectionActivity extends BaseActivity {
     private PopupWindow popupwindow;
     private RadioGridViewAdapter popupwindowAdapter;
     private int selectedPosition;
+    private CenterDialog centerDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +115,7 @@ public class CollectionActivity extends BaseActivity {
         textview2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCollection();
+                setDiaglog();
             }
         });
         ImageView iv_back = findViewById(R.id.iv_back);
@@ -219,7 +230,32 @@ public class CollectionActivity extends BaseActivity {
             }
         });
     }
+    private void setDiaglog(){
+        View outerView = LayoutInflater.from(CollectionActivity.this).inflate(R.layout.dialog_deletes, null);
+        Button btn_ok=outerView.findViewById(R.id.btn_ok);
+        Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCollection();
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (centerDialog !=null && centerDialog.isShowing()) {
+            return;
+        }
 
+        centerDialog = new CenterDialog(CollectionActivity.this, R.style.ActionSheetDialogBotoomStyle);
+        //将布局设置给Dialog
+        centerDialog.setContentView(outerView);
+        centerDialog.show();//显示对话框
+    }
     private void handleRecyclerViewInfo() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

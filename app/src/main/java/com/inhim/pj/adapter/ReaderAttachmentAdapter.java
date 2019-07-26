@@ -23,10 +23,11 @@ import java.util.ArrayList;
 public class ReaderAttachmentAdapter extends RecyclerArrayAdapter<ReaderList.List> {
 
     Context context;
-    private int lastPosition;//定义一个标记为最后选择的位置
-
-    public ReaderAttachmentAdapter(Context context) {
+    private int lastPosition=-1;//定义一个标记为最后选择的位置
+    private  int ReaderId;
+    public ReaderAttachmentAdapter(Context context,int ReaderId) {
         super(context);
+        this.ReaderId=ReaderId;
     }
 
     @Override
@@ -50,12 +51,19 @@ public class ReaderAttachmentAdapter extends RecyclerArrayAdapter<ReaderList.Lis
         public void setData(ReaderList.List data) {
             super.setData(data);
             textview.setText(data.getTitle());
-            if (lastPosition == position) {
-                imageview.setImageResource(R.mipmap.attachment1);
-                textview.setTextColor(Color.parseColor("#0079D7"));
-            } else {
-                imageview.setImageResource(R.mipmap.attachment2);
-                textview.setTextColor(Color.parseColor("#333333"));
+            if(lastPosition==-1){
+                if(ReaderId==data.getReaderId()){
+                    imageview.setImageResource(R.mipmap.attachment1);
+                    textview.setTextColor(Color.parseColor("#0079D7"));
+                }
+            }else{
+                if (lastPosition == position) {
+                    imageview.setImageResource(R.mipmap.attachment1);
+                    textview.setTextColor(Color.parseColor("#0079D7"));
+                } else {
+                    imageview.setImageResource(R.mipmap.attachment2);
+                    textview.setTextColor(Color.parseColor("#333333"));
+                }
             }
         }
     }

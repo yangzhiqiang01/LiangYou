@@ -617,11 +617,13 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
         bottomContainer.setVisibility(bottomCon);
         startButton.setVisibility(startBtn);
         loadingProgressBar.setVisibility(loadingPro);
-        thumbImageView.setVisibility(thumbImg);
+
         if(format!=null&&format.equals("mp3")){
-            surface_container.setBackgroundResource(R.drawable.medio_backgroud);
+            //surface_container.setBackgroundResource(R.drawable.medio_backgroud);
+            thumbImageView.setVisibility(View.VISIBLE);
             fullscreenButton.setVisibility(View.INVISIBLE);
         }else{
+            thumbImageView.setVisibility(thumbImg);
             fullscreenButton.setVisibility(View.VISIBLE);
         }
         bottomProgressBar.setVisibility(bottomPro);

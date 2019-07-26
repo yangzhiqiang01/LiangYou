@@ -104,7 +104,7 @@ public class DownloadListDidAdapter extends
         @SuppressWarnings("unchecked")
         public void bindData(final MyBusinessInfoDid data, final int position) {
             tv_name.setText(data.getTitle());
-            if(data.getProgress()!=null){
+            if(data.getProgress()!=null&&!data.getProgress().equals("0")){
                 tv_status.setText(data.getProgress());
             }else{
                 tv_status.setText("未播放");
@@ -164,18 +164,22 @@ public class DownloadListDidAdapter extends
         for(int i=0;i<deleteMap.size();i++){
             if (deleteMap.get(i)) {
                 File file = new File(listInfo.get(i).getFilePath());
-                file.delete();
+                if(file.exists()){
+                    file.delete();
+                }
                 listInfo.get(i).delete();
-                listInfo.remove(i);
                 try {
                     DBController instance =  DBController.getInstance(context);
-                    instance.delete(instance.findAllDownloaded().get(i));
+                    List<DownloadInfo> list=instance.findAllDownloaded();
+                    for(int j=0;j<list.size();j++){
+                        instance.delete(instance.findAllDownloaded().get(j));
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }
-        setData(listInfo);
+        setData(getDownloadListData());
     }
     private List<MyBusinessInfoDid> getDownloadListData() {
         List<MyBusinessInfoDid> myBusinessInfos = DataSupport.findAll(MyBusinessInfoDid.class);

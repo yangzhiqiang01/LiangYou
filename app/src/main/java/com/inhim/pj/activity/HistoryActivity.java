@@ -6,7 +6,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.CenterDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +48,7 @@ public class HistoryActivity extends BaseActivity {
     private ImageView iv_back;
     private List<CollectionList.List> historyList;
     private Map vipCollectionIdsMap;
+    private CenterDialog centerDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,7 @@ public class HistoryActivity extends BaseActivity {
         tv_clean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteAllHistory();
+                setDiaglog();
             }
         });
         iv_back=findViewById(R.id.iv_back);
@@ -68,6 +72,32 @@ public class HistoryActivity extends BaseActivity {
         vipCollectionIdsMap=new HashMap();
         handleRecyclerViewInfo();
         getHistoryList();
+    }
+    private void setDiaglog(){
+        View outerView = LayoutInflater.from(HistoryActivity.this).inflate(R.layout.dialog_deletes, null);
+        Button btn_ok=outerView.findViewById(R.id.btn_ok);
+        Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllHistory();
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (centerDialog !=null && centerDialog.isShowing()) {
+            return;
+        }
+
+        centerDialog = new CenterDialog(HistoryActivity.this, R.style.ActionSheetDialogBotoomStyle);
+        //将布局设置给Dialog
+        centerDialog.setContentView(outerView);
+        centerDialog.show();//显示对话框
     }
     private void deleteAllHistory() {
         showLoading("删除中");

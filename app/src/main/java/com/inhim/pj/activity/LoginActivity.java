@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,6 +31,7 @@ import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.AboutDialog;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.CenterDialog;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private Gson gson;
     private CheckBox cb_save_pw;
     private boolean isOk;
-
+    private CenterDialog centerDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,14 +181,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_encounter_problem:
-                AboutDialog.Builder aboutDialog=new AboutDialog.Builder(LoginActivity.this);
-                aboutDialog.setPositiveButton(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                aboutDialog.create().show();
+                setCenterDiaolog();
                 break;
             case R.id.iv_weixin:
                 break;
@@ -197,11 +192,32 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 sendSMS();
                 break;
             case R.id.tv_agreement:
-                Intent intent=new Intent(LoginActivity.this,AgreementActivity.class);
+                Intent intent=new Intent(LoginActivity.this,WebViewActivity.class);
+                intent.putExtra("Type","agreement");
                 startActivity(intent);
                 break;
             default:
                 break;
         }
+    }
+
+    private void setCenterDiaolog(){
+        View outerView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_about, null);
+        Button btn_ok=outerView.findViewById(R.id.btn_ok);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (centerDialog !=null && centerDialog.isShowing()) {
+            return;
+        }
+
+        centerDialog = new CenterDialog(LoginActivity.this, R.style.ActionSheetDialogBotoomStyle);
+        //将布局设置给Dialog
+        centerDialog.setContentView(outerView);
+        centerDialog.show();//显示对话框
     }
 }

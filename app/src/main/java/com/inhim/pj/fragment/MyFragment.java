@@ -291,12 +291,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 PrefUtils.remove("expire");
                 PrefUtils.remove("token");
                 PrefUtils.remove("isLogin");
-                Intent intent=new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
                 try {
                     JSONObject jsonObject=new JSONObject(result);
                     if(jsonObject.getString("msg").equals("success")){
-
+                        Intent intent=new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

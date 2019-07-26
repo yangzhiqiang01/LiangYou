@@ -5,73 +5,80 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.SettingActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/back"
-            android:layout_marginLeft="@dimen/base_dimen_0"/>
+            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:src="@mipmap/back" />
+
         <TextView
-            android:text="设置"
-            android:layout_margin="@dimen/base_dimen_5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/color333"/>
+            android:layout_margin="@dimen/base_dimen_5dp"
+            android:text="设置"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/text_size_18" />
     </RelativeLayout>
-    <include layout="@layout/dividing_line"/>
+
+    <include layout="@layout/dividing_line" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/color333"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/base_dimen_0"
-            android:text="允许在数据网络下看视频"/>
+            android:text="允许在数据网络下看视频"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/text_size_18" />
+
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/base_dimen_0"
-            android:button="@null"
             android:background="@drawable/checkbox_setting"
-            />
+            android:button="@null" />
     </RelativeLayout>
-    <include layout="@layout/dividing_line2"/>
+
+    <include layout="@layout/dividing_line2" />
+
     <RelativeLayout
         android:id="@+id/rela_clean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/color333"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/base_dimen_0"
-            android:text="清除缓存"/>
+            android:text="清除缓存"
+            android:textColor="@color/color333"
+            android:textSize="@dimen/text_size_18" />
+
         <TextView
             android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="4.3M"
-            android:textColor="@color/color999"
-            android:textSize="@dimen/text_size_18"
-            android:gravity="center"
             android:layout_margin="@dimen/base_dimen_0"
-            android:drawablePadding="@dimen/base_dimen_5dp"
             android:drawableRight="@mipmap/rown_more"
-            />
+            android:drawablePadding="@dimen/base_dimen_5dp"
+            android:gravity="center"
+            android:textColor="@color/color999"
+            android:textSize="@dimen/text_size_18" />
     </RelativeLayout>
 </LinearLayout>

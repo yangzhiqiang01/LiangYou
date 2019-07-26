@@ -27,7 +27,6 @@
             android:maxLines="2"
             app:layout_constraintBottom_toTopOf="@+id/lin_1"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
         <ImageView

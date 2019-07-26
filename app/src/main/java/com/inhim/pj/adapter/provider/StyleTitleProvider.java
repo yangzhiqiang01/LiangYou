@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseViewHolder;

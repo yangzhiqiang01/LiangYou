@@ -114,7 +114,7 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">true</item>
         <!-- Dialog进入及退出动画 -->
-        <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimationBotoom</item>
+       <!-- <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimationBotoom</item>-->
     </style>
     <!-- 发文查阅状态，tab按钮 -->
     <style name="post_read">

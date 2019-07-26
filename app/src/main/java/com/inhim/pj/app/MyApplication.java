@@ -6,11 +6,9 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.view.View;
-import android.widget.Toast;
 
-import com.inhim.pj.MainActivity;
 import com.inhim.pj.R;
+import com.inhim.pj.activity.HomeActivity;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,8 +20,6 @@ import com.tencent.bugly.beta.Beta;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MyApplication extends LitePalApplication {
     private static Context context;
@@ -111,7 +107,7 @@ public class MyApplication extends LitePalApplication {
         /**
          * 只允许在MainActivity上显示更新弹窗，其他activity上不显示弹窗; 不设置会默认所有activity都可以显示弹窗;
          */
-        Beta.canShowUpgradeActs.add(MainActivity.class);
+        Beta.canShowUpgradeActs.add(HomeActivity.class);
 
         /***** Bugly高级设置 *****/
         BuglyStrategy strategy = new BuglyStrategy();

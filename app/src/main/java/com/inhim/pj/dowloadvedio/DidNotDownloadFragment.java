@@ -10,10 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,22 +21,16 @@ import android.widget.TextView;
 
 import com.inhim.downloader.DownloadService;
 import com.inhim.downloader.config.Config;
-import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerDidViewAdapter;
 import com.inhim.pj.dowloadvedio.adapter.DownloadListDidAdapter;
-import com.inhim.pj.dowloadvedio.db.DBController;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.dummy.DummyContent;
-import com.inhim.pj.http.Urls;
+import com.inhim.pj.view.CenterDialog;
 
 import org.litepal.crud.DataSupport;
-
-import java.io.File;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +58,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     private LinearLayout lin_caozuo;
     private TextView textview1, textview2;
     private boolean isCheck, isAll;
+    private CenterDialog centerDialog;
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static HaveDownloadedFragment newInstance(int columnCount) {
@@ -126,7 +121,38 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
             }
         }
     }
+    private void setDiaglog(){
+        View outerView = LayoutInflater.from( getActivity()).inflate(R.layout.dialog_deletes, null);
+        Button btn_ok=outerView.findViewById(R.id.btn_ok);
+        Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
+                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
+                    mDeviceHeaderMap.put(i, checkBox.isChecked());
+                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (centerDialog !=null && centerDialog.isShowing()) {
+            return;
+        }
 
+        centerDialog = new CenterDialog( getActivity(), R.style.ActionSheetDialogBotoomStyle);
+        //将布局设置给Dialog
+        centerDialog.setContentView(outerView);
+        centerDialog.show();//显示对话框
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -179,13 +205,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
         textview2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
-                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
-                    mDeviceHeaderMap.put(i, checkBox.isChecked());
-                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
-                }
+                setDiaglog();
             }
         });
         // Set the adapter
@@ -208,7 +228,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        downloadListAdapter.notifyDataSetChanged();
+        initData();
     }
 
     @Override

@@ -133,6 +133,6 @@
         android:text="@string/encounter_problem"
         android:textColor="@color/color6666"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/base_dimen_0"
+        android:padding="@dimen/base_dimen_0"
         android:textSize="@dimen/text_size_12"/>
 </LinearLayout>

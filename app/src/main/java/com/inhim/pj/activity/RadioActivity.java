@@ -45,9 +45,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
 import fm.jiecao.jcvideoplayer_lib.JCUserAction;
 import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
@@ -202,9 +204,39 @@ public class RadioActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        //当前播放进度
+        if(businessInfoDid!=null){
+            int position = mJcVideoPlayerStandard.getCurrentPositionWhenPlaying();
+            //获取当前播放进度
+            int duration = getDuration();
+            Log.e("position","==="+duration);
+            float num= (float)position/duration;
+            DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+            String progressTime = df.format(num);//返回的是String类型
+            //格式化fat,保留两位小数, 得到一个string字符串
+            if(progressTime!=null&&!progressTime.equals("NaN")){
+                MyBusinessInfoDid infoDid=businessInfoDid;
+                DecimalFormat decimalFormat=new DecimalFormat(".00");
+                String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
+                infoDid.setProgress(proess+"%");
+                infoDid.save();
+                businessInfoDid.delete();
+            }
+        }
         unregisterReceiver(srearchreceiver);
         JCVideoPlayer.releaseAllVideos();
+    }
+    public int getDuration() {
+        //视频总时间
+        int duration = 0;
+        if (JCMediaManager.instance().mediaPlayer == null) return duration;
+        try {
+            duration = JCMediaManager.instance().mediaPlayer.getDuration();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return duration;
+        }
+        return duration;
     }
 
     class MyUserActionStandard implements JCUserActionStandard {

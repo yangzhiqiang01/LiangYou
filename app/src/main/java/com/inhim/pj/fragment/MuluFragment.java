@@ -54,7 +54,8 @@ public class MuluFragment extends Fragment{
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rcyclerView.setLayoutManager(linearLayoutManager);
         final int ReaderTypeId=getArguments().getInt("ReaderTypeId");
-        readerAttachmentAdapter = new ReaderAttachmentAdapter(getActivity());
+        int ReaderId=getArguments().getInt("ReaderId");
+        readerAttachmentAdapter = new ReaderAttachmentAdapter(getActivity(),ReaderId);
         rcyclerView.setAdapter(readerAttachmentAdapter);
         readerAttachmentAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

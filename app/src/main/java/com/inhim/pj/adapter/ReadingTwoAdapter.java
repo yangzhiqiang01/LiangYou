@@ -7,11 +7,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.MultipleItemRvAdapter;
 import com.inhim.pj.adapter.provider.BannerItemProvider;
 import com.inhim.pj.adapter.provider.ChapterItemProvider;
-import com.inhim.pj.adapter.provider.CourseOnerItemProvider;
 import com.inhim.pj.adapter.provider.CourseOtherItemProvider;
 import com.inhim.pj.adapter.provider.ReaderTypeProvider;
-import com.inhim.pj.adapter.provider.StyleTitleProvider;
-import com.inhim.pj.adapter.provider.VideoTypeItemProvider;
+import com.inhim.pj.adapter.provider.SeriesProvider;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
@@ -56,7 +54,7 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
     protected int getViewType(T news) {
         if (news instanceof BannerList) {
             return BANNER;
-        } else if (news instanceof ReaderStyle.List) {
+        } else if (news instanceof ReaderStyle) {
             return CHAPTER;
         } else if (news instanceof String) {
             return STYLE_TITLE;
@@ -75,7 +73,7 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
     public void registerItemProvider() {
         //注册itemProvider
         mProviderDelegate.registerProvider(new BannerItemProvider());
-        mProviderDelegate.registerProvider(new StyleTitleProvider(context));
+        mProviderDelegate.registerProvider(new SeriesProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
         mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));
         mProviderDelegate.registerProvider(new ReaderTypeProvider());

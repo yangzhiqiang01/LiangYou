@@ -9,18 +9,8 @@ import android.view.WindowManager;
 
 public class CenterDialog extends Dialog {
 
-    public CenterDialog(Context context) {
-        super(context);
-        init();
-    }
-
     public CenterDialog(Context context, int themeResId) {
         super(context, themeResId);
-        init();
-    }
-
-    protected CenterDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
         init();
     }
 

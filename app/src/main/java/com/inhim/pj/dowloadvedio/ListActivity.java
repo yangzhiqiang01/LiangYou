@@ -8,12 +8,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.inhim.pj.R;
+import com.inhim.pj.activity.SettingActivity;
+import com.inhim.pj.view.CenterDialog;
 
 import java.util.ArrayList;
 
@@ -127,7 +131,6 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
           break;
     }
   }
-
 
   /*自定义适配器  FragmentPagerAdapter*/
   class MyPagerAdapter extends FragmentPagerAdapter {

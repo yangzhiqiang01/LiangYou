@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.ListenAdapter;
-import com.inhim.pj.adapter.ReadingTwoAdapter;
-import com.inhim.pj.adapter.provider.ListenReaderTypeProvider;
 import com.inhim.pj.base.ClassicsHeader;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
