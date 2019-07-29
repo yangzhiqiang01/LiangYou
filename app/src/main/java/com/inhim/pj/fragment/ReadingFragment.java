@@ -59,7 +59,7 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getReaderStyle() {
-        MyOkHttpClient.getInstance().asyncGet(Urls.getReaderStyle("type"), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getReaderStyle("type"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 

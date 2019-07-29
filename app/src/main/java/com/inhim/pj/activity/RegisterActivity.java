@@ -74,7 +74,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private void sendSMS() {
         String examUrl = Urls.sendSMS(ed_mobile.getText().toString());
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
             }

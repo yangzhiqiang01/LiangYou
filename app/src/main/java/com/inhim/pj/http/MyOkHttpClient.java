@@ -79,17 +79,6 @@ public class MyOkHttpClient {
         @Override
         public void onResponse(Call call, Response response) throws IOException {
             final String result = response.body().string();
-           /* JSONObject jsonObject;
-            try {
-                jsonObject = new JSONObject(result);
-                if (jsonObject.getInt("code") == 500) {
-                    PrefUtils.remove("expire");
-                    PrefUtils.remove("token");
-                    PrefUtils.remove("isLogin");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
 
             try {
                 if (httpCallBack != null) {
@@ -106,7 +95,10 @@ public class MyOkHttpClient {
 
         }
     }
-
+    public void asyncGetNoToken(String url, HttpCallBack httpCallBack) {
+        Request request = new Request.Builder().url(url).build();
+        okHttpClient.newCall(request).enqueue(new StringCallBack(request, httpCallBack));
+    }
     public void asyncGet(String url, HttpCallBack httpCallBack) {
         String token = PrefUtils.getString("token", "");
         Request request = new Request.Builder().header("token", token).url(url).build();

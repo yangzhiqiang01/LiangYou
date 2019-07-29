@@ -38,7 +38,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void getAppAbout() {
         MyOkHttpClient myOkHttpClient=MyOkHttpClient.getInstance();
-        myOkHttpClient.asyncGet(Urls.appAbout(Type), new MyOkHttpClient.HttpCallBack() {
+        myOkHttpClient.asyncGetNoToken(Urls.appAbout(Type), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 

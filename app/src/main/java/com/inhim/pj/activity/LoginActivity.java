@@ -1,6 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -29,10 +28,8 @@ import com.inhim.pj.entity.SMSResult;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
-import com.inhim.pj.view.AboutDialog;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,7 +39,7 @@ import okhttp3.Request;
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private EditText ed_mobile, ed_password;
     private TextView tv_encounter_problem,tv_agreement;
-    private ImageView iv_weixin;
+    private ImageView iv_weixin,iv_back;
     private Button btn_login, btn_gecode;
     private Gson gson;
     private CheckBox cb_save_pw;
@@ -81,6 +78,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 isOk=isChecked;
             }
         });
+        iv_back=findViewById(R.id.iv_back);
     }
 
     private void loGin() {
@@ -124,7 +122,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         timer.start();
         String examUrl = Urls.sendSMS(ed_mobile.getText().toString());
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
             }
@@ -195,6 +193,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Intent intent=new Intent(LoginActivity.this,WebViewActivity.class);
                 intent.putExtra("Type","agreement");
                 startActivity(intent);
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
             default:
                 break;

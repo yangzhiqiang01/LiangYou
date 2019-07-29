@@ -116,7 +116,7 @@ public class ListenFragment extends Fragment {
          }*/
         HashMap postMap = new HashMap();
         String url=Urls.getReaderTypeList(mPageNum, 5, "3");
-        MyOkHttpClient.getInstance().asyncJsonPost(url, postMap, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncJsonPostNoToken(url, postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 loadingView.hideLoading();
@@ -174,7 +174,7 @@ public class ListenFragment extends Fragment {
     private void getBannerList () {
         loadingView=new LoadingView();
         loadingView.showLoading("加载中",getActivity());
-        MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(4), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(4), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 getReaderTypeList();

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,9 +70,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private UserInfo.User userInfo;
     private ImageView iv_photo;
     private TextView tv_name;
+    private RelativeLayout rela1;
+    private String token;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token=PrefUtils.getString("token", "");
         mContext=getActivity();
         api = WXAPIFactory.createWXAPI(mContext, MyApplication.appID,false);
         api.registerApp(MyApplication.appID);
@@ -93,34 +97,37 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getInfo(final boolean isStart) {
-        String examUrl = Urls.getUserInfo;
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
-            @Override
-            public void onError(Request request, IOException e) {
-            }
-
-            @Override
-            public void onSuccess(Request request, String results) {
-                Gson gson=new Gson();
-                UserInfo smsResult = gson.fromJson(results, UserInfo.class);
-                if (smsResult.getCode()==0) {
-                    userInfo=smsResult.getUser();
-                    if(isStart){
-                        Intent intent1=new Intent(mContext, MyInfoActivity.class);
-                        intent1.putExtra("result",userInfo);
-                        startActivity(intent1);
-                    }
-                    tv_name.setText(userInfo.getRealname());
-                    ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
-                    //GlideCircleUtils.displayFromUrl(userInfo.getHeadimgurl(),iv_photo,mContext);
-                } else {
-                    BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
+        if(!token.equals("")){
+            String examUrl = Urls.getUserInfo;
+            MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+                @Override
+                public void onError(Request request, IOException e) {
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(Request request, String results) {
+                    Gson gson=new Gson();
+                    UserInfo smsResult = gson.fromJson(results, UserInfo.class);
+                    if (smsResult.getCode()==0) {
+                        userInfo=smsResult.getUser();
+                        if(isStart){
+                            Intent intent1=new Intent(mContext, MyInfoActivity.class);
+                            intent1.putExtra("result",userInfo);
+                            startActivity(intent1);
+                        }
+                        tv_name.setText(userInfo.getRealname());
+                        ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
+                    } else {
+                        BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
+                    }
+                }
+            });
+        }
     }
 
     private void initView(View view) {
+        rela1=view.findViewById(R.id.rela1);
+        rela1.setOnClickListener(this);
         tv_name=view.findViewById(R.id.tv_name);
         iv_photo=view.findViewById(R.id.iv_photo);
         tv_code=view.findViewById(R.id.tv_code);
@@ -158,21 +165,38 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.lin_1:
-                if(userInfo==null){
-                    getInfo(true);
+                if(token.equals("")){
+                    Intent login=new Intent(mContext,LoginActivity.class);
+                    startActivity(login);
                 }else{
-                    Intent intent1=new Intent(mContext, MyInfoActivity.class);
-                    intent1.putExtra("result",userInfo);
-                    startActivity(intent1);
+                    if(userInfo==null){
+                        getInfo(true);
+                    }else{
+                        Intent intent1=new Intent(mContext, MyInfoActivity.class);
+                        intent1.putExtra("result",userInfo);
+                        startActivity(intent1);
+                    }
                 }
                 break;
             case R.id.lin_2:
-                Intent intent2=new Intent(mContext, CollectionActivity.class);
-                startActivity(intent2);
+                if(token.equals("")){
+                    Intent login=new Intent(mContext,LoginActivity.class);
+                    startActivity(login);
+                }else {
+                    Intent intent2=new Intent(mContext, CollectionActivity.class);
+                    startActivity(intent2);
+                }
+
                 break;
             case R.id.lin_3:
-                Intent intent3=new Intent(mContext, HistoryActivity.class);
-                startActivity(intent3);
+                if(token.equals("")){
+                    Intent login=new Intent(mContext,LoginActivity.class);
+                    startActivity(login);
+                }else{
+                    Intent intent3=new Intent(mContext, HistoryActivity.class);
+                    startActivity(intent3);
+                }
+
                 break;
             case R.id.mycollection:
                 Intent intent7=new Intent(getActivity(), WebViewActivity.class);
@@ -206,6 +230,21 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.lin_8:
                 setDiaglog();
+                break;
+            case R.id.rela1:
+                if(token.equals("")){
+                    Intent intent=new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    if(userInfo==null){
+                        getInfo(true);
+                    }else{
+                        Intent intent1=new Intent(mContext, MyInfoActivity.class);
+                        intent1.putExtra("result",userInfo);
+                        startActivity(intent1);
+                    }
+                }
+
                 break;
         }
     }

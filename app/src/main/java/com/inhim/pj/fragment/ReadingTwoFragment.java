@@ -108,7 +108,7 @@ public class ReadingTwoFragment extends Fragment {
     }
 
     private void getReaderStyle(){
-        MyOkHttpClient.getInstance().asyncGet(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 loadingView.hideLoading();
@@ -188,7 +188,7 @@ public class ReadingTwoFragment extends Fragment {
     private void getBannerList() {
         loadingView=new LoadingView();
         loadingView.showLoading("加载中",getActivity());
-        MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(2), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(2), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 BToast.showText("请求失败", false);

@@ -64,7 +64,7 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void getReaderStyle(){
-        MyOkHttpClient.getInstance().asyncGet(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
 

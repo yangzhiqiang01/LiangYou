@@ -33,7 +33,7 @@
                     android:layout_width="@dimen/base_dimen_60"
                     android:layout_height="@dimen/base_dimen_60"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/user_photo"
                     android:layout_margin="@dimen/base_dimen_0"/>
 
                 <RelativeLayout
@@ -43,22 +43,13 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/base_dimen_0"
-                        android:textSize="@dimen/textsize16"
-                        android:text="@string/user_nicheng" />
-
-                    <TextView
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_username"
                         android:layout_marginLeft="@dimen/base_dimen_0"
-                        android:drawablePadding="@dimen/base_dimen_0"
-                        android:textSize="@dimen/text_size_20"
-                        android:layout_marginTop="@dimen/base_dimen_5dp" />
+                        android:text="点击登录"
+                        android:textSize="@dimen/text_size_25"
+                         />
 
                     <ImageView
                         android:layout_width="wrap_content"

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('/Users/apple/Desktop/HS_autograph/HS_qianming')
+            storePassword '1112268'
+            keyAlias = '1112268'
+            keyPassword '1112268'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.inhim.pj"

@@ -176,7 +176,7 @@ public class VideoFragment extends Fragment {
     private void getBannerList() {
         loadingView=new LoadingView();
         loadingView.showLoading("加载中",getActivity());
-        MyOkHttpClient.getInstance().asyncGet(Urls.getBannerList(3), new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(3), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
                 getReaderTypeList();
