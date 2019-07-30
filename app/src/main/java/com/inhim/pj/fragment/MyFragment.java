@@ -33,6 +33,7 @@ import com.inhim.pj.utils.GlideCircleUtils;
 import com.inhim.pj.utils.PermissionUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.Util;
+import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.WXShareDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -62,23 +63,19 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private Context mContext;
     private TextView tv_setting,mycollection,dowload_list,tv_code;
 
-    private static final int THUMB_SIZE = 150;
-    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
-    private int mTargetScene1 = SendMessageToWX.Req.WXSceneTimeline;
-    private IWXAPI api;
-    private WXShareDialog wxShareDialog;
     private UserInfo.User userInfo;
     private ImageView iv_photo;
     private TextView tv_name;
     private RelativeLayout rela1;
     private String token;
+    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
+    private String title = "良友学院下载页";
+    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token=PrefUtils.getString("token", "");
         mContext=getActivity();
-        api = WXAPIFactory.createWXAPI(mContext, MyApplication.appID,false);
-        api.registerApp(MyApplication.appID);
     }
 
     @Override
@@ -229,7 +226,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.lin_8:
-                setDiaglog();
+                WXShareUtils.show(getActivity(),webpageUrl,title,description);
                 break;
             case R.id.rela1:
                 if(token.equals("")){
@@ -248,74 +245,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-    private void setDiaglog(){
-        View outerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_wx_share, null);
-        TextView tv_cancel=outerView.findViewById(R.id.tv_cancel);
-        TextView tv_dete=outerView.findViewById(R.id.tv_dete);
-
-        //点击确定
-        tv_dete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                sendShare(1);
-                wxShareDialog.dismiss();
-            }
-        });
-        //点击取消
-        tv_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                sendShare(0);
-                wxShareDialog.dismiss();
-            }
-        });
-        //防止弹出两个窗口
-        if (wxShareDialog !=null && wxShareDialog.isShowing()) {
-            return;
-        }
-
-        wxShareDialog = new WXShareDialog(getActivity(), R.style.ActionSheetDialogStyle);
-        //将布局设置给Dialog
-        wxShareDialog.setContentView(outerView);
-        wxShareDialog.show();//显示对话框
-    }
-    private void sendShare(int type){
-        WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "http://ly.bible.ac.cn/upload/android/app-release.apk";
-        WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = "良友学院下载页";
-        msg.description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
-        bmp.recycle();
-        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
-
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = buildTransaction("webpage");
-        req.message = msg;
-        if(type==0){
-            req.scene = mTargetScene;
-        }else{
-            req.scene = mTargetScene1;
-        }
-        api.sendReq(req);
-    }
-    private String buildTransaction(final String type) {
-        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
-    }
-
-    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
-        @Override
-        public void onPermissionGranted(int requestCode) {
-            switch (requestCode) {
-                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     private void outLogin() {
         MyOkHttpClient myOkHttpClient=MyOkHttpClient.getInstance();

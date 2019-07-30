@@ -36,6 +36,7 @@ import com.inhim.pj.fragment.MuluFragment;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.pili.pldroid.player.AVOptions;
 import com.squareup.picasso.Picasso;
@@ -61,7 +62,7 @@ import okhttp3.Request;
 public class RadioActivity extends BaseActivity implements
         JCVideoPlayerStandard.DowloadVedioListener, MuluFragment.OnVideoLinear {
 
-    ImageView iv_back;
+    ImageView iv_back,iv_share;
     String name;
     public static String contents;
     private String photoUrl;
@@ -84,7 +85,9 @@ public class RadioActivity extends BaseActivity implements
     String content;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
-
+    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
+    private String title = "良友学院下载页";
+    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -298,6 +301,13 @@ public class RadioActivity extends BaseActivity implements
     }
 
     private void initView() {
+        iv_share = findViewById(R.id.iv_share);
+        iv_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WXShareUtils.show(RadioActivity.this,webpageUrl,title,description);
+            }
+        });
         iv_back=findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new OnClickListener() {
             @Override

@@ -34,6 +34,7 @@ import com.inhim.pj.fragment.MuluFragment;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
@@ -61,7 +62,7 @@ import okhttp3.Request;
 public class VideoActivity extends BaseActivity implements OnClickListener,
         JCVideoPlayerStandard.DowloadVedioListener, MuluFragment.OnVideoLinear {
 
-    ImageView iv_back;
+    ImageView iv_back,iv_share;
     String name;
     public static String contents;
     private String photoUrl;
@@ -83,6 +84,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     //下载得视频 课程
     private MyBusinessInfoDid businessInfoDid;
     private long busiID;
+    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
+    private String title = "良友学院下载页";
+    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -377,6 +381,13 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
 
     private void initView() {
+        iv_share = findViewById(R.id.iv_share);
+        iv_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WXShareUtils.show(VideoActivity.this,webpageUrl,title,description);
+            }
+        });
         iv_back=findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new OnClickListener() {
             @Override

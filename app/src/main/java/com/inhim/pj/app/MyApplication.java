@@ -16,6 +16,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.BuglyStrategy;
 import com.tencent.bugly.beta.Beta;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.litepal.LitePalApplication;
 
@@ -25,11 +27,12 @@ public class MyApplication extends LitePalApplication {
     private static Context context;
     private static Context mContext;
     private ImageLoader imageLoader;
-    public static String appID = "wxd48ba30205b8827a";
+    public static String appID = "wx1562f6cc73ae0dcd";
+    public static String AppSecret="085ca383ef4f07809817493c592fb88e";
     public static final String APP_ID = "c60234e621"; // TODO 替换成bugly上注册的appid
     // TODO 自定义渠道
     public static final String APP_CHANNEL = "lyxy";
-
+    public static IWXAPI api;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,6 +42,8 @@ public class MyApplication extends LitePalApplication {
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
         setBugly();
         isExist(Urls.getFilePath());
+        api = WXAPIFactory.createWXAPI(mContext, MyApplication.appID,false);
+        api.registerApp(MyApplication.appID);
     }
 
     /**

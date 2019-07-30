@@ -19,17 +19,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.LoginEntity;
 import com.inhim.pj.entity.SMSResult;
+import com.inhim.pj.entity.WeChatEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,6 +52,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private CheckBox cb_save_pw;
     private boolean isOk;
     private CenterDialog centerDialog;
+    /**
+     * 微信登录相关
+     */
+    private IWXAPI api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,21 +90,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
         iv_back=findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
     }
 
-    private void loGin() {
-        if(ed_password.getText().toString().equals("")){
-            BToast.showText( "请输入验证码 ", Toast.LENGTH_LONG, false);
-            return;
-        }
+    private void loGin(String openId) {
+        String examUrl = Urls.onLogin;
+        HashMap map=new HashMap();
         if(!isOk){
             BToast.showText( "请阅读并同意用户协议 ", Toast.LENGTH_LONG, false);
             return;
         }
-        String examUrl = Urls.onLogin;
-        HashMap map=new HashMap();
-        map.put("mobile", ed_mobile.getText().toString());
-        map.put("validate", ed_password.getText().toString());
+        if(!"".equals(openId)){
+            map.put("openId", ed_mobile.getText().toString());
+            map.put("mobile", ed_mobile.getText().toString());
+        }else{
+            if(ed_password.getText().toString().equals("")){
+                BToast.showText( "请输入验证码 ", Toast.LENGTH_LONG, false);
+                return;
+            }
+            map.put("mobile", ed_mobile.getText().toString());
+            map.put("validate", ed_password.getText().toString());
+        }
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(examUrl, map, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -182,9 +199,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 setCenterDiaolog();
                 break;
             case R.id.iv_weixin:
+                //通过WXAPIFactory工厂获取IWXApI的示例
+                api = WXAPIFactory.createWXAPI(this, MyApplication.appID,true);
+                //将应用的appid注册到微信
+                api.registerApp(MyApplication.appID);
+                SendAuth.Req req = new SendAuth.Req();
+                req.scope = "snsapi_userinfo";
+//                req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
+                req.state = "wechat_sdk_微信登录";
+                api.sendReq(req);
                 break;
             case R.id.btn_login:
-                loGin();
+                loGin("");
                 break;
             case R.id.btn_gecode:
                 sendSMS();
@@ -201,7 +227,50 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
         }
     }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // 跳转首页或者其他操作
+        String code = intent.getStringExtra("code");
+        String wxUrl=Urls.wechatCallback(code);
+        MyOkHttpClient.getInstance().asyncGet(wxUrl, new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
 
+            }
+
+            @Override
+            public void onSuccess(Request request, String result) {
+                try {
+                    JSONObject jsonObject=new JSONObject(result);
+                    if(jsonObject.getInt("code")==0){
+                        WeChatEntity weChatEntity=gson.fromJson(result,WeChatEntity.class);
+                        loGin(weChatEntity.getMap().getData().getOpenId());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 0){
+            String code = data.getStringExtra("code");
+            MyOkHttpClient.getInstance().asyncGet(Urls.wechatCallback(code), new MyOkHttpClient.HttpCallBack() {
+                @Override
+                public void onError(Request request, IOException e) {
+
+                }
+
+                @Override
+                public void onSuccess(Request request, String result) {
+                    Log.e("result",result);
+                }
+            });
+        }
+    }
     private void setCenterDiaolog(){
         View outerView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_about, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);

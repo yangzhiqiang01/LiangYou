@@ -194,4 +194,9 @@ public class Urls {
     public static String getCommonDict(String code) {
         return urlPath + "common/dict/" + code;
     }
+    /**GET /wechat/callback/{code}
+    微信授权登陆*/
+    public static String wechatCallback(String code) {
+        return urlPath + "wechat/callback/" + code;
+    }
 }

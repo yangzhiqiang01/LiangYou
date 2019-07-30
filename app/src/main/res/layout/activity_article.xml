@@ -76,7 +76,7 @@
             <com.inhim.pj.view.CustomRoundAngleImageView
                 android:id="@+id/custImageview"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/base_dimen_140"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/base_dimen_0"
                 android:layout_marginRight="@dimen/base_dimen_0"
                 android:layout_weight="1"

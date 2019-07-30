@@ -95,6 +95,11 @@ public class MyOkHttpClient {
 
         }
     }
+
+    public void asyncGetAddHeader(String url, Headers.Builder headers, HttpCallBack httpCallBack) {
+        Request request = new Request.Builder().headers(headers.build()).url(url).build();
+        okHttpClient.newCall(request).enqueue(new StringCallBack(request, httpCallBack));
+    }
     public void asyncGetNoToken(String url, HttpCallBack httpCallBack) {
         Request request = new Request.Builder().url(url).build();
         okHttpClient.newCall(request).enqueue(new StringCallBack(request, httpCallBack));

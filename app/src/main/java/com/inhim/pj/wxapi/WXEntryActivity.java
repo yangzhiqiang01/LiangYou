@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.inhim.pj.R;
+import com.inhim.pj.activity.LoginActivity;
 import com.inhim.pj.app.MyApplication;
+import com.inhim.pj.entity.WXAccessTokenEntity;
+import com.inhim.pj.entity.WXBaseRespEntity;
+import com.inhim.pj.entity.WXUserInfo;
+import com.inhim.pj.http.MyOkHttpClient;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -16,9 +20,14 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.alibaba.fastjson.JSON;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.IOException;
+
+import okhttp3.Headers;
+import okhttp3.Request;
 
 public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
 
@@ -35,7 +44,6 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
-
         wxapi = WXAPIFactory.createWXAPI(this, MyApplication.appID);
         wxapi.handleIntent(getIntent(), this);
     }
@@ -54,9 +62,12 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
      */
     @Override
     public void onResp(BaseResp baseResp) {
+        WXBaseRespEntity entity = JSON.parseObject(JSON.toJSONString(baseResp), WXBaseRespEntity.class);
+        String result = "";
         switch (baseResp.errCode) {
             // 正确返回
             case BaseResp.ErrCode.ERR_OK:
+                Log.e("getType",baseResp.getType()+"");
                 switch (baseResp.getType()) {
                     // ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX是微信分享，api自带
                     case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
@@ -66,16 +77,42 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                     case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
 //                goToShowMsg((ShowMessageFromWX.Req) req);
                         break;
-                    case BaseResp.ErrCode.ERR_OK:
-                        String code = ((SendAuth.Resp) baseResp).code;
-                        //获取用户信息
-                        //getAccessToken(code);
+                    case ConstantsAPI.COMMAND_SENDAUTH:
+                        Intent intent = new Intent(WXEntryActivity.this, LoginActivity.class);
+                        intent.putExtra("code", entity.getCode());
+                        WXEntryActivity.this.setResult(0, intent);
+                        startActivity(intent);
+                        finish();
+                        /*OkHttpUtils.get().url("https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code")
+                                .addParams("appid",MyApplication.appID)
+                                .addParams("secret",MyApplication.AppSecret)
+                                .addParams("code",entity.getCode())
+                                .addParams("grant_type","authorization_code")
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(okhttp3.Call call, Exception e, int id) {
+                                    }
+
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        WXAccessTokenEntity accessTokenEntity = JSON.parseObject(response,WXAccessTokenEntity.class);
+                                        if(accessTokenEntity!=null){
+                                            getUserInfo(accessTokenEntity);
+                                        }else {
+                                        }
+                                    }
+                                });*/
                         break;
                     case BaseResp.ErrCode.ERR_AUTH_DENIED://用户拒绝授权
                         finish();
                         break;
                     case BaseResp.ErrCode.ERR_USER_CANCEL://用户取消
                         finish();
+                        break;
+                    case BaseResp.ErrCode.ERR_BAN:
+                        /*result = "签名错误";
+                        ViseLog.d("签名错误");*/
                         break;
                     default:
                         finish();
@@ -87,7 +124,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 switch (baseResp.getType()) {
                     // 微信分享
                     case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
-                        Log.i("WXEntryActivity" , ">>>errCode = " + baseResp.errCode);
+                        Log.i("WXEntryActivity", ">>>errCode = " + baseResp.errCode);
                         finish();
                         break;
                     default:
@@ -97,82 +134,34 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
         }
     }
 
-   /* private void getAccessToken(String code) {
-        //获取授权
-        StringBuffer loginUrl = new StringBuffer();
-        loginUrl.append("https://api.weixin.qq.com/sns/oauth2/access_token")
-                .append("?appid=")
-                .append(MyApplication.APP_ID)
-                .append("&secret=")
-                .append(Constant.SECRET)
-                .append("&code=")
-                .append(code)
-                .append("&grant_type=authorization_code");
-        OkHttpUtils.ResultCallback<String> resultCallback = new OkHttpUtils.ResultCallback<String>() {
-            @Override
-            public void onSuccess(String response) {
-                String access = null;
-                String openId = null;
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    access = jsonObject.getString("access_token");
-                    openId = jsonObject.getString("openid");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //获取个人信息
-                String getUserInfo = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access + "&openid=" + openId;
-                OkHttpUtils.ResultCallback<String> reCallback = new OkHttpUtils.ResultCallback<String>() {
+    /**
+     * 获取个人信息
+     *
+     * @param accessTokenEntity
+     */
+    private void getUserInfo(WXAccessTokenEntity accessTokenEntity) {
+        Headers.Builder headers = new Headers.Builder();
+        headers.add("access_token", accessTokenEntity.getAccess_token());
+        headers.add("openid", accessTokenEntity.getOpenid());
+        MyOkHttpClient.getInstance().asyncGetAddHeader("https://api.weixin.qq.com/sns/userinfo",
+                headers, new MyOkHttpClient.HttpCallBack() {
                     @Override
-                    public void onSuccess(String responses) {
-
-                        String nickName = null;
-                        String sex = null;
-                        String city = null;
-                        String province = null;
-                        String country = null;
-                        String headimgurl = null;
-                        try {
-                            JSONObject jsonObject = new JSONObject(responses);
-
-                            openid = jsonObject.getString("openid");
-                            nickName = jsonObject.getString("nickname");
-                            sex = jsonObject.getString("sex");
-                            city = jsonObject.getString("city");
-                            province = jsonObject.getString("province");
-                            country = jsonObject.getString("country");
-                            headimgurl = jsonObject.getString("headimgurl");
-                            unionid = jsonObject.getString("unionid");
-                            loadNetData(1, openid, nickName, sex, province,
-                                    city, country, headimgurl, unionid);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onError(Request request, IOException e) {
 
                     }
 
                     @Override
-                    public void onFailure(Exception e) {
-                        Toast.makeText(WXEntryActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(Request request, String result) {
+                        WXUserInfo wxResponse = JSON.parseObject(result, WXUserInfo.class);
+                        String headUrl = wxResponse.getHeadimgurl();
+                        //ViseLog.d("头像Url:"+headUrl);
+                        //App.getShared().putString("headUrl",headUrl);
+                        Intent intent = getIntent();
+                        intent.putExtra("WXUserInfo", wxResponse);
+                        WXEntryActivity.this.setResult(0, intent);
                         finish();
                     }
-                };
-                OkHttpUtils.get(getUserInfo, reCallback);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Toast.makeText(WXEntryActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        };
-        OkHttpUtils.get(loginUrl.toString(), resultCallback);
+                });
     }
 
-    @Override
-    protected void onPause() {
-        overridePendingTransition(0, 0);
-        super.onPause();
-    }*/
 }

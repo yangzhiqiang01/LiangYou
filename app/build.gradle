@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            storeFile file('/Users/apple/Desktop/HS_autograph/HS_qianming')
-            storePassword '1112268'
-            keyAlias = '1112268'
-            keyPassword '1112268'
-        }
-    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.inhim.pj"
@@ -18,12 +10,41 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+    /*signingConfigs {
+
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //SHA1: 4A2FD3626FFED787BB9D9C11FF0443914F0CD3F0
+            //      409E5F60CD8EB4F00F5C5BE63A70A29E
+            storeFile file('/Users/apple/Desktop/HS_autograph/HS_qianming')
+            storePassword '13772914588'
+            keyAlias = 'hs_oa'
+            keyPassword '13772914588'
         }
     }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+//            //启用代码混淆
+//            minifyEnabled true
+//            //zip压缩
+//            zipAlignEnabled true
+//            //移除无用的resource文件
+//            shrinkResources true
+//            //混淆规则配置文件
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            //开启混淆
+//            minifyEnabled true
+//            zipAlignEnabled true
+//            //移除无用的resource文件
+//            shrinkResources true
+//
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }*/
     lintOptions {
         abortOnError false
     }
@@ -62,4 +83,6 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.3.1'
+    implementation 'com.alibaba:fastjson:1.2.58'
+    implementation 'com.zhy:okhttputils:2.6.2'
 }
