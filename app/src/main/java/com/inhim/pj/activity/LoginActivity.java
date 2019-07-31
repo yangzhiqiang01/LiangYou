@@ -6,8 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +21,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.LoginEntity;
 import com.inhim.pj.entity.SMSResult;
-import com.inhim.pj.entity.WeChatEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
@@ -34,10 +36,6 @@ import com.inhim.pj.view.CenterDialog;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -45,8 +43,8 @@ import okhttp3.Request;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private EditText ed_mobile, ed_password;
-    private TextView tv_encounter_problem,tv_agreement;
-    private ImageView iv_weixin,iv_back;
+    private TextView tv_encounter_problem, tv_agreement;
+    private ImageView iv_weixin, iv_back;
     private Button btn_login, btn_gecode;
     private Gson gson;
     private CheckBox cb_save_pw;
@@ -56,13 +54,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 微信登录相关
      */
     private IWXAPI api;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        MyApplication.instance.addActivity(this);
         gson = new Gson();
-        if(PrefUtils.getBoolean("isLogin",false)){
-            Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+        if (PrefUtils.getBoolean("isLogin", false)) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -71,46 +71,89 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initView() {
         ed_mobile = findViewById(R.id.ed_mobile);
+        ed_mobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().length()>=11){
+                    btn_gecode.setEnabled(true);
+                    btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode2);
+                    btn_gecode.setTextColor(Color.parseColor("#0079D7"));
+                }else{
+                    btn_gecode.setEnabled(false);
+                    btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode1);
+                    btn_gecode.setTextAppearance(R.style.btn_getcode);
+                    btn_gecode.setTextColor(Color.parseColor("#999999"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         ed_password = findViewById(R.id.ed_password);
+        ed_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().length()>=6){
+                    btn_login.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         tv_encounter_problem = findViewById(R.id.tv_encounter_problem);
         iv_weixin = findViewById(R.id.iv_weixin);
         btn_login = findViewById(R.id.btn_login);
         tv_encounter_problem.setOnClickListener(this);
         iv_weixin.setOnClickListener(this);
         btn_login.setOnClickListener(this);
+        btn_login.setEnabled(false);
         btn_gecode = findViewById(R.id.btn_gecode);
         btn_gecode.setOnClickListener(this);
-        tv_agreement=findViewById(R.id.tv_agreement);
+        btn_gecode.setEnabled(false);
+        tv_agreement = findViewById(R.id.tv_agreement);
         tv_agreement.setOnClickListener(this);
-        cb_save_pw=findViewById(R.id.cb_save_pw);
+        cb_save_pw = findViewById(R.id.cb_save_pw);
         cb_save_pw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isOk=isChecked;
+                isOk = isChecked;
             }
         });
-        iv_back=findViewById(R.id.iv_back);
+        iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(this);
     }
 
-    private void loGin(String openId) {
+    private void loGin() {
         String examUrl = Urls.onLogin;
-        HashMap map=new HashMap();
-        if(!isOk){
-            BToast.showText( "请阅读并同意用户协议 ", Toast.LENGTH_LONG, false);
+        HashMap map = new HashMap();
+        if (!isOk) {
+            BToast.showText("请阅读并同意用户协议 ", Toast.LENGTH_LONG, false);
             return;
         }
-        if(!"".equals(openId)){
-            map.put("openId", ed_mobile.getText().toString());
-            map.put("mobile", ed_mobile.getText().toString());
-        }else{
-            if(ed_password.getText().toString().equals("")){
-                BToast.showText( "请输入验证码 ", Toast.LENGTH_LONG, false);
-                return;
-            }
-            map.put("mobile", ed_mobile.getText().toString());
-            map.put("validate", ed_password.getText().toString());
+        if (ed_mobile.getText().toString().equals("")) {
+            BToast.showText("请输入手机号码 ", Toast.LENGTH_LONG, false);
+            return;
         }
+        if (ed_password.getText().toString().equals("")) {
+            BToast.showText("请输入验证码 ", Toast.LENGTH_LONG, false);
+            return;
+        }
+        map.put("mobile", ed_mobile.getText().toString());
+        map.put("validate", ed_password.getText().toString());
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(examUrl, map, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -119,22 +162,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onSuccess(Request request, String results) {
                 LoginEntity loginEntity = gson.fromJson(results, LoginEntity.class);
-                if (loginEntity.getMsg().equals("success")) {
-                    PrefUtils.putLong("expire",loginEntity.getExpire());
-                    PrefUtils.putString("token",loginEntity.getToken());
-                    PrefUtils.putBoolean("isLogin",true);
-                    Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+                if (loginEntity.getCode() == 0) {
+                    PrefUtils.putLong("expire", loginEntity.getExpire());
+                    PrefUtils.putString("token", loginEntity.getToken());
+                    PrefUtils.putBoolean("isLogin", true);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    BToast.showText( loginEntity.getMsg(), Toast.LENGTH_LONG, false);
+                } else if (loginEntity.getCode() == 500) {
+                    Intent intent = new Intent(LoginActivity.this, BindPhoneActivity.class);
+                    startActivity(intent);
+                } else {
+                    BToast.showText(loginEntity.getMsg(), Toast.LENGTH_LONG, false);
                 }
             }
         });
     }
+
     private void sendSMS() {
         if (ed_mobile.getText().toString().equals("")) {
-            BToast.showText( "请输入手机号码 ", Toast.LENGTH_LONG, false);
+            BToast.showText("请输入手机号码 ", Toast.LENGTH_LONG, false);
             return;
         }
         timer.start();
@@ -144,17 +191,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onError(Request request, IOException e) {
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onSuccess(Request request, String results) {
                 SMSResult smsResult = gson.fromJson(results, SMSResult.class);
-                Log.e("code",String.valueOf(smsResult.getCode()));
-                Toast.makeText(LoginActivity.this,String.valueOf(smsResult.getCode()),Toast.LENGTH_LONG).show();
                 if (!smsResult.getMsg().equals("success")) {
-                    btn_gecode.setEnabled(true);
-                    btn_gecode.setTextAppearance(R.style.btn_getcode);
-                    btn_gecode.setText("获取验证码");
                     BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
+                    timer.onFinish();
+                    timer.cancel();
+                }else{
+                    BToast.showText(String.valueOf(smsResult.getCode()), Toast.LENGTH_LONG, true);
                 }
             }
         });
@@ -173,8 +218,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             SpannableString spannableString = new SpannableString(
                     millisUntilFinished / 1000 + "秒后再获取");
             //设置颜色
-            spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#0079D7")),
-                    0, spannableString.length() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#999999")),
+                    spannableString.length() - 4, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             //设置字体大小，true表示前面的字体大小20单位为dip
             //spannableString.setSpan(new AbsoluteSizeSpan(20, true), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             //设置链接
@@ -183,11 +228,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             btn_gecode.setText(spannableString);
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onFinish() {
             btn_gecode.setEnabled(true);
-            btn_gecode.setTextAppearance(R.style.btn_getcode);
             btn_gecode.setText("获取验证码");
         }
     };
@@ -199,8 +242,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 setCenterDiaolog();
                 break;
             case R.id.iv_weixin:
+                if (!isOk) {
+                    BToast.showText("请阅读并同意用户协议 ", Toast.LENGTH_LONG, false);
+                    return;
+                }
                 //通过WXAPIFactory工厂获取IWXApI的示例
-                api = WXAPIFactory.createWXAPI(this, MyApplication.appID,true);
+                api = WXAPIFactory.createWXAPI(this, MyApplication.appID, true);
                 //将应用的appid注册到微信
                 api.registerApp(MyApplication.appID);
                 SendAuth.Req req = new SendAuth.Req();
@@ -210,14 +257,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 api.sendReq(req);
                 break;
             case R.id.btn_login:
-                loGin("");
+                loGin();
                 break;
             case R.id.btn_gecode:
                 sendSMS();
                 break;
             case R.id.tv_agreement:
-                Intent intent=new Intent(LoginActivity.this,WebViewActivity.class);
-                intent.putExtra("Type","agreement");
+                Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
+                intent.putExtra("Type", "agreement");
                 startActivity(intent);
                 break;
             case R.id.iv_back:
@@ -227,36 +274,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
         }
     }
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        // 跳转首页或者其他操作
-        String code = intent.getStringExtra("code");
-        String wxUrl=Urls.wechatCallback(code);
-        MyOkHttpClient.getInstance().asyncGet(wxUrl, new MyOkHttpClient.HttpCallBack() {
-            @Override
-            public void onError(Request request, IOException e) {
 
-            }
-
-            @Override
-            public void onSuccess(Request request, String result) {
-                try {
-                    JSONObject jsonObject=new JSONObject(result);
-                    if(jsonObject.getInt("code")==0){
-                        WeChatEntity weChatEntity=gson.fromJson(result,WeChatEntity.class);
-                        loGin(weChatEntity.getMap().getData().getOpenId());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 0){
+        if (resultCode == 0) {
             String code = data.getStringExtra("code");
             MyOkHttpClient.getInstance().asyncGet(Urls.wechatCallback(code), new MyOkHttpClient.HttpCallBack() {
                 @Override
@@ -266,14 +288,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onSuccess(Request request, String result) {
-                    Log.e("result",result);
+                    Log.e("result", result);
                 }
             });
         }
     }
-    private void setCenterDiaolog(){
+
+    private void setCenterDiaolog() {
         View outerView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_about, null);
-        Button btn_ok=outerView.findViewById(R.id.btn_ok);
+        Button btn_ok = outerView.findViewById(R.id.btn_ok);
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +304,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
         //防止弹出两个窗口
-        if (centerDialog !=null && centerDialog.isShowing()) {
+        if (centerDialog != null && centerDialog.isShowing()) {
             return;
         }
 

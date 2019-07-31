@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,13 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +39,6 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     public ImageView thumbImageView;
     private LinearLayout lin_shouchang,lin_dowload;
     private String format;
-    private FrameLayout surface_container;
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
     private boolean isOne;
@@ -60,15 +54,14 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     @Override
     public void init(Context context) {
         super.init(context);
-        bottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progress);
-        titleTextView = (TextView) findViewById(R.id.title);
-        backButton = (ImageView) findViewById(R.id.back);
-        surface_container=(FrameLayout)findViewById(R.id.surface_container);
-        thumbImageView = (ImageView) findViewById(R.id.thumb);
-        loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
+        bottomProgressBar = findViewById(R.id.bottom_progress);
+        titleTextView = findViewById(R.id.title);
+        backButton = findViewById(R.id.back);
+        thumbImageView = findViewById(R.id.thumb);
+        loadingProgressBar = findViewById(R.id.loading);
         //tinyBackImageView = (ImageView) findViewById(R.id.back_tiny);
-        lin_shouchang = (LinearLayout) findViewById(R.id.lin_shouchang);
-        lin_dowload = (LinearLayout)  findViewById(R.id.lin_dowload);
+        lin_shouchang = findViewById(R.id.lin_shouchang);
+        lin_dowload = findViewById(R.id.lin_dowload);
         lin_shouchang.setOnClickListener(this);
         lin_dowload.setOnClickListener(this);
         thumbImageView.setOnClickListener(this);
@@ -215,15 +208,7 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     public void onClick(View v) {
         super.onClick(v);
         int i = v.getId();
-        /*if(i==R.id.start){
-            if(isOne){
-                isOne=false;
-                if (mListener != null) {
-                    //第一次进入页面记录播放次数
-                    mListener.chapterPay();
-                }
-            }
-        }else */if (i == R.id.thumb) {
+        if (i == R.id.thumb) {
 
 
             if (TextUtils.isEmpty(url)) {
@@ -238,6 +223,9 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
                 }
                 startVideo();
             } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
+                onClickUiToggle();
+                //这里解决音频播放时不能弹出暂停按钮的问题
+            }else{
                 onClickUiToggle();
             }
         } else if (i == R.id.surface_container) {
@@ -330,7 +318,10 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
             } else {
                 changeUiToPlayingBufferingShow();
             }
+        }else{
+
         }
+
     }
 
     public void onCLickUiToggleToClear() {

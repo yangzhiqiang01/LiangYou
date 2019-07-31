@@ -40,9 +40,9 @@ public class ArticleActivity extends BaseActivity {
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
     private MyScrollView scrollView;
-    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
-    private String title = "良友学院下载页";
-    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
+    private String webpageUrl;
+    private String title ;
+    private String description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,8 +131,10 @@ public class ArticleActivity extends BaseActivity {
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 if(readerInfos.getCode()==0){
                     readerInfo=readerInfos.getReader();
-                    //GlideUtils.displayFromUrl(readerInfo.getCover(),custImageview,ArticleActivity.this);
                     Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
+                    webpageUrl=readerInfo.getContent();
+                    title=readerInfo.getTitle() ;
+                    description=readerInfo.getSynopsis();
                     checkbox.setChecked(readerInfo.getCollectionStatus());
                     textview1.setText(readerInfo.getTitle());
                     textview2.setText("类别："+readerInfo.getReaderTypeText());

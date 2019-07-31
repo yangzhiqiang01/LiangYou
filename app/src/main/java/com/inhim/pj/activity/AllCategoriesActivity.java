@@ -77,8 +77,8 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
         home_SwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                mPageNum = 1;
-                refresh = true;
+                mPageNum= 1;
+                refresh=true;
                 //请求数据
                 home_SwipeRefreshLayout.finishRefresh();  //刷新完成
                 getReaderTypeList();
@@ -87,8 +87,11 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
         home_SwipeRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
+                mPageNum++;
+                refresh=false;
                 //加载
                 home_SwipeRefreshLayout.finishLoadmore();      //加载完成
+
                 getReaderTypeList();
             }
         });
@@ -105,7 +108,9 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
          "readerTypeId": "string",
          "title": "string"
          }*/
-        showLoading("加载中");
+        if (refresh){
+            showLoading("加载中");
+        }
         HashMap postMap = new HashMap();
         MyOkHttpClient.getInstance().asyncJsonPost(Urls.getReaderTypeList(mPageNum, 10, ""), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
@@ -119,14 +124,11 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
                 ReaderTypeList readerTypeList = gson.fromJson(result, ReaderTypeList.class);
                 if (readerTypeList.getCode() == 0) {
                     if (refresh) {
-                        refresh=false;
-                        mPageNum=1;
                         categoriesList2.clear();
                         //categoriesList4.clear();
                         categoriesList2.addAll(readerTypeList.getPage().getList());
                         //categoriesList4.addAll(readerTypeList.getPage().getList());
                     } else {
-                        mPageNum++;
                         categoriesList2.addAll(readerTypeList.getPage().getList());
                         //categoriesList4.addAll(readerTypeList.getPage().getList());
                     }

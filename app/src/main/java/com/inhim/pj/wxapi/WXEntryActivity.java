@@ -5,26 +5,36 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.inhim.pj.R;
+import com.inhim.pj.activity.BindPhoneActivity;
+import com.inhim.pj.activity.HomeActivity;
 import com.inhim.pj.activity.LoginActivity;
 import com.inhim.pj.app.MyApplication;
+import com.inhim.pj.entity.LoginEntity;
 import com.inhim.pj.entity.WXAccessTokenEntity;
 import com.inhim.pj.entity.WXBaseRespEntity;
 import com.inhim.pj.entity.WXUserInfo;
+import com.inhim.pj.entity.WeChatEntity;
 import com.inhim.pj.http.MyOkHttpClient;
+import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.view.BToast;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.alibaba.fastjson.JSON;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -32,7 +42,7 @@ import okhttp3.Request;
 public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
 
     private IWXAPI wxapi;
-
+    private Gson gson;
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -44,6 +54,8 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
+        MyApplication.instance.addActivity(this);
+        gson=new Gson();
         wxapi = WXAPIFactory.createWXAPI(this, MyApplication.appID);
         wxapi.handleIntent(getIntent(), this);
     }
@@ -78,31 +90,35 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 //                goToShowMsg((ShowMessageFromWX.Req) req);
                         break;
                     case ConstantsAPI.COMMAND_SENDAUTH:
-                        Intent intent = new Intent(WXEntryActivity.this, LoginActivity.class);
-                        intent.putExtra("code", entity.getCode());
-                        WXEntryActivity.this.setResult(0, intent);
-                        startActivity(intent);
-                        finish();
-                        /*OkHttpUtils.get().url("https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code")
-                                .addParams("appid",MyApplication.appID)
-                                .addParams("secret",MyApplication.AppSecret)
-                                .addParams("code",entity.getCode())
-                                .addParams("grant_type","authorization_code")
-                                .build()
-                                .execute(new StringCallback() {
-                                    @Override
-                                    public void onError(okhttp3.Call call, Exception e, int id) {
-                                    }
+                        // 跳转首页或者其他操作
+                        String wxUrl = Urls.wechatCallback(entity.getCode());
+                        MyOkHttpClient.getInstance().asyncGet(wxUrl, new MyOkHttpClient.HttpCallBack() {
+                            @Override
+                            public void onError(Request request, IOException e) {
 
-                                    @Override
-                                    public void onResponse(String response, int id) {
-                                        WXAccessTokenEntity accessTokenEntity = JSON.parseObject(response,WXAccessTokenEntity.class);
-                                        if(accessTokenEntity!=null){
-                                            getUserInfo(accessTokenEntity);
-                                        }else {
-                                        }
+                            }
+
+                            @Override
+                            public void onSuccess(Request request, String result) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    if (jsonObject.getJSONObject("map").getBoolean("bindVipUser")) {
+                                        JSONObject data=jsonObject.getJSONObject("map").getJSONObject("data");
+                                        PrefUtils.putLong("expire", data.getLong("expire"));
+                                        PrefUtils.putString("token", data.getString("token"));
+                                        PrefUtils.putBoolean("isLogin", true);
+                                        Intent intent = new Intent(WXEntryActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                        MyApplication.instance.finishAllActivity();
+                                    }else{
+                                        WeChatEntity weChatEntity = gson.fromJson(result, WeChatEntity.class);
+                                        loGin(weChatEntity.getMap().getData().getOpenId());
                                     }
-                                });*/
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                         break;
                     case BaseResp.ErrCode.ERR_AUTH_DENIED://用户拒绝授权
                         finish();
@@ -132,6 +148,35 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 }
                 break;
         }
+    }
+    private void loGin(final String openId) {
+        String examUrl = Urls.onLogin;
+        HashMap map = new HashMap();
+        map.put("openId", openId);
+        MyOkHttpClient.getInstance().asyncJsonPostNoToken(examUrl, map, new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+            }
+
+            @Override
+            public void onSuccess(Request request, String results) {
+                LoginEntity loginEntity = gson.fromJson(results, LoginEntity.class);
+                if (loginEntity.getCode() == 0) {
+                    PrefUtils.putLong("expire", loginEntity.getExpire());
+                    PrefUtils.putString("token", loginEntity.getToken());
+                    PrefUtils.putBoolean("isLogin", true);
+                    Intent intent = new Intent(WXEntryActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (loginEntity.getCode() == 500) {
+                    Intent intent = new Intent(WXEntryActivity.this, BindPhoneActivity.class);
+                    intent.putExtra("openId",openId);
+                    startActivity(intent);
+                } else {
+                    BToast.showText(loginEntity.getMsg(), Toast.LENGTH_LONG, false);
+                }
+            }
+        });
     }
 
     /**

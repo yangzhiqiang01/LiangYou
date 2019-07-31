@@ -12,26 +12,23 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.LoginEntity;
 import com.inhim.pj.entity.SMSResult;
+import com.inhim.pj.entity.WeChatEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.BToast;
-import com.inhim.pj.view.CenterDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,40 +36,36 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
-import okhttp3.FormBody;
 import okhttp3.Request;
 
-public class ReplacePhoneActivity extends BaseActivity implements View.OnClickListener {
+public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
     private EditText ed_mobile, ed_password;
-    private TextView tv_encounter_problem;
+    private ImageView iv_back;
     private Button btn_login, btn_gecode;
     private Gson gson;
-    private int resultCode=100;
-    private CenterDialog centerDialog;
+    private String openId;
+    /**
+     * 微信登录相关
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_replace_phone);
+        setContentView(R.layout.activity_bind_phone);
+        openId=getIntent().getStringExtra("openId");
+        MyApplication.instance.addActivity(this);
         gson = new Gson();
         initView();
     }
 
     private void initView() {
-        ImageView iv_back=findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         ed_mobile = findViewById(R.id.ed_mobile);
         ed_password = findViewById(R.id.ed_password);
-        tv_encounter_problem = findViewById(R.id.tv_encounter_problem);
         btn_login = findViewById(R.id.btn_login);
-        tv_encounter_problem.setOnClickListener(this);
         btn_login.setOnClickListener(this);
         btn_gecode = findViewById(R.id.btn_gecode);
         btn_gecode.setOnClickListener(this);
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
         btn_login.setEnabled(false);
         btn_gecode.setEnabled(false);
         ed_mobile.addTextChangedListener(new TextWatcher() {
@@ -119,6 +112,42 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
+    private void loGin(String openId) {
+        String examUrl = Urls.onLogin;
+        HashMap map = new HashMap();
+        if (ed_mobile.getText().toString().equals("")) {
+            BToast.showText("请输入手机号码 ", Toast.LENGTH_LONG, false);
+            return;
+        }
+        if (ed_password.getText().toString().equals("")) {
+            BToast.showText("请输入验证码 ", Toast.LENGTH_LONG, false);
+            return;
+        }
+        map.put("openId", openId);
+        map.put("mobile", ed_mobile.getText().toString());
+        map.put("validate", ed_password.getText().toString());
+        MyOkHttpClient.getInstance().asyncJsonPostNoToken(examUrl, map, new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+            }
+
+            @Override
+            public void onSuccess(Request request, String results) {
+                LoginEntity loginEntity = gson.fromJson(results, LoginEntity.class);
+                if (loginEntity.getCode() == 0) {
+                    PrefUtils.putLong("expire", loginEntity.getExpire());
+                    PrefUtils.putString("token", loginEntity.getToken());
+                    PrefUtils.putBoolean("isLogin", true);
+                    Intent intent = new Intent(BindPhoneActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    MyApplication.instance.finishAllActivity();
+                } else {
+                    BToast.showText(loginEntity.getMsg(), Toast.LENGTH_LONG, false);
+                }
+            }
+        });
+    }
+
     private void sendSMS() {
         if (ed_mobile.getText().toString().equals("")) {
             BToast.showText("请输入手机号码 ", Toast.LENGTH_LONG, false);
@@ -126,7 +155,7 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
         }
         timer.start();
         String examUrl = Urls.sendSMS(ed_mobile.getText().toString());
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
             }
@@ -145,10 +174,6 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     CountDownTimer timer = new CountDownTimer(50000, 1000) {
         @Override
@@ -178,71 +203,18 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_encounter_problem:
-                setCenterDiaolog();
-                break;
             case R.id.btn_login:
-                updateMobile();
+                loGin(openId);
                 break;
             case R.id.btn_gecode:
                 sendSMS();
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
             default:
                 break;
         }
     }
-    private void setCenterDiaolog(){
-        View outerView = LayoutInflater.from(ReplacePhoneActivity.this).inflate(R.layout.dialog_about, null);
-        Button btn_ok=outerView.findViewById(R.id.btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-            }
-        });
-        //防止弹出两个窗口
-        if (centerDialog !=null && centerDialog.isShowing()) {
-            return;
-        }
 
-        centerDialog = new CenterDialog(ReplacePhoneActivity.this, R.style.ActionSheetDialogBotoomStyle);
-        //将布局设置给Dialog
-        centerDialog.setContentView(outerView);
-        centerDialog.show();//显示对话框
-    }
-    private void updateMobile() {
-        if (ed_password.getText().toString().equals("")) {
-            BToast.showText("请输入验证码 ", Toast.LENGTH_LONG, false);
-            return;
-        }
-        HashMap build = new HashMap();
-        MyOkHttpClient.getInstance().asyncPut(Urls.updateMobile(ed_mobile.getText().toString(), ed_password.getText().toString()),
-
-                build, new MyOkHttpClient.HttpCallBack() {
-                    @Override
-                    public void onError(Request request, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Request request, String result) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(result);
-                            if (jsonObject.getInt("code") == 0) {
-                                BToast.showText("更改成功", true);
-                                Intent intent=new Intent();
-                                intent.putExtra("phoneNumber",ed_mobile.getText().toString());
-                                setResult(resultCode,intent);
-                                finish();
-                            }else{
-                                timer.onFinish();
-                                timer.cancel();
-                                BToast.showText(jsonObject.getString("msg") ,false);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
 }

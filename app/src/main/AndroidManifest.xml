@@ -47,6 +47,11 @@
             android:launchMode="singleInstance">
 
         </activity>
+        <activity
+            android:name=".activity.BindPhoneActivity"
+            android:launchMode="singleInstance">
+
+        </activity>
         <activity android:name=".activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

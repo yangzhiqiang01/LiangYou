@@ -88,6 +88,8 @@ public class ListenFragment extends Fragment {
         home_SwipeRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
+                mPageNum++;
+                refresh=false;
                 //加载
                 home_SwipeRefreshLayout.finishLoadmore();      //加载完成
                 getReaderTypeList();
@@ -184,9 +186,7 @@ public class ListenFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 bannerList = gson.fromJson(result, BannerList.class);
                 if(refresh){
-                    refresh=false;
                     homeList.clear();
-                    mPageNum=1;
                 }
                 if (bannerList.getCode() == 0) {
                     homeList.add(bannerList);

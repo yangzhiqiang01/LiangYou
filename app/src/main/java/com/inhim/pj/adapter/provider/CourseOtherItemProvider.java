@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.ArticleActivity;
 import com.inhim.pj.activity.RadioActivity;
-import com.inhim.pj.activity.SearchActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
@@ -70,6 +68,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     }else if(news.getType().equals("3")){
                         intent=new Intent(context, RadioActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     }else{
                         intent=new Intent(context, ArticleActivity.class);
                     }

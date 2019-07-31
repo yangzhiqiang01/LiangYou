@@ -90,6 +90,8 @@ public class ReadingTwoFragment extends Fragment {
             public void onLoadmore(RefreshLayout refreshlayout) {
                 //加载
                 home_SwipeRefreshLayout.finishLoadmore();      //加载完成
+                mPageNum++;
+                refresh=false;
                 getReaderList(rederType.getList().get(0));
             }
         });
@@ -142,7 +144,6 @@ public class ReadingTwoFragment extends Fragment {
             @Override
             public void onSuccess(Request request, String result) {
                 loadingView.hideLoading();
-                mPageNum++;
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0) {
                     homeList.addAll(readerList.getPage().getList());
@@ -199,8 +200,6 @@ public class ReadingTwoFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 bannerList = gson.fromJson(result, BannerList.class);
                 if(refresh){
-                    refresh=false;
-                    mPageNum=1;
                     homeList.clear();
                 }
                 if (bannerList.getCode() == 0) {

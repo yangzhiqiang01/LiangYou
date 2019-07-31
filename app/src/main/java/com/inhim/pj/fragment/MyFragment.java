@@ -29,21 +29,12 @@ import com.inhim.pj.dowloadvedio.ListActivity;
 import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
-import com.inhim.pj.utils.GlideCircleUtils;
-import com.inhim.pj.utils.PermissionUtils;
 import com.inhim.pj.utils.PrefUtils;
-import com.inhim.pj.utils.Util;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
-import com.inhim.pj.view.WXShareDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +65,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        token=PrefUtils.getString("token", "");
         mContext=getActivity();
     }
 
@@ -94,6 +84,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getInfo(final boolean isStart) {
+        token=PrefUtils.getString("token", "");
         if(!token.equals("")){
             String examUrl = Urls.getUserInfo;
             MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
@@ -113,7 +104,19 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                             startActivity(intent1);
                         }
                         tv_name.setText(userInfo.getRealname());
-                        ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
+                        if(userInfo.getHeadimgurl()==null||"".equals(userInfo.getHeadimgurl())){
+                            ImageLoader.getInstance().displayImage(userInfo.getWechatUser().getHeadimgurl(),iv_photo);
+                        }else{
+                            ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
+                        }
+                    }else if(smsResult.getCode()==500){
+                        PrefUtils.remove("expire");
+                        PrefUtils.remove("token");
+                        PrefUtils.remove("isLogin");
+                        tv_name.setText("点击登录");
+                        iv_photo.setImageResource(R.mipmap.user_photo);
+                        btn_back_login.setVisibility(View.GONE);
+                        BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
                     } else {
                         BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
                     }
@@ -256,15 +259,18 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onSuccess(Request request, String result) {
-                PrefUtils.remove("expire");
-                PrefUtils.remove("token");
-                PrefUtils.remove("isLogin");
                 try {
                     JSONObject jsonObject=new JSONObject(result);
                     if(jsonObject.getString("msg").equals("success")){
-                        Intent intent=new Intent(getActivity(), LoginActivity.class);
+                        /*Intent intent=new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
-                        getActivity().finish();
+                        getActivity().finish();*/
+                        PrefUtils.remove("expire");
+                        PrefUtils.remove("token");
+                        PrefUtils.remove("isLogin");
+                        tv_name.setText("点击登录");
+                        iv_photo.setImageResource(R.mipmap.user_photo);
+                        btn_back_login.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

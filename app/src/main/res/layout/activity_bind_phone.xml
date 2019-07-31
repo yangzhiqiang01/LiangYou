@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/base_dimen_0"
+        android:src="@mipmap/back"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_back"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+        android:text="绑定手机号"
+        android:textSize="@dimen/text_size_20"
+        android:textColor="@color/color333"
+        tools:ignore="MissingConstraints" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/dividing_line_backgroud"
+        app:layout_constraintTop_toBottomOf="@+id/iv_back"
+        android:layout_marginTop="@dimen/base_dimen_0"
+        tools:ignore="MissingConstraints" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/base_dimen_5dp"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/base_dimen_8"
+                android:layout_height="@dimen/base_dimen_8"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/base_dimen_0"
+                android:layout_marginRight="@dimen/base_dimen_0"
+                android:src="@mipmap/phone" />
+
+            <EditText
+                android:id="@+id/ed_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:hint="@string/user_hint"
+                android:inputType="number"
+                android:textColor="@color/color999"
+                android:textColorHint="@color/color999"
+                android:textSize="@dimen/text_size_18" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/base_dimen_15"
+            android:layout_marginTop="@dimen/base_dimen_5dp"
+            android:layout_marginRight="@dimen/base_dimen_15"
+            android:layout_marginBottom="@dimen/base_dimen_15"
+            android:background="@color/color999" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/base_dimen_8"
+                android:layout_height="@dimen/base_dimen_8"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/base_dimen_0"
+                android:layout_marginRight="@dimen/base_dimen_0"
+                android:src="@mipmap/emi_code" />
+
+            <EditText
+                android:id="@+id/ed_password"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/please_enter_code"
+                android:inputType="number"
+                android:textColor="@color/color999"
+                android:textColorHint="@color/color999"
+                android:textSize="@dimen/text_size_18" />
+
+            <Button
+                android:id="@+id/btn_gecode"
+                style="@style/btn_getcode"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/base_dimen_15"
+                android:inputType="text"
+                android:text="@string/get_code" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/base_dimen_15"
+            android:layout_marginTop="@dimen/base_dimen_5dp"
+            android:layout_marginRight="@dimen/base_dimen_15"
+            android:layout_marginBottom="@dimen/base_dimen_15"
+            android:background="@color/color999" />
+
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/btn_login_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_dimen_15"
+            android:layout_marginTop="@dimen/base_dimen_40"
+            android:layout_marginRight="@dimen/base_dimen_15"
+            android:text="确定" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

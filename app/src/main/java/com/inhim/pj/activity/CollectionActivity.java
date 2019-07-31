@@ -279,7 +279,7 @@ public class CollectionActivity extends BaseActivity {
             public void onLoadMore() {
                 //可以做请求下一页操作
                 mPageNum++;
-                refresh = false;
+                refresh=false;
                 getCollectionList(TypeId);
             }
         });

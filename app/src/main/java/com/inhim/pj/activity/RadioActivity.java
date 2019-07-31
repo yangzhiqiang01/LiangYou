@@ -1,28 +1,15 @@
 package com.inhim.pj.activity;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
@@ -31,8 +18,6 @@ import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.Config;
 import com.inhim.pj.entity.ReaderInfo;
-import com.inhim.pj.fragment.JIangyiFragment;
-import com.inhim.pj.fragment.MuluFragment;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
@@ -40,19 +25,13 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.pili.pldroid.player.AVOptions;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-
 import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
-import fm.jiecao.jcvideoplayer_lib.JCUserAction;
-import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.Request;
@@ -60,7 +39,7 @@ import okhttp3.Request;
 //单个章节
 @SuppressLint("SetJavaScriptEnabled")
 public class RadioActivity extends BaseActivity implements
-        JCVideoPlayerStandard.DowloadVedioListener, MuluFragment.OnVideoLinear {
+        JCVideoPlayerStandard.DowloadVedioListener{
 
     ImageView iv_back,iv_share;
     String name;
@@ -68,47 +47,39 @@ public class RadioActivity extends BaseActivity implements
     private String photoUrl;
 
     JCVideoPlayerStandard mJcVideoPlayerStandard;
-    private boolean mIsLiveStreaming;
+    private boolean mIsLiveStreaming=false;
     Long id;
     String videoUrl, videoPath;
     File videoFile;
     private String results;
-    private FullScreenReceiver srearchreceiver;
     private String vedioName;
-    //下载得视频 课程
-    //private MyBusinessInfoDid resultDid;
     private ReaderInfo.Reader readerInfo;
     private CheckBox checkbox;
     private Gson gson;
+    //下载得视频 课程
     private MyBusinessInfoDid businessInfoDid;
     WebView webView;
-    String content;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
-    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
-    private String title = "良友学院下载页";
-    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
+    private String webpageUrl;
+    private String title ;
+    private String description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gson = new Gson();
-        instance = this;
         setContentView(R.layout.activity_radio);
         initView();
-        srearchreceiver = new FullScreenReceiver();
-        IntentFilter finishfilter1 = new IntentFilter();
-        finishfilter1.addAction("the.search.data");
-        registerReceiver(srearchreceiver, finishfilter1);
         businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
         if (businessInfoDid != null && (new File(businessInfoDid.getFilePath())).exists()) {
             loadDownloadContent(businessInfoDid);
         } else {
-            getReaderInfo(getIntent().getIntExtra("ReaderId", 0), true);
+            getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
         }
     }
 
-    private void getReaderInfo(int readerId, final boolean isOne) {
+    private void getReaderInfo(int readerId) {
         showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
@@ -130,6 +101,9 @@ public class RadioActivity extends BaseActivity implements
     }
 
     private void loadDownloadContent(MyBusinessInfoDid businessInfoDid) {
+        webpageUrl=businessInfoDid.getContent();
+        title=businessInfoDid.getTitle() ;
+        description=businessInfoDid.getSynopsis();
         checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
         name = businessInfoDid.getTitle();
         contents = businessInfoDid.getContent();
@@ -142,6 +116,9 @@ public class RadioActivity extends BaseActivity implements
 
     private void loadContent(ReaderInfo readerInfos) {
         readerInfo = readerInfos.getReader();
+        webpageUrl=readerInfo.getContent();
+        title=readerInfo.getTitle() ;
+        description=readerInfo.getSynopsis();
         checkbox.setChecked(readerInfo.getCollectionStatus());
         name = readerInfo.getTitle();
         if (readerInfo.getUrl() != null) {
@@ -159,7 +136,7 @@ public class RadioActivity extends BaseActivity implements
     @Override
     public void dowload() {
         if (videoFile.exists()) {
-            BToast.showText("您已下载该视频");
+            BToast.showText("您已下载该音频");
         } else {
             try {
                 JSONObject jsonObject = new JSONObject(results);
@@ -182,26 +159,12 @@ public class RadioActivity extends BaseActivity implements
 
     @Override
     public void fullScreen() {
-        changeToFullScreen(true);
+
     }
 
     @Override
     public void chapterPay() {
-        //进入页面第一次点击播放按钮记录播放次数的回调
-    }
 
-    @Override
-    public void setVidoUrl(int ReaderId) {
-        getReaderInfo(ReaderId, false);
-    }
-
-    class FullScreenReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            changeToFullScreen(true);
-
-        }
     }
 
     @Override
@@ -226,7 +189,6 @@ public class RadioActivity extends BaseActivity implements
                 businessInfoDid.delete();
             }
         }
-        unregisterReceiver(srearchreceiver);
         JCVideoPlayer.releaseAllVideos();
     }
     public int getDuration() {
@@ -240,64 +202,6 @@ public class RadioActivity extends BaseActivity implements
             return duration;
         }
         return duration;
-    }
-
-    class MyUserActionStandard implements JCUserActionStandard {
-
-        @Override
-        public void onEvent(int type, String url, int screen, Object... objects) {
-            switch (type) {
-                case JCUserAction.ON_CLICK_START_ICON:
-                    Log.i("USER_EVENT", "ON_CLICK_START_ICON" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_START_ERROR:
-                    Log.i("USER_EVENT", "ON_CLICK_START_ERROR" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_START_AUTO_COMPLETE:
-                    Log.i("USER_EVENT", "ON_CLICK_START_AUTO_COMPLETE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_PAUSE:
-                    Log.i("USER_EVENT", "ON_CLICK_PAUSE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_RESUME:
-                    Log.i("USER_EVENT", "ON_CLICK_RESUME" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_SEEK_POSITION:
-                    Log.i("USER_EVENT", "ON_SEEK_POSITION" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_AUTO_COMPLETE:
-                    Log.i("USER_EVENT", "ON_AUTO_COMPLETE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_ENTER_FULLSCREEN:
-                    Log.i("USER_EVENT", "ON_ENTER_FULLSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_QUIT_FULLSCREEN:
-                    Log.i("USER_EVENT", "ON_QUIT_FULLSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_ENTER_TINYSCREEN:
-                    Log.i("USER_EVENT", "ON_ENTER_TINYSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_QUIT_TINYSCREEN:
-                    Log.i("USER_EVENT", "ON_QUIT_TINYSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_TOUCH_SCREEN_SEEK_VOLUME:
-                    Log.i("USER_EVENT", "ON_TOUCH_SCREEN_SEEK_VOLUME" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_TOUCH_SCREEN_SEEK_POSITION:
-                    Log.i("USER_EVENT", "ON_TOUCH_SCREEN_SEEK_POSITION" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-
-                case JCUserActionStandard.ON_CLICK_START_THUMB:
-                    Log.i("USER_EVENT", "ON_CLICK_START_THUMB" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserActionStandard.ON_CLICK_BLANK:
-                    Log.i("USER_EVENT", "ON_CLICK_BLANK" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                default:
-                    Log.i("USER_EVENT", "unknow");
-                    break;
-            }
-        }
     }
 
     private void initView() {
@@ -353,8 +257,8 @@ public class RadioActivity extends BaseActivity implements
     }
 
     private void setVideo() {
-        if (content == null || content.length() == 0) {
-            content = "暂无内容";
+        if (contents == null || contents.length() == 0) {
+            contents = "暂无内容";
         }
         webView.loadDataWithBaseURL(null, contents, mimeType, encoding, null);
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
@@ -369,9 +273,8 @@ public class RadioActivity extends BaseActivity implements
                 .load(photoUrl)
                 .into(mJcVideoPlayerStandard.thumbImageView);
 
-        JCVideoPlayer.setJcUserAction(new MyUserActionStandard());
         //屏幕保持常亮
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 1 -> hw codec enable, 0 -> disable [recommended]
         int codec = getIntent().getIntExtra("mediaCodec", AVOptions.MEDIA_CODEC_SW_DECODE);
@@ -392,46 +295,6 @@ public class RadioActivity extends BaseActivity implements
             options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
         }
 
-    }
-
-
-    private RadioActivity instance;
-    private boolean isFullScreen;
-
-    /**
-     * 横屏
-     * isLeft参数代表是向左横屏还是向右横屏
-     *
-     * @param
-     */
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && (isFullScreen == true)) {
-            fullScreenToNormal();
-            return false;
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-
-    }
-
-    // 竖屏
-    private void fullScreenToNormal() {
-        isFullScreen = false;
-        instance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-
-    private void changeToFullScreen(boolean isLeft) {
-        isFullScreen = true;
-        if (isLeft) {
-            // 向左横屏
-            instance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            // 向右横屏
-            instance.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-        }
     }
 
 }

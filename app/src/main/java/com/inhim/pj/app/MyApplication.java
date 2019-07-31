@@ -1,5 +1,6 @@
 package com.inhim.pj.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
+import java.util.Stack;
 
 public class MyApplication extends LitePalApplication {
     private static Context context;
@@ -33,11 +35,14 @@ public class MyApplication extends LitePalApplication {
     // TODO 自定义渠道
     public static final String APP_CHANNEL = "lyxy";
     public static IWXAPI api;
+    private static Stack<Activity> activityStack;
+    public static MyApplication instance;
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this.getBaseContext();
         context = this;
+        instance=this;
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
         setBugly();
@@ -56,7 +61,32 @@ public class MyApplication extends LitePalApplication {
             file.mkdir();
         }
     }
+    /**
+     * add Activity 添加Activity到栈
+     */
+    public void addActivity(Activity activity){
+        if(activityStack ==null){
+            activityStack =new Stack<Activity>();
+        }
+        activityStack.add(activity);
+    }
 
+    /**
+     * 结束所有Activity
+     */
+    public void finishAllActivity() {
+        try {
+            for (int i = 0, size = activityStack.size(); i < size; i++) {
+                if (null != activityStack.get(i)) {
+                    activityStack.get(i).finish();
+                }
+            }
+            activityStack.clear();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     private void setBugly() {
 /***** Beta高级设置 *****/
         /**

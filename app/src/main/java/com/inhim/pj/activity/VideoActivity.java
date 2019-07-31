@@ -68,7 +68,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private String photoUrl;
 
     JCVideoPlayerStandard mJcVideoPlayerStandard;
-    private boolean mIsLiveStreaming;
+    private boolean mIsLiveStreaming=false;
     private ViewPager viewPager;
     private ArrayList<Fragment> fs;
     private RadioButton jiangyi, mulu;
@@ -84,9 +84,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     //下载得视频 课程
     private MyBusinessInfoDid businessInfoDid;
     private long busiID;
-    private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
-    private String title = "良友学院下载页";
-    private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
+    private String webpageUrl;
+    private String title;
+    private String description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +129,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         });
     }
     private void loadDownloadContent(MyBusinessInfoDid businessInfoDid){
+        webpageUrl=businessInfoDid.getContent();
+        title=businessInfoDid.getTitle() ;
+        description=businessInfoDid.getSynopsis();
         name = businessInfoDid.getTitle();
         contents = businessInfoDid.getContent();
         photoUrl = businessInfoDid.getCover();
@@ -156,6 +159,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
     private void loadContent(ReaderInfo readerInfos, boolean isOne) {
         readerInfo = readerInfos.getReader();
+        webpageUrl=readerInfo.getContent();
+        title=readerInfo.getTitle() ;
+        description=readerInfo.getSynopsis();
         checkbox.setChecked(readerInfo.getCollectionStatus());
         name = readerInfo.getTitle();
         if (readerInfo.getUrl() != null) {

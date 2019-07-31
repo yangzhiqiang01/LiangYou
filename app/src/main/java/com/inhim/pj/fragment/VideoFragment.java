@@ -89,6 +89,8 @@ public class VideoFragment extends Fragment {
             public void onLoadmore(RefreshLayout refreshlayout) {
                 //加载
                 home_SwipeRefreshLayout.finishLoadmore();      //加载完成
+                mPageNum++;
+                refresh=false;
                 getReaderList();
             }
         });
@@ -156,7 +158,6 @@ public class VideoFragment extends Fragment {
 
             @Override
             public void onSuccess(Request request, String result) {
-                mPageNum++;
                 loadingView.hideLoading();
                 Gson gson = new Gson();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
@@ -186,9 +187,7 @@ public class VideoFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 bannerList = gson.fromJson(result, BannerList.class);
                 if(refresh){
-                    refresh=false;
                     homeList.clear();
-                    mPageNum=1;
                 }
                 if (bannerList.getCode() == 0) {
                     homeList.add(bannerList);

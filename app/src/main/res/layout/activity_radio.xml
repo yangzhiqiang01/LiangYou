@@ -7,8 +7,6 @@
     <com.inhim.pj.view.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:focusable="true"
-        android:clickable="true"
         android:layout_weight="1">
 
         <RelativeLayout
@@ -19,8 +17,7 @@
             <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
                 android:id="@+id/jc_video"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="260dp" />
             <WebView
                 android:id="@+id/webView1"
                 android:layout_width="match_parent"

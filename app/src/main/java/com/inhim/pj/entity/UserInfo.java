@@ -3,7 +3,108 @@ package com.inhim.pj.entity;
 import java.io.Serializable;
 
 public class UserInfo implements Serializable {
-    public class User implements Serializable{
+    public class WechatUser  implements Serializable {
+        private int wechatUserId;
+
+        private String country;
+
+        private String province;
+
+        private String city;
+
+        private String headimgurl;
+
+        private String language;
+
+        private String nickname;
+
+        private int sex;
+
+        private String openId;
+
+        private String unionId;
+
+        private String createTime;
+
+        private String updateTime;
+
+        public void setWechatUserId(int wechatUserId){
+            this.wechatUserId = wechatUserId;
+        }
+        public int getWechatUserId(){
+            return this.wechatUserId;
+        }
+        public void setCountry(String country){
+            this.country = country;
+        }
+        public String getCountry(){
+            return this.country;
+        }
+        public void setProvince(String province){
+            this.province = province;
+        }
+        public String getProvince(){
+            return this.province;
+        }
+        public void setCity(String city){
+            this.city = city;
+        }
+        public String getCity(){
+            return this.city;
+        }
+        public void setHeadimgurl(String headimgurl){
+            this.headimgurl = headimgurl;
+        }
+        public String getHeadimgurl(){
+            return this.headimgurl;
+        }
+        public void setLanguage(String language){
+            this.language = language;
+        }
+        public String getLanguage(){
+            return this.language;
+        }
+        public void setNickname(String nickname){
+            this.nickname = nickname;
+        }
+        public String getNickname(){
+            return this.nickname;
+        }
+        public void setSex(int sex){
+            this.sex = sex;
+        }
+        public int getSex(){
+            return this.sex;
+        }
+        public void setOpenId(String openId){
+            this.openId = openId;
+        }
+        public String getOpenId(){
+            return this.openId;
+        }
+        public void setUnionId(String unionId){
+            this.unionId = unionId;
+        }
+        public String getUnionId(){
+            return this.unionId;
+        }
+        public void setCreateTime(String createTime){
+            this.createTime = createTime;
+        }
+        public String getCreateTime(){
+            return this.createTime;
+        }
+        public void setUpdateTime(String updateTime){
+            this.updateTime = updateTime;
+        }
+        public String getUpdateTime(){
+            return this.updateTime;
+        }
+
+    }
+/*=================================*/
+
+    public class User  implements Serializable {
         private int vipUserId;
 
         private String username;
@@ -34,9 +135,9 @@ public class UserInfo implements Serializable {
 
         private String childrenStatus;
 
-        private String wechatUserId;
+        private String openId;
 
-        private String wechatUser;
+        private WechatUser wechatUser;
 
         public void setVipUserId(int vipUserId){
             this.vipUserId = vipUserId;
@@ -128,21 +229,22 @@ public class UserInfo implements Serializable {
         public String getChildrenStatus(){
             return this.childrenStatus;
         }
-        public void setWechatUserId(String wechatUserId){
-            this.wechatUserId = wechatUserId;
+        public void setOpenId(String openId){
+            this.openId = openId;
         }
-        public String getWechatUserId(){
-            return this.wechatUserId;
+        public String getOpenId(){
+            return this.openId;
         }
-        public void setWechatUser(String wechatUser){
+        public void setWechatUser(WechatUser wechatUser){
             this.wechatUser = wechatUser;
         }
-        public String getWechatUser(){
+        public WechatUser getWechatUser(){
             return this.wechatUser;
         }
 
     }
 /*=================================*/
+
         private String msg;
 
         private int code;
@@ -167,5 +269,6 @@ public class UserInfo implements Serializable {
         public User getUser(){
             return this.user;
         }
+
 
     }

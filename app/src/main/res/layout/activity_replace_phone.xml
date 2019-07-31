@@ -7,9 +7,10 @@
     android:background="@color/white"
     tools:context=".activity.LoginActivity">
     <ImageView
-        android:layout_width="@dimen/base_dimen_5"
-        android:layout_height="@dimen/base_dimen_5"
-        android:layout_margin="@dimen/base_dimen_0"
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_dimen_0"
         android:src="@mipmap/back"/>
     <TextView
         android:id="@+id/tv_mobile"

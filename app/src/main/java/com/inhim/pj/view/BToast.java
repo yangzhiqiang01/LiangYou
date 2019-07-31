@@ -122,9 +122,9 @@ public class BToast extends Toast {
             toast_img.setVisibility(View.GONE);
         } else {
             if (imgType == TYPE_TRUE) {
-                toast_img.setImageResource(R.mipmap.toast_prompt);
+                toast_img.setImageResource(R.mipmap.toast_y);
             } else {
-                toast_img.setImageResource(R.mipmap.toast_error_prompt);
+                toast_img.setImageResource(R.mipmap.toast_y);
             }
             toast_img.setVisibility(View.VISIBLE);
 
