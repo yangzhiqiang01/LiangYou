@@ -108,7 +108,31 @@ public class ListenFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
+    private void getBannerList () {
+        loadingView=new LoadingView();
+        loadingView.showLoading("加载中",getActivity());
+        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(4), new MyOkHttpClient.HttpCallBack() {
+            @Override
+            public void onError(Request request, IOException e) {
+                getReaderTypeList();
+            }
 
+            @Override
+            public void onSuccess(Request request, String result) {
+                bannerList = gson.fromJson(result, BannerList.class);
+                if(refresh){
+                    homeList.clear();
+                }
+                if (bannerList.getCode() == 0&&bannerList.getData().size()>0) {
+                    homeList.add(bannerList);
+                } else if(bannerList.getCode() != 0){
+                    BToast.showText(bannerList.getMsg(), false);
+                }
+                getReaderTypeList();
+
+            }
+        });
+    }
     private void getReaderTypeList () {
         /** {
          "readerStyleId": "string",
@@ -128,13 +152,16 @@ public class ListenFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 mPageNum++;
                 ReaderTypeList readerTypeList = gson.fromJson(result, ReaderTypeList.class);
-                if (readerTypeList.getCode() == 0) {
+                if (readerTypeList.getCode() == 0&&readerTypeList.getPage().getList().size()>0) {
                     size=readerTypeList.getPage().getList().size();
                     for (int i=0;i<size;i++){
                         getReaderList(readerTypeList.getPage().getList().get(i),i);
                     }
-                } else {
+                } else if(readerTypeList.getCode() != 0){
+                    loadingView.hideLoading();
                     BToast.showText(readerTypeList.getMsg(), false);
+                }else{
+                    loadingView.hideLoading();
                 }
             }
         });
@@ -157,7 +184,6 @@ public class ListenFragment extends Fragment {
 
             @Override
             public void onSuccess(Request request, String result) {
-                loadingView.hideLoading();
                 Gson gson = new Gson();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0) {
@@ -167,35 +193,11 @@ public class ListenFragment extends Fragment {
                     BToast.showText(readerList.getMsg(), false);
                 }
                 if(position==size-1){
+                    loadingView.hideLoading();
                     mAdapter.notifyDataSetChanged();
                 }
             }
         });
     }
 
-    private void getBannerList () {
-        loadingView=new LoadingView();
-        loadingView.showLoading("加载中",getActivity());
-        MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(4), new MyOkHttpClient.HttpCallBack() {
-            @Override
-            public void onError(Request request, IOException e) {
-                getReaderTypeList();
-            }
-
-            @Override
-            public void onSuccess(Request request, String result) {
-                bannerList = gson.fromJson(result, BannerList.class);
-                if(refresh){
-                    homeList.clear();
-                }
-                if (bannerList.getCode() == 0) {
-                    homeList.add(bannerList);
-                } else {
-                    BToast.showText(bannerList.getMsg(), false);
-                }
-                getReaderTypeList();
-
-            }
-        });
-    }
 }

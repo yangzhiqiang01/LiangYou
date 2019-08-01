@@ -189,6 +189,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
+                timer.onFinish();
+                timer.cancel();
             }
 
             @Override
@@ -275,7 +277,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    @Override
+ /*   @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
@@ -293,7 +295,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             });
         }
     }
-
+*/
     private void setCenterDiaolog() {
         View outerView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_about, null);
         Button btn_ok = outerView.findViewById(R.id.btn_ok);

@@ -126,9 +126,9 @@ public class VideoFragment extends Fragment {
             @Override
             public void onSuccess(Request request, String result) {
                 ReaderTypeList readerTypeList = gson.fromJson(result, ReaderTypeList.class);
-                if (readerTypeList.getCode() == 0) {
+                if (readerTypeList.getCode() == 0&&readerTypeList.getPage().getList().size()>0) {
                     homeList.add(readerTypeList);
-                } else {
+                } else if(readerTypeList.getCode() != 0){
                     BToast.showText(readerTypeList.getMsg(), false);
                 }
                 getReaderList();
@@ -161,12 +161,12 @@ public class VideoFragment extends Fragment {
                 loadingView.hideLoading();
                 Gson gson = new Gson();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
-                if (readerList.getCode() == 0) {
+                if (readerList.getCode() == 0&&readerList.getPage().getList().size()>0) {
                     if(refresh){
                         homeList.add("视频推荐");
                     }
                     homeList.addAll(readerList.getPage().getList());
-                } else {
+                } else if(readerList.getCode() != 0) {
                     BToast.showText(readerList.getMsg(), false);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -189,9 +189,9 @@ public class VideoFragment extends Fragment {
                 if(refresh){
                     homeList.clear();
                 }
-                if (bannerList.getCode() == 0) {
+                if (bannerList.getCode() == 0&&bannerList.getData().size()>0) {
                     homeList.add(bannerList);
-                } else {
+                } else if(bannerList.getCode() != 0){
                     BToast.showText(bannerList.getMsg(), false);
                 }
                 getReaderTypeList();

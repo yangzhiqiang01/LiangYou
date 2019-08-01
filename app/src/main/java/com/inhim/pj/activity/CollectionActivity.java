@@ -25,29 +25,21 @@ import com.inhim.pj.R;
 import com.inhim.pj.adapter.CollectionAdapter;
 import com.inhim.pj.adapter.RadioGridViewAdapter;
 import com.inhim.pj.app.BaseActivity;
-import com.inhim.pj.base.ClassicsHeader;
-import com.inhim.pj.dowloadvedio.db.DBController;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.entity.CollectionTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
-import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 import com.inhim.pj.view.MyGridView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 import org.yczbj.ycrefreshviewlib.inter.OnItemChildClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnItemLongClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,14 +162,16 @@ public class CollectionActivity extends BaseActivity {
     }
 
     private void collectionTypeList() {
+        showLoading("加载中");
         MyOkHttpClient.getInstance().asyncGet(Urls.collectionTypeList, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                hideLoading();
                 CollectionTypeList collectionTypeList = gson.fromJson(result, CollectionTypeList.class);
                 CollectionTypeList.TypeList type = new CollectionTypeList().new TypeList();
                 type.setName("全部");

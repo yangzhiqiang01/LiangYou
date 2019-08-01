@@ -2,7 +2,6 @@ package com.inhim.pj.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import com.inhim.pj.R;
 import com.inhim.pj.entity.HistoricalRecordEntity;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -65,10 +64,7 @@ public class SearchTwoAdapter extends ArrayAdapter{
 				normalHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						List<HistoricalRecordEntity> historicalRecordEntityList= DataSupport.findAll(HistoricalRecordEntity.class);
-						for(int i=0;i<historicalRecordEntityList.size();i++){
-							historicalRecordEntityList.get(i).delete();
-						}
+						LitePal.deleteAll(HistoricalRecordEntity.class);
 						notifyDataSetChanged();
 					}
 				});

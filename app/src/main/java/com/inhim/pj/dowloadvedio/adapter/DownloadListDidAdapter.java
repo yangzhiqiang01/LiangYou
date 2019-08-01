@@ -1,6 +1,7 @@
 package com.inhim.pj.dowloadvedio.adapter;
 
 import android.content.Context;
+import android.graphics.Movie;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +17,13 @@ import com.inhim.downloader.DownloadService;
 import com.inhim.downloader.callback.DownloadManager;
 import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
-import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.dowloadvedio.callback.MyDownloadListener;
 import com.inhim.pj.dowloadvedio.db.DBController;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.FileUtil;
-import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.GlideUtils;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -167,7 +166,8 @@ public class DownloadListDidAdapter extends
                 if(file.exists()){
                     file.delete();
                 }
-                listInfo.get(i).delete();
+                //删除数据库movie表中id为1的记录
+                LitePal.delete(MyBusinessInfoDid.class,i);
                 try {
                     DBController instance =  DBController.getInstance(context);
                     List<DownloadInfo> list=instance.findAllDownloaded();
@@ -182,7 +182,7 @@ public class DownloadListDidAdapter extends
         setData(getDownloadListData());
     }
     private List<MyBusinessInfoDid> getDownloadListData() {
-        List<MyBusinessInfoDid> myBusinessInfos = DataSupport.findAll(MyBusinessInfoDid.class);
+        List<MyBusinessInfoDid> myBusinessInfos = LitePal.findAll(MyBusinessInfoDid.class);
         if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;

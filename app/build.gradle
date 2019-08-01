@@ -9,8 +9,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex
+        multiDexEnabled true
     }
-    /*signingConfigs {
+    signingConfigs {
 
         release {
             //SHA1: 4A2FD3626FFED787BB9D9C11FF0443914F0CD3F0
@@ -44,7 +46,7 @@ android {
 //
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }*/
+    }
     lintOptions {
         abortOnError false
     }
@@ -72,7 +74,6 @@ dependencies {
     implementation 'com.bigkoo:convenientbanner:2.0.5'
     implementation 'com.github.chaychan:MultipleItemRvAdapter:1.0.4'
     implementation project(':jcvideoplayer-lib')
-    implementation files('libs/litepal-1.3.1.jar')
     implementation 'com.j256.ormlite:ormlite-android:5.0'
     implementation 'com.j256.ormlite:ormlite-core:5.0'
     implementation 'com.squareup.picasso:picasso:2.5.1'
@@ -85,4 +86,13 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.3.1'
     implementation 'com.alibaba:fastjson:1.2.58'
     implementation 'com.zhy:okhttputils:2.6.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+
+    // eventbus
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    //已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.litepal.android:java:3.0.0'
 }

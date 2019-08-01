@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.support.multidex.MultiDex;
 
 import com.inhim.pj.R;
 import com.inhim.pj.activity.HomeActivity;
@@ -20,6 +21,7 @@ import com.tencent.bugly.beta.Beta;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import org.litepal.LitePal;
 import org.litepal.LitePalApplication;
 
 import java.io.File;
@@ -40,6 +42,10 @@ public class MyApplication extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        //已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex
+        MultiDex.install(this);
+        // 初始化
+        LitePal.initialize(this);
         mContext = this.getBaseContext();
         context = this;
         instance=this;

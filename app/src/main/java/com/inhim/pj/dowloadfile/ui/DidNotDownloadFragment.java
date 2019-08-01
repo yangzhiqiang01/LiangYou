@@ -1,4 +1,4 @@
-package com.inhim.pj.dowloadvedio;
+package com.inhim.pj.dowloadfile.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,25 +10,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.inhim.downloader.DownloadService;
 import com.inhim.downloader.config.Config;
 import com.inhim.pj.R;
-import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerViewAdapter;
-import com.inhim.pj.dowloadvedio.adapter.DownloadListAdapter;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
+import com.inhim.pj.activity.RadioActivity;
+import com.inhim.pj.activity.VideoActivity;
+import com.inhim.pj.dowloadvedio.HaveDownloadedFragment;
+import com.inhim.pj.dowloadvedio.MyItemRecyclerViewAdapter;
+import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerDidViewAdapter;
+import com.inhim.pj.dowloadvedio.adapter.DownloadListDidAdapter;
+import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.dummy.DummyContent;
-import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.CenterDialog;
 
 import org.litepal.LitePal;
@@ -37,29 +37,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * A fragment representing a list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HaveDownloadedFragment extends Fragment implements BaseRecyclerViewAdapter.OnItemClickListener {
+public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidViewAdapter.OnItemClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private HaveDownloadedFragment.OnListFragmentInteractionListener mListener;
     private static final int REQUEST_DOWNLOAD_DETAIL_PAGE = 100;
 
     private RecyclerView recyclerView;
-    private DownloadListAdapter downloadListAdapter;
+    private DownloadListDidAdapter downloadListAdapter;
     private SrearchReceiver srearchreceiver;
     private DeleteReceiver deleteReceiver;
-    private TextView tvFile;
-    private boolean isCheck;
     private LinearLayout lin_caozuo;
     private TextView textview1, textview2;
+    private boolean isCheck, isAll;
     private CenterDialog centerDialog;
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
@@ -71,23 +71,56 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         return fragment;
     }
 
+    public void initListener() {
+        downloadListAdapter.setOnItemClickListener(this);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //实例化IntentFilter对象
         IntentFilter filter = new IntentFilter();
-        filter.addAction("the.search.data.dowload");
+        filter.addAction("the.search");
         //注册广播接收
         srearchreceiver = new SrearchReceiver();
         if (getActivity() != null) {
             getActivity().registerReceiver(srearchreceiver, filter);
         }
         IntentFilter deleteFilter = new IntentFilter();
-        deleteFilter.addAction("one.fragment.delete");
+        deleteFilter.addAction("two.fragment.delete");
         //注册广播接收
         deleteReceiver = new DeleteReceiver();
         if (getActivity() != null) {
             getActivity().registerReceiver(deleteReceiver, deleteFilter);
+        }
+    }
+
+    class DeleteReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!isCheck) {
+                isCheck = true;
+                downloadListAdapter.setCheck(isCheck, false);
+                downloadListAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.VISIBLE);
+            } else {
+                isCheck = false;
+                downloadListAdapter.setCheck(isCheck, false);
+                downloadListAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    class SrearchReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            downloadListAdapter.setData(getDownloadListData());
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE || (recyclerView.isComputingLayout() == false)) {
+                downloadListAdapter.notifyDataSetChanged();
+            }
         }
     }
     private void setDiaglog(){
@@ -122,31 +155,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         centerDialog.setContentView(outerView);
         centerDialog.show();//显示对话框
     }
-    class DeleteReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!isCheck) {
-                isCheck = true;
-                downloadListAdapter.setCheck(isCheck, false);
-                downloadListAdapter.notifyDataSetChanged();
-                lin_caozuo.setVisibility(View.VISIBLE);
-            } else {
-                isCheck = false;
-                downloadListAdapter.setCheck(isCheck, false);
-                downloadListAdapter.notifyDataSetChanged();
-                lin_caozuo.setVisibility(View.GONE);
-            }
-        }
-    }
-    class SrearchReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            initData();
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -157,7 +165,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     }
 
     public void initData() {
-
         try {
             Config config = new Config();
             config.setDownloadThread(3);
@@ -168,14 +175,15 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         } catch (Exception e) {
             e.printStackTrace();
         }
-        downloadListAdapter = new DownloadListAdapter(getActivity());
+        downloadListAdapter = new DownloadListDidAdapter(getActivity());
         downloadListAdapter.setData(getDownloadListData());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(downloadListAdapter);
+        initListener();
     }
 
-    private List<MyBusinessInfo> getDownloadListData() {
-        List<MyBusinessInfo> myBusinessInfos = LitePal.findAll(MyBusinessInfo.class);
+    private List<MyBusinessInfoDid> getDownloadListData() {
+        List<MyBusinessInfoDid> myBusinessInfos = LitePal.findAll(MyBusinessInfoDid.class);
         if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;
@@ -184,12 +192,11 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_list2, container, false);
         recyclerView = view.findViewById(R.id.rv);
-        lin_caozuo = view.findViewById(R.id.lin_caozuo);
-        tvFile = view.findViewById(R.id.tvFile);
         textview1 = view.findViewById(R.id.textview1);
         textview2 = view.findViewById(R.id.textview2);
+        lin_caozuo = view.findViewById(R.id.lin_caozuo);
         textview1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +210,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
                 setDiaglog();
             }
         });
-        tvFile.setText("存储路径:" + Urls.getFilePath());
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -221,11 +227,10 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         }
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        downloadListAdapter.notifyDataSetChanged();
+        initData();
     }
 
     @Override
@@ -236,10 +241,16 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
     @Override
     public void onItemClick(int position) {
-        /*MyBusinessInfo data = downloadListAdapter.getData(position);
-        Intent intent = new Intent(getActivity(), DownloadDetailActivity.class);
-        intent.putExtra(DownloadDetailActivity.DATA, data);
-        startActivityForResult(intent, REQUEST_DOWNLOAD_DETAIL_PAGE);*/
+        Intent intent;
+        MyBusinessInfoDid data = downloadListAdapter.getData(position);
+        if(data.getType()==2){
+            intent=new Intent(getActivity(), VideoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        }else {
+            intent=new Intent(getActivity(), RadioActivity.class);
+        }
+        intent.putExtra("result", data);
+        startActivityForResult(intent, REQUEST_DOWNLOAD_DETAIL_PAGE);
     }
 
     /**

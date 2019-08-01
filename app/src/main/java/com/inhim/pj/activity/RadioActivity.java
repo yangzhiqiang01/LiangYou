@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
-import com.inhim.pj.dowloadvedio.ListActivity;
+import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.Config;
@@ -57,7 +58,7 @@ public class RadioActivity extends BaseActivity implements
     private CheckBox checkbox;
     private Gson gson;
     //下载得视频 课程
-    private MyBusinessInfoDid businessInfoDid;
+    private DownloadInfo businessInfoDid;
     WebView webView;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
@@ -70,7 +71,7 @@ public class RadioActivity extends BaseActivity implements
         gson = new Gson();
         setContentView(R.layout.activity_radio);
         initView();
-        businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
+        businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
         if (businessInfoDid != null && (new File(businessInfoDid.getFilePath())).exists()) {
             loadDownloadContent(businessInfoDid);
@@ -100,7 +101,7 @@ public class RadioActivity extends BaseActivity implements
         });
     }
 
-    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid) {
+    private void loadDownloadContent(DownloadInfo businessInfoDid) {
         webpageUrl=businessInfoDid.getContent();
         title=businessInfoDid.getTitle() ;
         description=businessInfoDid.getSynopsis();
@@ -140,9 +141,10 @@ public class RadioActivity extends BaseActivity implements
         } else {
             try {
                 JSONObject jsonObject = new JSONObject(results);
-                MyBusinessInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), MyBusinessInfo.class);
+                DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
                 businessInfo.setFilePath(videoPath);
-                businessInfo.setProgress("0");
+                businessInfo.setProgress(0);
+                businessInfo.setProgressText("0");
                 boolean istrue = businessInfo.save();
                 if (istrue) {
                     Intent intent = new Intent(RadioActivity.this, ListActivity.class);
@@ -181,10 +183,10 @@ public class RadioActivity extends BaseActivity implements
             String progressTime = df.format(num);//返回的是String类型
             //格式化fat,保留两位小数, 得到一个string字符串
             if(progressTime!=null&&!progressTime.equals("NaN")){
-                MyBusinessInfoDid infoDid=businessInfoDid;
+                DownloadInfo infoDid=businessInfoDid;
                 DecimalFormat decimalFormat=new DecimalFormat(".00");
                 String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
-                infoDid.setProgress(proess+"%");
+                infoDid.setProgressText(proess+"%");
                 infoDid.save();
                 businessInfoDid.delete();
             }

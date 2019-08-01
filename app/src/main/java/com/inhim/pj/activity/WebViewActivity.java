@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.inhim.pj.R;
+import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.AboutEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
@@ -19,7 +20,7 @@ import java.io.IOException;
 
 import okhttp3.Request;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseActivity {
     WebView webView;
     String content;
     final String mimeType = "text/html";
@@ -37,15 +38,17 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private void getAppAbout() {
+        showLoading("加载中");
         MyOkHttpClient myOkHttpClient=MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGetNoToken(Urls.appAbout(Type), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                hideLoading();
                 Gson gson=new Gson();
                 AboutEntity aboutEntity=gson.fromJson(result,AboutEntity.class);
                 if(aboutEntity.getCode()==0){

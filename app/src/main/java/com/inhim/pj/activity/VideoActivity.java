@@ -1,5 +1,6 @@
 package com.inhim.pj.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -20,13 +21,13 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
-import com.inhim.pj.dowloadvedio.ListActivity;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
+import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.dowloadvedio.util.Config;
 import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.fragment.JIangyiFragment;
@@ -38,12 +39,10 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
-import com.squareup.picasso.Picasso;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -55,6 +54,7 @@ import fm.jiecao.jcvideoplayer_lib.JCUserAction;
 import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import io.reactivex.functions.Consumer;
 import okhttp3.Request;
 
 //单个章节
@@ -82,7 +82,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private CheckBox checkbox;
     private Gson gson;
     //下载得视频 课程
-    private MyBusinessInfoDid businessInfoDid;
+    private DownloadInfo businessInfoDid;
     private long busiID;
     private String webpageUrl;
     private String title;
@@ -98,7 +98,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         IntentFilter finishfilter1 = new IntentFilter();
         finishfilter1.addAction("the.search.data");
         registerReceiver(srearchreceiver, finishfilter1);
-        businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
+        businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
         if (businessInfoDid != null&& (new File(businessInfoDid.getFilePath())).exists()) {
             busiID=getIntent().getLongExtra("busiID",0);
@@ -128,7 +128,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             }
         });
     }
-    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid){
+    private void loadDownloadContent(DownloadInfo businessInfoDid){
         webpageUrl=businessInfoDid.getContent();
         title=businessInfoDid.getTitle() ;
         description=businessInfoDid.getSynopsis();
@@ -202,26 +202,40 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void dowload() {
-        if (videoFile.exists()) {
-            BToast.showText("您已下载该视频");
-        } else {
-            try {
-                JSONObject jsonObject=new JSONObject(results);
-                MyBusinessInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), MyBusinessInfo.class);
-                businessInfo.setFilePath(videoPath);
-                businessInfo.setProgress("0");
-                boolean istrue=businessInfo.save();
-                if(istrue){
-                    Intent intent = new Intent(VideoActivity.this, ListActivity.class);
-                    startActivity(intent);
-                }else{
-                    BToast.showText("下载失败");
-                }
+        RxPermissions mRxPermission = new RxPermissions(this);
+        mRxPermission.request(Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean){
+                            if (videoFile.exists()) {
+                                BToast.showText("您已下载该视频");
+                            } else {
+                                try {
+                                    JSONObject jsonObject=new JSONObject(results);
+                                    DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
+                                    businessInfo.setFilePath(videoPath);
+                                    businessInfo.setProgress(0);
+                                    businessInfo.setProgressText("0");
+                                    businessInfo.setFileName(vedioName);
+                                    businessInfo.setDownloadStatus("wait");
+                                    boolean istrue=businessInfo.save();
+                                    if(istrue){
+                                        Intent intent = new Intent(VideoActivity.this, ListActivity.class);
+                                        startActivity(intent);
+                                    }else{
+                                        BToast.showText("下载失败");
+                                    }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }else{
+                            Toast.makeText(VideoActivity.this , "请打开读写权限" , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -303,10 +317,10 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             String progressTime = df.format(num);//返回的是String类型
             //格式化fat,保留两位小数, 得到一个string字符串
             if(progressTime!=null&&!progressTime.equals("NaN")){
-                MyBusinessInfoDid infoDid=businessInfoDid;
+                DownloadInfo infoDid=businessInfoDid;
                 DecimalFormat decimalFormat=new DecimalFormat(".00");
                 String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
-                infoDid.setProgress(proess+"%");
+                infoDid.setProgressText(proess+"%");
                 infoDid.save();
                 businessInfoDid.delete();
             }

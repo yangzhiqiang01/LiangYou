@@ -2,7 +2,6 @@ package com.inhim.pj.dowloadvedio.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +23,9 @@ import com.inhim.pj.dowloadvedio.domain.MyBusinessInfLocal;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
 import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.util.FileUtil;
-import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.GlideUtils;
 
-import org.litepal.crud.DataSupport;
-
+import org.litepal.LitePal;
 import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
@@ -269,14 +266,14 @@ public class DownloadListAdapter extends
                             e.printStackTrace();
                         }
 
-                        List<MyBusinessInfo> infos = DataSupport.findAll(MyBusinessInfo.class);
+                        List<MyBusinessInfo> infos = LitePal.findAll(MyBusinessInfo.class);
                         if (infos.size() > 0) {
                             try {
                                 MyBusinessInfoDid infosDid = new MyBusinessInfoDid();
                                 infosDid.setContent(infos.get(position).getContent());
                                 infosDid.setCover(infos.get(position).getCover());
                                 infosDid.setFilePath(infos.get(position).getFilePath());
-                                infosDid.setProgress(infos.get(position).getProgress());
+                                //infosDid.setProgress(infos.get(position).getProgress());
                                 infosDid.setReaderId(infos.get(position).getReaderId());
                                 infosDid.setReaderTypeId(infos.get(position).getReaderTypeId());
                                 infosDid.setTitle(infos.get(position).getTitle());
@@ -336,7 +333,7 @@ public class DownloadListAdapter extends
         setData(getDownloadListData());
     }
     private List<MyBusinessInfo> getDownloadListData() {
-        List<MyBusinessInfo> myBusinessInfos = DataSupport.findAll(MyBusinessInfo.class);
+        List<MyBusinessInfo> myBusinessInfos = LitePal.findAll(MyBusinessInfo.class);
         if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;

@@ -1,6 +1,6 @@
 package com.inhim.pj.dowloadvedio.domain;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by renpingqing on 17/1/19.
  */
-public class MyBusinessInfoDid extends DataSupport implements Serializable{
+public class MyBusinessInfoDid extends LitePalSupport implements Serializable{
     private int readerId;
 
     private String cover;

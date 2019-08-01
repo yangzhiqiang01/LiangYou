@@ -30,7 +30,7 @@ import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
 import com.inhim.pj.dowloadvedio.dummy.DummyContent;
 import com.inhim.pj.view.CenterDialog;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +181,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     }
 
     private List<MyBusinessInfoDid> getDownloadListData() {
-        List<MyBusinessInfoDid> myBusinessInfos = DataSupport.findAll(MyBusinessInfoDid.class);
+        List<MyBusinessInfoDid> myBusinessInfos = LitePal.findAll(MyBusinessInfoDid.class);
         if (myBusinessInfos.size() > 0) {
         }
         return myBusinessInfos;

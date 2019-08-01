@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="dongdong" ></dbname>
 
-    <version value="1" ></version>
+    <version value="3" ></version>
 
     <list>
         <mapping class="com.inhim.pj.dowloadvedio.domain.MyBusinessInfo"></mapping>
@@ -13,5 +13,8 @@
     </list>
     <list>
         <mapping class="com.inhim.pj.entity.HistoricalRecordEntity"></mapping>
+    </list>
+    <list>
+        <mapping class="com.inhim.pj.dowloadfile.download.DownloadInfo"></mapping>
     </list>
 </litepal>

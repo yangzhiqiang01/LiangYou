@@ -120,9 +120,15 @@ public class ReadingTwoFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 rederType=gson.fromJson(result,ReaderStyle.class);
                 if(rederType.getCode()==0){
-                    homeList.add("系列专题");
-                    homeList.add(rederType);
-                    getReaderList(rederType.getList().get(0));
+                    if(rederType.getList().size()>0){
+                        homeList.add("系列专题");
+                        homeList.add(rederType);
+                        getReaderList(rederType.getList().get(0));
+                    }else{
+                        loadingView.hideLoading();
+                    }
+                }else{
+                    loadingView.hideLoading();
                 }
             }
         });
@@ -145,9 +151,9 @@ public class ReadingTwoFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 loadingView.hideLoading();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
-                if (readerList.getCode() == 0) {
+                if (readerList.getCode() == 0&&readerList.getPage().getList().size()>0) {
                     homeList.addAll(readerList.getPage().getList());
-                } else {
+                } else if(readerList.getCode() != 0){
                     BToast.showText(readerList.getMsg(), false);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -175,10 +181,10 @@ public class ReadingTwoFragment extends Fragment {
             public void onSuccess(Request request, String result) {
                 Gson gson = new Gson();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
-                if (readerList.getCode() == 0) {
+                if (readerList.getCode() == 0&&readerList.getPage().getList().size()>0) {
                     homeList.add("每日推荐");
                     homeList.addAll(readerList.getPage().getList());
-                } else {
+                } else if(readerList.getCode() != 0){
                     BToast.showText(readerList.getMsg(), false);
                 }
                 getReaderStyle();
@@ -192,7 +198,6 @@ public class ReadingTwoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(1), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                BToast.showText("请求失败", false);
                 getReaderList();
             }
 
@@ -202,9 +207,9 @@ public class ReadingTwoFragment extends Fragment {
                 if(refresh){
                     homeList.clear();
                 }
-                if (bannerList.getCode() == 0) {
+                if (bannerList.getCode() == 0&&bannerList.getData().size()>0) {
                     homeList.add(bannerList);
-                } else {
+                } else if(bannerList.getCode() != 0){
                     BToast.showText(bannerList.getMsg(), false);
                 }
                 getReaderList();

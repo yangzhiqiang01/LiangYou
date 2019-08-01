@@ -1,5 +1,6 @@
 package com.inhim.pj.activity;
 
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.dowloadvedio.db.DBController;
@@ -19,7 +21,8 @@ import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
-import org.litepal.crud.DataSupport;
+
+import org.litepal.LitePal;
 
 import java.io.File;
 import java.util.List;
@@ -29,6 +32,7 @@ public class SettingActivity extends BaseActivity {
     TextView tv_size;
     CheckBox checkbox;
     private CenterDialog centerDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +42,13 @@ public class SettingActivity extends BaseActivity {
 
     private void initView() {
         rela_clean = findViewById(R.id.rela_clean);
-        tv_size=findViewById(R.id.tv_size);
+        tv_size = findViewById(R.id.tv_size);
         tv_size.setText(FileUtils.getAutoFileOrFilesSize(Urls.getFilePath()));
-        checkbox=findViewById(R.id.checkbox);
+        checkbox = findViewById(R.id.checkbox);
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtils.putBoolean("isPlay",isChecked);
+                PrefUtils.putBoolean("isPlay", isChecked);
             }
         });
         rela_clean.setOnClickListener(new View.OnClickListener() {
@@ -55,23 +59,17 @@ public class SettingActivity extends BaseActivity {
         });
     }
 
-    private void setDiaglog(){
+    private void setDiaglog() {
         View outerView = LayoutInflater.from(SettingActivity.this).inflate(R.layout.dialog_deletes, null);
-        Button btn_ok=outerView.findViewById(R.id.btn_ok);
-        Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
+        Button btn_ok = outerView.findViewById(R.id.btn_ok);
+        Button btn_cancel = outerView.findViewById(R.id.btn_cancel);
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showLoading("删除中");
                 FileUtils.DeleteFile(new File(Urls.getFilePath()));
-                List<MyBusinessInfo> myBusinessInfos = DataSupport.findAll(MyBusinessInfo.class);
-                for (int j = 0; j < myBusinessInfos.size(); j++) {
-                    myBusinessInfos.get(j).delete();
-                }
-                List<MyBusinessInfoDid> myBusinessInfoDids = DataSupport.findAll(MyBusinessInfoDid.class);
-                for (int j = 0; j < myBusinessInfoDids.size(); j++) {
-                    myBusinessInfoDids.get(j).delete();
-                }
+                LitePal.deleteAll(DownloadInfo.class);
+                LitePal.deleteAll(MyBusinessInfoDid.class);
                 FileUtils.DeleteFile(new File(Urls.getFilePath()));
                 //删除下载的信息
                 try {
@@ -96,7 +94,7 @@ public class SettingActivity extends BaseActivity {
             }
         });
         //防止弹出两个窗口
-        if (centerDialog !=null && centerDialog.isShowing()) {
+        if (centerDialog != null && centerDialog.isShowing()) {
             return;
         }
 

@@ -14,7 +14,6 @@ import com.inhim.pj.R;
 import com.inhim.pj.adapter.SearchAdapter;
 import com.inhim.pj.adapter.SearchTwoAdapter;
 import com.inhim.pj.app.BaseActivity;
-import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.HistoricalRecordEntity;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.http.MyOkHttpClient;
@@ -22,8 +21,7 @@ import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.SearchView;
 
-import org.litepal.crud.DataSupport;
-
+import org.litepal.LitePal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +161,7 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
 
 
     private void getHintData() {
-        List<HistoricalRecordEntity> historicalRecordEntityList= DataSupport.findAll(HistoricalRecordEntity.class);
+        List<HistoricalRecordEntity> historicalRecordEntityList= LitePal.findAll(HistoricalRecordEntity.class);
         hintAdapter = new SearchTwoAdapter(this, R.layout.listvie_popuwindow, historicalRecordEntityList);
     }
 

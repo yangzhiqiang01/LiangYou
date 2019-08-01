@@ -1,10 +1,11 @@
 package com.inhim.pj.entity;
 
-import org.litepal.crud.DataSupport;
+
+import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
 
-public class HistoricalRecordEntity extends DataSupport implements Serializable {
+public class HistoricalRecordEntity extends LitePalSupport implements Serializable {
     private String text;
 
     public String getText() {

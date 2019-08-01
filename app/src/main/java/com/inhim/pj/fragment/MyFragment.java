@@ -25,13 +25,14 @@ import com.inhim.pj.activity.MyInfoActivity;
 import com.inhim.pj.activity.SettingActivity;
 import com.inhim.pj.activity.WebViewActivity;
 import com.inhim.pj.app.MyApplication;
-import com.inhim.pj.dowloadvedio.ListActivity;
+import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.LoadingView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
@@ -62,6 +63,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private String webpageUrl="http://ly.bible.ac.cn/upload/android/app-release.apk";
     private String title = "良友学院下载页";
     private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
+    private LoadingView loadingView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,15 +88,19 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private void getInfo(final boolean isStart) {
         token=PrefUtils.getString("token", "");
         if(!token.equals("")){
+            loadingView=new LoadingView();
+            loadingView.showLoading("加载中",getActivity());
             String examUrl = Urls.getUserInfo;
             MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
                 @Override
                 public void onError(Request request, IOException e) {
+                    loadingView.hideLoading();
                 }
 
                 @Override
                 public void onSuccess(Request request, String results) {
                     Gson gson=new Gson();
+                    loadingView.hideLoading();
                     UserInfo smsResult = gson.fromJson(results, UserInfo.class);
                     if (smsResult.getCode()==0) {
                         userInfo=smsResult.getUser();
@@ -250,17 +256,20 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
     private void outLogin() {
+        loadingView=new LoadingView();
+        loadingView.showLoading("退出中",getActivity());
         MyOkHttpClient myOkHttpClient=MyOkHttpClient.getInstance();
         myOkHttpClient.asyncJsonPost(Urls.onLogout, new HashMap(), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                loadingView.hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
                 try {
                     JSONObject jsonObject=new JSONObject(result);
+                    loadingView.hideLoading();
                     if(jsonObject.getString("msg").equals("success")){
                         /*Intent intent=new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);

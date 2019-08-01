@@ -21,6 +21,7 @@ import com.inhim.pj.activity.SearchActivity;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.view.LoadingView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,14 +60,17 @@ public class ReadingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getReaderStyle() {
+        final LoadingView loadingView=new LoadingView();
+        loadingView.showLoading("加载中",mContext);
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getReaderStyle("type"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-
+                loadingView.hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
+                loadingView.hideLoading();
                 readerStyle=gson.fromJson(result,ReaderStyle.class);
                 setFragment();
             }

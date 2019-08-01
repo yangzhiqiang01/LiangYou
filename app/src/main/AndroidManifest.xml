@@ -79,6 +79,9 @@
             android:name=".dowloadvedio.ListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".dowloadfile.ui.ListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"

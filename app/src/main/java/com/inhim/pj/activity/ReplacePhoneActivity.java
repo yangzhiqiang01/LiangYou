@@ -126,9 +126,11 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
         }
         timer.start();
         String examUrl = Urls.sendSMS(ed_mobile.getText().toString());
-        MyOkHttpClient.getInstance().asyncGet(examUrl, new MyOkHttpClient.HttpCallBack() {
+        MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
+                timer.onFinish();
+                timer.cancel();
             }
 
             @Override

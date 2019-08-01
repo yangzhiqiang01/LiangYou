@@ -158,10 +158,13 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         MyOkHttpClient.getInstance().asyncGetNoToken(examUrl, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
+                timer.onFinish();
+                timer.cancel();
             }
 
             @Override
             public void onSuccess(Request request, String results) {
+                hideLoading();
                 SMSResult smsResult = gson.fromJson(results, SMSResult.class);
                 if (!smsResult.getMsg().equals("success")) {
                     BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);
