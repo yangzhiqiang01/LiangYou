@@ -1,9 +1,7 @@
 package com.inhim.pj.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,8 +19,6 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
@@ -39,8 +35,6 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
@@ -54,7 +48,6 @@ import fm.jiecao.jcvideoplayer_lib.JCUserAction;
 import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
-import io.reactivex.functions.Consumer;
 import okhttp3.Request;
 
 //单个章节
@@ -84,7 +77,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     //下载得视频 课程
     private DownloadInfo businessInfoDid;
     private long busiID;
-    private String webpageUrl;
     private String title;
     private String description;
     @Override
@@ -129,7 +121,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         });
     }
     private void loadDownloadContent(DownloadInfo businessInfoDid){
-        webpageUrl=businessInfoDid.getContent();
         title=businessInfoDid.getTitle() ;
         description=businessInfoDid.getSynopsis();
         name = businessInfoDid.getTitle();
@@ -159,7 +150,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
     private void loadContent(ReaderInfo readerInfos, boolean isOne) {
         readerInfo = readerInfos.getReader();
-        webpageUrl=readerInfo.getContent();
         title=readerInfo.getTitle() ;
         description=readerInfo.getSynopsis();
         checkbox.setChecked(readerInfo.getCollectionStatus());
@@ -202,40 +192,29 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void dowload() {
-        RxPermissions mRxPermission = new RxPermissions(this);
-        mRxPermission.request(Manifest.permission.READ_EXTERNAL_STORAGE , Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (aBoolean){
-                            if (videoFile.exists()) {
-                                BToast.showText("您已下载该视频");
-                            } else {
-                                try {
-                                    JSONObject jsonObject=new JSONObject(results);
-                                    DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
-                                    businessInfo.setFilePath(videoPath);
-                                    businessInfo.setProgress(0);
-                                    businessInfo.setProgressText("0");
-                                    businessInfo.setFileName(vedioName);
-                                    businessInfo.setDownloadStatus("wait");
-                                    boolean istrue=businessInfo.save();
-                                    if(istrue){
-                                        Intent intent = new Intent(VideoActivity.this, ListActivity.class);
-                                        startActivity(intent);
-                                    }else{
-                                        BToast.showText("下载失败");
-                                    }
+        if (videoFile.exists()) {
+            BToast.showText("您已下载该视频");
+        } else {
+            try {
+                JSONObject jsonObject=new JSONObject(results);
+                DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
+                businessInfo.setFilePath(videoPath);
+                businessInfo.setProgress(0);
+                businessInfo.setProgressText("0");
+                businessInfo.setFileName(vedioName);
+                businessInfo.setDownloadStatus("wait");
+                boolean istrue=businessInfo.save();
+                if(istrue){
+                    Intent intent = new Intent(VideoActivity.this, ListActivity.class);
+                    startActivity(intent);
+                }else{
+                    BToast.showText("下载失败");
+                }
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }else{
-                            Toast.makeText(VideoActivity.this , "请打开读写权限" , Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -405,7 +384,11 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WXShareUtils.show(VideoActivity.this,webpageUrl,title,description);
+                if(businessInfoDid!=null){
+                    WXShareUtils.show(VideoActivity.this,Urls.shareH5(businessInfoDid.getReaderId()),title,description);
+                }else{
+                    WXShareUtils.show(VideoActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
+                }
             }
         });
         iv_back=findViewById(R.id.iv_back);

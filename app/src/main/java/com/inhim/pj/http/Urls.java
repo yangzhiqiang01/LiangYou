@@ -199,4 +199,9 @@ public class Urls {
     public static String wechatCallback(String code) {
         return urlPath + "wechat/callback/" + code;
     }
+    /*微信分享获取网页链接
+    http://39.105.154.75:9091/api/h5/share/29*/
+    public static String shareH5(int ReaderId) {
+        return urlPath + "h5/share/" + ReaderId;
+    }
 }

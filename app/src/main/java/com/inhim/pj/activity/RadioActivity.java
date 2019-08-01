@@ -62,7 +62,6 @@ public class RadioActivity extends BaseActivity implements
     WebView webView;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
-    private String webpageUrl;
     private String title ;
     private String description;
     @Override
@@ -102,7 +101,6 @@ public class RadioActivity extends BaseActivity implements
     }
 
     private void loadDownloadContent(DownloadInfo businessInfoDid) {
-        webpageUrl=businessInfoDid.getContent();
         title=businessInfoDid.getTitle() ;
         description=businessInfoDid.getSynopsis();
         checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
@@ -117,7 +115,6 @@ public class RadioActivity extends BaseActivity implements
 
     private void loadContent(ReaderInfo readerInfos) {
         readerInfo = readerInfos.getReader();
-        webpageUrl=readerInfo.getContent();
         title=readerInfo.getTitle() ;
         description=readerInfo.getSynopsis();
         checkbox.setChecked(readerInfo.getCollectionStatus());
@@ -211,7 +208,11 @@ public class RadioActivity extends BaseActivity implements
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WXShareUtils.show(RadioActivity.this,webpageUrl,title,description);
+                if(businessInfoDid!=null){
+                    WXShareUtils.show(RadioActivity.this,Urls.shareH5(businessInfoDid.getReaderId()),title,description);
+                }else{
+                    WXShareUtils.show(RadioActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
+                }
             }
         });
         iv_back=findViewById(R.id.iv_back);

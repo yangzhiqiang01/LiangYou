@@ -39,8 +39,6 @@ public class ArticleActivity extends BaseActivity {
     String content;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
-    private MyScrollView scrollView;
-    private String webpageUrl;
     private String title ;
     private String description;
     @Override
@@ -53,7 +51,6 @@ public class ArticleActivity extends BaseActivity {
     }
 
     private void initView() {
-        scrollView=findViewById(R.id.scrollView);
         checkbox = findViewById(R.id.checkbox);
         checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +100,7 @@ public class ArticleActivity extends BaseActivity {
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WXShareUtils.show(ArticleActivity.this,webpageUrl,title,description);
+                WXShareUtils.show(ArticleActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
             }
         });
         iv_back=findViewById(R.id.iv_back);
@@ -132,7 +129,6 @@ public class ArticleActivity extends BaseActivity {
                 if(readerInfos.getCode()==0){
                     readerInfo=readerInfos.getReader();
                     Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
-                    webpageUrl=readerInfo.getContent();
                     title=readerInfo.getTitle() ;
                     description=readerInfo.getSynopsis();
                     checkbox.setChecked(readerInfo.getCollectionStatus());

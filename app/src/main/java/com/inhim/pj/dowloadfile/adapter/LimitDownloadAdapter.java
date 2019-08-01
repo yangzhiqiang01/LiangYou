@@ -85,17 +85,14 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
     @Override
     public void onBindViewHolder(UploadHolder holder, int position) {
         final DownloadInfo info = mdata.get(position);
-        GlideUtils.displayFromUrl(info.getCover(), holder.imageview1, mContext);
         if(info.getProgress()!=0&&info.getTotal()!=0){
             float d = (float) info.getProgress() * (float) holder.progressBar.getMax() / (float) info.getTotal();
-            long progress=info.getProgress();
-            long Max=holder.progressBar.getMax();
-            long total=info.getTotal();
             holder.progressBar.setProgress((int) d);
             DownloadInfo downloadInfo=new DownloadInfo();
             //直接更新id为1的记录
-            downloadInfo.setProgress((long) d);
+            downloadInfo.setProgress(info.getProgress());
             downloadInfo.setTotal(info.getTotal());
+            downloadInfo.setDownloadStatus("download");
             downloadInfo.update(position+1);
         }else{
             holder.progressBar.setProgress(0);
@@ -137,8 +134,21 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
         }else if (DownloadInfo.DOWNLOAD_OVER.equals(info.getDownloadStatus())){
             /*holder.main_progress.setProgress(holder.main_progress.getMax());
             holder.main_btn_down.setText("完成");*/
+        }else  if(DownloadInfo.DOWNLOAD_OVER.equals(info.getDownloadStatus())){
+            holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
+            holder.tv_size.setText(FileUtil
+                    .formatFileSize(info.getTotal()));
+            holder.imageview2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DownloadLimitManager.getInstance().pauseDownload(info.getUrl());
+                }
+            });
+            holder.imageview2.setImageResource(R.mipmap.icon_puse);
         }else {
+            //等待中
             if (info.getTotal() == 0){
+                GlideUtils.displayFromUrl(info.getCover(), holder.imageview1, mContext);
                 holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
                 holder.tv_size.setText(FileUtil
                         .formatFileSize(info.getTotal()));
@@ -150,16 +160,15 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
                 });
                 holder.tv_name.setText(info.getTitle());
             }else {
-                holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
                 holder.tv_size.setText(FileUtil
                         .formatFileSize(info.getTotal()));
                 holder.imageview2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DownloadLimitManager.getInstance().pauseDownload(info.getUrl());
+                        DownloadLimitManager.getInstance().download(info.getUrl());
                     }
                 });
-                holder.imageview2.setImageResource(R.mipmap.icon_puse);
+                holder.imageview2.setImageResource(R.mipmap.icon_download);
             }
 
         }

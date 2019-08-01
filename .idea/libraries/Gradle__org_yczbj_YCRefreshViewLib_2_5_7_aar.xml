@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: org.yczbj:YCRefreshViewLib:2.5.7@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6b87035a5b33af3abdc95cae5b3f5849/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6b87035a5b33af3abdc95cae5b3f5849/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ecc19a06d8459ccd702a7ccc971025ad/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ecc19a06d8459ccd702a7ccc971025ad/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
