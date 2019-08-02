@@ -196,13 +196,17 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     @Override
     public void dowload() {
         //查找所有年龄小于25岁的人
-        List<DownloadInfo> person;
+        List<DownloadInfo> person = null;
         if(businessInfoDid!=null){
             person = LitePal.where("url = ?", businessInfoDid.getUrl()).find(DownloadInfo.class);
         }else{
-            person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
+            try{
+                person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        if (videoFile.exists()||person.size()>0) {
+        if (videoFile.exists()||(person!=null&&person.size()>0)) {
             BToast.showText("您已下载该视频");
         } else {
             try {

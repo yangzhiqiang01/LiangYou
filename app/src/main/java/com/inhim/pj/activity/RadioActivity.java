@@ -27,10 +27,14 @@ import com.pili.pldroid.player.AVOptions;
 import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
+
 import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -132,8 +136,19 @@ public class RadioActivity extends BaseActivity implements
 
     @Override
     public void dowload() {
-        if (videoFile.exists()) {
-            BToast.showText("您已下载该音频");
+        //查找所有年龄小于25岁的人
+        List<DownloadInfo> person = null;
+        if(businessInfoDid!=null){
+            person = LitePal.where("url = ?", businessInfoDid.getUrl()).find(DownloadInfo.class);
+        }else{
+            try{
+                person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if (videoFile.exists()||(person!=null&&person.size()>0)) {
+            BToast.showText("您已下载该视频");
         } else {
             try {
                 JSONObject jsonObject = new JSONObject(results);
@@ -141,6 +156,8 @@ public class RadioActivity extends BaseActivity implements
                 businessInfo.setFilePath(videoPath);
                 businessInfo.setProgress(0);
                 businessInfo.setProgressText("0");
+                businessInfo.setFileName(businessInfo.getUrl().substring(businessInfo.getUrl().lastIndexOf("/")));
+                businessInfo.setDownloadStatus("wait");
                 boolean istrue = businessInfo.save();
                 if (istrue) {
                     Intent intent = new Intent(RadioActivity.this, ListActivity.class);
