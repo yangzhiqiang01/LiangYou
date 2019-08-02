@@ -7,9 +7,9 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constran"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_marginLeft="@dimen/base_dimen_80"
-        android:layout_marginRight="@dimen/base_dimen_80"
+        android:layout_height="120dp"
+        android:layout_marginLeft="@dimen/base_dimen_70"
+        android:layout_marginRight="@dimen/base_dimen_70"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@+id/constran"
         app:layout_constraintBottom_toBottomOf="@+id/view1"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_20"
+        android:textSize="@dimen/text_size_18"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:text="是否确认删除"/>
@@ -52,7 +52,7 @@
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="0dp"
-            android:layout_height="@dimen/base_dimen_50"
+            android:layout_height="@dimen/base_dimen_40"
             android:layout_weight="1"
             android:background="@drawable/background_dialog_determine"
             android:text="确定"
@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:background="@drawable/background_dialog_cancel"
-            android:layout_height="@dimen/base_dimen_50"
+            android:layout_height="@dimen/base_dimen_40"
             android:textColor="@color/color333"
             android:text="取消"/>
     </LinearLayout>
