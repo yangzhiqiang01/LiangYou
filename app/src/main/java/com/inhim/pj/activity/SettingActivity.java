@@ -10,12 +10,10 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.inhim.downloader.domain.DownloadInfo;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
-import com.inhim.pj.dowloadvedio.db.DBController;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
+import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.utils.PrefUtils;
@@ -25,7 +23,6 @@ import com.inhim.pj.view.CenterDialog;
 import org.litepal.LitePal;
 
 import java.io.File;
-import java.util.List;
 
 public class SettingActivity extends BaseActivity {
     RelativeLayout rela_clean;
@@ -67,21 +64,22 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 showLoading("删除中");
-                FileUtils.DeleteFile(new File(Urls.getFilePath()));
-                LitePal.deleteAll(DownloadInfo.class);
-                LitePal.deleteAll(MyBusinessInfoDid.class);
-                FileUtils.DeleteFile(new File(Urls.getFilePath()));
-                //删除下载的信息
-                try {
-
-                    DBController instance = DBController.getInstance(SettingActivity.this);
-                    for (int i = 0; i < instance.findAllDownloaded().size(); i++) {
-                        instance.delete(instance.findAllDownloaded().get(i));
-                    }
-
-                } catch (Exception e) {
+                try{
+                    FileUtils.DeleteFile(new File(Urls.getFilePath()));
+                }catch (Exception e){
                     e.printStackTrace();
                 }
+                try{
+                    LitePal.deleteAll(DownloadInfo.class);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try{
+                    LitePal.deleteAll(MyBusinessInfoDid.class);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                //删除下载的信息
                 hideLoading();
                 tv_size.setText("0B");
                 BToast.showText("已删除缓存文件");

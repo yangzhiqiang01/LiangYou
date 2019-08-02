@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,12 +19,13 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.ui.ListActivity;
-import com.inhim.pj.dowloadvedio.util.Config;
 import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.fragment.JIangyiFragment;
 import com.inhim.pj.fragment.MuluFragment;
@@ -37,15 +38,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import fm.jiecao.jcvideoplayer_lib.JCMediaManager;
-import fm.jiecao.jcvideoplayer_lib.JCUserAction;
-import fm.jiecao.jcvideoplayer_lib.JCUserActionStandard;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.Request;
@@ -55,13 +57,13 @@ import okhttp3.Request;
 public class VideoActivity extends BaseActivity implements OnClickListener,
         JCVideoPlayerStandard.DowloadVedioListener, MuluFragment.OnVideoLinear {
 
-    ImageView iv_back,iv_share;
+    ImageView iv_back, iv_share;
     String name;
     public static String contents;
     private String photoUrl;
 
     JCVideoPlayerStandard mJcVideoPlayerStandard;
-    private boolean mIsLiveStreaming=false;
+    private boolean mIsLiveStreaming = false;
     private ViewPager viewPager;
     private ArrayList<Fragment> fs;
     private RadioButton jiangyi, mulu;
@@ -75,10 +77,10 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private CheckBox checkbox;
     private Gson gson;
     //下载得视频 课程
-    private DownloadInfo businessInfoDid;
-    private long busiID;
+    private MyBusinessInfoDid businessInfoDid;
     private String title;
     private String description;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,12 +92,11 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         IntentFilter finishfilter1 = new IntentFilter();
         finishfilter1.addAction("the.search.data");
         registerReceiver(srearchreceiver, finishfilter1);
-        businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
+        businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
-        if (businessInfoDid != null&& (new File(businessInfoDid.getFilePath())).exists()) {
-            busiID=getIntent().getLongExtra("busiID",0);
+        if (businessInfoDid != null && (new File(businessInfoDid.getFilePath())).exists()) {
             loadDownloadContent(businessInfoDid);
-        }else{
+        } else {
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0), true);
         }
     }
@@ -114,20 +115,21 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                 hideLoading();
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 if (readerInfos.getCode() == 000) {
-                    results=result;
+                    results = result;
                     loadContent(readerInfos, isOne);
                 }
             }
         });
     }
-    private void loadDownloadContent(DownloadInfo businessInfoDid){
-        title=businessInfoDid.getTitle() ;
-        description=businessInfoDid.getSynopsis();
+
+    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid) {
+        title = businessInfoDid.getTitle();
+        description = businessInfoDid.getSynopsis();
         name = businessInfoDid.getTitle();
         contents = businessInfoDid.getContent();
         photoUrl = businessInfoDid.getCover();
         videoPath = businessInfoDid.getFilePath();
-        videoUrl=businessInfoDid.getUrl();
+        videoUrl = businessInfoDid.getUrl();
         videoFile = new File(videoPath);
         checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
         setVideo();
@@ -148,15 +150,16 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         viewPager.setAdapter(adapter);
         setListener();
     }
+
     private void loadContent(ReaderInfo readerInfos, boolean isOne) {
         readerInfo = readerInfos.getReader();
-        title=readerInfo.getTitle() ;
-        description=readerInfo.getSynopsis();
+        title = readerInfo.getTitle();
+        description = readerInfo.getSynopsis();
         checkbox.setChecked(readerInfo.getCollectionStatus());
         name = readerInfo.getTitle();
         if (readerInfo.getUrl() != null) {
             videoUrl = readerInfo.getUrl();
-            vedioName = name + videoUrl.substring(videoUrl.length() - 4);
+            vedioName = readerInfo.getUrl().substring(readerInfo.getUrl().lastIndexOf("/"));
         }
         contents = readerInfo.getContent();
         photoUrl = readerInfo.getCover();
@@ -192,22 +195,29 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void dowload() {
-        if (videoFile.exists()) {
+        //查找所有年龄小于25岁的人
+        List<DownloadInfo> person;
+        if(businessInfoDid!=null){
+            person = LitePal.where("url = ?", businessInfoDid.getUrl()).find(DownloadInfo.class);
+        }else{
+            person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
+        }
+        if (videoFile.exists()||person.size()>0) {
             BToast.showText("您已下载该视频");
         } else {
             try {
-                JSONObject jsonObject=new JSONObject(results);
+                JSONObject jsonObject = new JSONObject(results);
                 DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
                 businessInfo.setFilePath(videoPath);
                 businessInfo.setProgress(0);
                 businessInfo.setProgressText("0");
-                businessInfo.setFileName(vedioName);
+                businessInfo.setFileName(businessInfo.getUrl().substring(businessInfo.getUrl().lastIndexOf("/")));
                 businessInfo.setDownloadStatus("wait");
-                boolean istrue=businessInfo.save();
-                if(istrue){
+                boolean istrue = businessInfo.save();
+                if (istrue) {
                     Intent intent = new Intent(VideoActivity.this, ListActivity.class);
                     startActivity(intent);
-                }else{
+                } else {
                     BToast.showText("下载失败");
                 }
 
@@ -283,27 +293,33 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         //当前播放进度
-        if(businessInfoDid!=null){
+        if (businessInfoDid != null) {
             int position = mJcVideoPlayerStandard.getCurrentPositionWhenPlaying();
             //获取当前播放进度
             int duration = getDuration();
-            Log.e("position","==="+duration);
-            float num= (float)position/duration;
+            float num = (float) position / duration;
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             String progressTime = df.format(num);//返回的是String类型
             //格式化fat,保留两位小数, 得到一个string字符串
-            if(progressTime!=null&&!progressTime.equals("NaN")){
-                DownloadInfo infoDid=businessInfoDid;
-                DecimalFormat decimalFormat=new DecimalFormat(".00");
-                String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
-                infoDid.setProgressText(proess+"%");
-                infoDid.save();
-                businessInfoDid.delete();
+            if (progressTime != null && !progressTime.equals("NaN")) {
+                DecimalFormat decimalFormat = new DecimalFormat(".00");
+                String proess = decimalFormat.format(Float.valueOf(progressTime) * 100);
+                MyBusinessInfoDid myBusinessInfoDid = new MyBusinessInfoDid();
+                //第二步，改变某个字段的值
+                myBusinessInfoDid.setProgressText("已观看"+proess + "%");
+                //第三步，保存数据
+                //更新所有readerId为readerId的记录,记录观看进度
+                myBusinessInfoDid.updateAll("readerId = ?", businessInfoDid.getReaderId());
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(srearchreceiver);
         JCVideoPlayer.releaseAllVideos();
     }
@@ -321,77 +337,19 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         return duration;
     }
 
-    class MyUserActionStandard implements JCUserActionStandard {
-
-        @Override
-        public void onEvent(int type, String url, int screen, Object... objects) {
-            switch (type) {
-                case JCUserAction.ON_CLICK_START_ICON:
-                    Log.i("USER_EVENT", "ON_CLICK_START_ICON" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_START_ERROR:
-                    Log.i("USER_EVENT", "ON_CLICK_START_ERROR" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_START_AUTO_COMPLETE:
-                    Log.i("USER_EVENT", "ON_CLICK_START_AUTO_COMPLETE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_PAUSE:
-                    Log.i("USER_EVENT", "ON_CLICK_PAUSE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_CLICK_RESUME:
-                    Log.i("USER_EVENT", "ON_CLICK_RESUME" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_SEEK_POSITION:
-                    Log.i("USER_EVENT", "ON_SEEK_POSITION" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_AUTO_COMPLETE:
-                    Log.i("USER_EVENT", "ON_AUTO_COMPLETE" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_ENTER_FULLSCREEN:
-                    Log.i("USER_EVENT", "ON_ENTER_FULLSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_QUIT_FULLSCREEN:
-                    Log.i("USER_EVENT", "ON_QUIT_FULLSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_ENTER_TINYSCREEN:
-                    Log.i("USER_EVENT", "ON_ENTER_TINYSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_QUIT_TINYSCREEN:
-                    Log.i("USER_EVENT", "ON_QUIT_TINYSCREEN" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_TOUCH_SCREEN_SEEK_VOLUME:
-                    Log.i("USER_EVENT", "ON_TOUCH_SCREEN_SEEK_VOLUME" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserAction.ON_TOUCH_SCREEN_SEEK_POSITION:
-                    Log.i("USER_EVENT", "ON_TOUCH_SCREEN_SEEK_POSITION" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-
-                case JCUserActionStandard.ON_CLICK_START_THUMB:
-                    Log.i("USER_EVENT", "ON_CLICK_START_THUMB" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                case JCUserActionStandard.ON_CLICK_BLANK:
-                    Log.i("USER_EVENT", "ON_CLICK_BLANK" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " url is : " + url + " screen is : " + screen);
-                    break;
-                default:
-                    Log.i("USER_EVENT", "unknow");
-                    break;
-            }
-        }
-    }
-
     private void initView() {
         iv_share = findViewById(R.id.iv_share);
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(businessInfoDid!=null){
-                    WXShareUtils.show(VideoActivity.this,Urls.shareH5(businessInfoDid.getReaderId()),title,description);
-                }else{
-                    WXShareUtils.show(VideoActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
+                if (businessInfoDid != null) {
+                    WXShareUtils.show(VideoActivity.this, Urls.shareH5(Integer.valueOf(businessInfoDid.getReaderId())), title, description);
+                } else {
+                    WXShareUtils.show(VideoActivity.this, Urls.shareH5(readerInfo.getReaderId()), title, description);
                 }
             }
         });
-        iv_back=findViewById(R.id.iv_back);
+        iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -414,9 +372,9 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                             @Override
                             public void onError(Request request, IOException e) {
                                 hideLoading();
-                                if(checkbox.isChecked()){
+                                if (checkbox.isChecked()) {
                                     checkbox.setChecked(false);
-                                }else{
+                                } else {
                                     checkbox.setChecked(true);
                                 }
                             }
@@ -425,12 +383,12 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                             public void onSuccess(Request request, String result) {
                                 hideLoading();
                                 try {
-                                    JSONObject jsonObject=new JSONObject(result);
-                                    if(jsonObject.getInt("code")!=0){
-                                        BToast.showText(jsonObject.getString("msg"),false);
-                                        if(checkbox.isChecked()){
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    if (jsonObject.getInt("code") != 0) {
+                                        BToast.showText(jsonObject.getString("msg"), false);
+                                        if (checkbox.isChecked()) {
                                             checkbox.setChecked(false);
-                                        }else{
+                                        } else {
                                             checkbox.setChecked(true);
                                         }
                                     }
@@ -454,18 +412,17 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
 
     private void setVideo() {
-        if(videoFile.exists()){
+        if (videoFile.exists()) {
             mJcVideoPlayerStandard.setUp(videoPath
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
-        }else{
+        } else {
             mJcVideoPlayerStandard.setUp(videoUrl
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
         }
         /*Picasso.with(this)
                 .load(photoUrl)
                 .into(mJcVideoPlayerStandard.thumbImageView);*/
-        ImageLoader.getInstance().displayImage(photoUrl,mJcVideoPlayerStandard.thumbImageView);
-        JCVideoPlayer.setJcUserAction(new MyUserActionStandard());
+        ImageLoader.getInstance().displayImage(photoUrl, mJcVideoPlayerStandard.thumbImageView);
         //屏幕保持常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -481,7 +438,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         options.setInteger(AVOptions.KEY_LOG_LEVEL, disableLog ? 5 : 0);
         boolean cache = getIntent().getBooleanExtra("cache", false);
         if (!mIsLiveStreaming && cache) {
-            options.setString(AVOptions.KEY_CACHE_DIR, Config.DEFAULT_CACHE_DIR);
+            options.setString(AVOptions.KEY_CACHE_DIR, Urls.getFilePath());
         }
         boolean vcallback = getIntent().getBooleanExtra("video-data-callback", false);
         if (vcallback) {

@@ -13,7 +13,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.inhim.pj.R;
-import com.inhim.pj.dowloadvedio.DidNotDownloadFragment;
 
 import java.util.ArrayList;
 

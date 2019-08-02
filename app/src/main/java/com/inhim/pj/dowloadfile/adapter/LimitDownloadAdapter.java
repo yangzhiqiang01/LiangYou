@@ -1,6 +1,7 @@
 package com.inhim.pj.dowloadfile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,9 @@ import android.widget.TextView;
 
 import com.inhim.pj.R;
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.download.limit.DownloadLimitManager;
-import com.inhim.pj.dowloadvedio.util.FileUtil;
+import com.inhim.pj.dowloadfile.utils.FileUtil;
 import com.inhim.pj.utils.GlideUtils;
 
 import org.litepal.LitePal;
@@ -30,12 +32,13 @@ import java.util.Map;
  * About:
  * —————————————————————————————————————
  */
-public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdapter.UploadHolder>  {
+public class LimitDownloadAdapter extends BaseRecyclerDidViewAdapter<DownloadInfo,LimitDownloadAdapter.UploadHolder>  {
 
     private Context mContext;
     private List<DownloadInfo> mdata;
     private boolean isCheck, isAll;
     public LimitDownloadAdapter(Context context , List<DownloadInfo> mdata) {
+        super(context);
         this.mContext = context;
         this.mdata = mdata;
     }
@@ -56,14 +59,23 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
     public void deleteFiles(Map<Integer, Boolean> deleteMap){
         for(int i=0;i<deleteMap.size();i++){
             if (deleteMap.get(i)) {
-                File file = new File(mdata.get(i).getFilePath());
-                if(file.exists()){
-                    file.delete();
+                try{
+                    File file = new File(getDownloadListData().get(i).getFilePath());
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                mdata.get(i).delete();
+                try{
+                    DownloadLimitManager.getInstance().cancelDownload(mdata.get(i));
+                    mdata.get(i).delete();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
-        notifyDataSetChanged();
+        setData(getDownloadListData());
     }
 
     private List<DownloadInfo> getDownloadListData() {
@@ -92,20 +104,28 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
             //直接更新id为1的记录
             downloadInfo.setProgress(info.getProgress());
             downloadInfo.setTotal(info.getTotal());
-            downloadInfo.setDownloadStatus("download");
-            downloadInfo.update(position+1);
+            downloadInfo.updateAll("url = ?", info.getUrl());
         }else{
             holder.progressBar.setProgress(0);
+        }
+        if (isAll) {
+            //当item为选中状态时暂停下载 以免下载中不断刷新item
+            DownloadLimitManager.getInstance().pauseDownload(info.getUrl());
+            holder.imageview2.setImageResource(R.mipmap.icon_download);
+            holder.imageview2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DownloadLimitManager.getInstance().download(info.getUrl());
+                }
+            });
+            holder.checkbox.setChecked(true);
+        } else {
+            holder.checkbox.setChecked(false);
         }
         if (isCheck) {
             holder.checkbox.setVisibility(View.VISIBLE);
         } else {
             holder.checkbox.setVisibility(View.GONE);
-        }
-        if (isAll) {
-            holder.checkbox.setChecked(true);
-        } else {
-            holder.checkbox.setChecked(false);
         }
         if (DownloadLimitManager.getInstance().getWaitUrl(info.getUrl())){
             holder.imageview2.setImageResource(R.mipmap.icon_download);
@@ -131,10 +151,38 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
                     DownloadLimitManager.getInstance().download(info.getUrl());
                 }
             });
+        }else if(DownloadInfo.DOWNLOAD_ERROR.equals(info.getDownloadStatus())){
+            DownloadLimitManager.getInstance().download(info.getUrl());
         }else if (DownloadInfo.DOWNLOAD_OVER.equals(info.getDownloadStatus())){
             /*holder.main_progress.setProgress(holder.main_progress.getMax());
             holder.main_btn_down.setText("完成");*/
-        }else  if(DownloadInfo.DOWNLOAD_OVER.equals(info.getDownloadStatus())){
+            List<DownloadInfo> infos = LitePal.findAll(DownloadInfo.class);
+            if (infos.size() > 0) {
+                try {
+                    MyBusinessInfoDid infosDid = new MyBusinessInfoDid();
+                    infosDid.setContent(infos.get(position).getContent());
+                    infosDid.setCover(infos.get(position).getCover());
+                    infosDid.setFilePath(infos.get(position).getFilePath());
+                    //infosDid.setProgress(infos.get(position).getProgress());
+                    infosDid.setReaderId(infos.get(position).getReaderId());
+                    infosDid.setReaderTypeId(infos.get(position).getReaderTypeId());
+                    infosDid.setTitle(infos.get(position).getTitle());
+                    infosDid.setUrl(infos.get(position).getUrl());
+                    infosDid.setSynopsis(infos.get(position).getSynopsis());
+                    infosDid.setType(infos.get(position).getType());
+                    infosDid.setTotal(infos.get(position).getTotal());
+                    infosDid.save();
+                    infos.get(position).delete();
+                    infos.remove(position);
+                    Intent intent = new Intent();
+                    intent.setAction("the.search.data.dowload");
+                    mContext.sendBroadcast(intent);
+                    setData(infos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }else  if(DownloadInfo.DOWNLOAD.equals(info.getDownloadStatus())){
             holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
             holder.tv_size.setText(FileUtil
                     .formatFileSize(info.getTotal()));
@@ -160,6 +208,8 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
                 });
                 holder.tv_name.setText(info.getTitle());
             }else {
+                GlideUtils.displayFromUrl(info.getCover(), holder.imageview1, mContext);
+                holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
                 holder.tv_size.setText(FileUtil
                         .formatFileSize(info.getTotal()));
                 holder.imageview2.setOnClickListener(new View.OnClickListener() {
@@ -169,18 +219,12 @@ public class LimitDownloadAdapter extends RecyclerView.Adapter<LimitDownloadAdap
                     }
                 });
                 holder.imageview2.setImageResource(R.mipmap.icon_download);
+                holder.tv_name.setText(info.getTitle());
             }
 
         }
 
-        /*holder.main_btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DownloadLimitManager.getInstance().cancelDownload(info);
-            }
-        });*/
     }
-
     @Override
     public int getItemCount() {
         return mdata.size();

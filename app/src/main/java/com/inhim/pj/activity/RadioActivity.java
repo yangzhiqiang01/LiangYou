@@ -14,16 +14,15 @@ import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.ui.ListActivity;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfo;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
-import com.inhim.pj.dowloadvedio.util.Config;
 import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
 import com.squareup.picasso.Picasso;
 import org.json.JSONException;
@@ -165,29 +164,33 @@ public class RadioActivity extends BaseActivity implements
     public void chapterPay() {
 
     }
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         //当前播放进度
-        if(businessInfoDid!=null){
+        if (businessInfoDid != null) {
             int position = mJcVideoPlayerStandard.getCurrentPositionWhenPlaying();
             //获取当前播放进度
             int duration = getDuration();
-            Log.e("position","==="+duration);
-            float num= (float)position/duration;
+            float num = (float) position / duration;
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             String progressTime = df.format(num);//返回的是String类型
             //格式化fat,保留两位小数, 得到一个string字符串
-            if(progressTime!=null&&!progressTime.equals("NaN")){
-                DownloadInfo infoDid=businessInfoDid;
-                DecimalFormat decimalFormat=new DecimalFormat(".00");
-                String proess=decimalFormat.format(Float.valueOf(progressTime) * 100);
-                infoDid.setProgressText(proess+"%");
-                infoDid.save();
-                businessInfoDid.delete();
+            if (progressTime != null && !progressTime.equals("NaN")) {
+                DecimalFormat decimalFormat = new DecimalFormat(".00");
+                String proess = decimalFormat.format(Float.valueOf(progressTime) * 100);
+                MyBusinessInfoDid myBusinessInfoDid = new MyBusinessInfoDid();
+                //第二步，改变某个字段的值
+                myBusinessInfoDid.setProgressText("已观看"+proess + "%");
+                //第三步，保存数据
+                //更新所有readerId为readerId的记录,记录观看进度
+                myBusinessInfoDid.updateAll("readerId = ?", businessInfoDid.getReaderId());
             }
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         JCVideoPlayer.releaseAllVideos();
     }
     public int getDuration() {
@@ -209,7 +212,7 @@ public class RadioActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 if(businessInfoDid!=null){
-                    WXShareUtils.show(RadioActivity.this,Urls.shareH5(businessInfoDid.getReaderId()),title,description);
+                    WXShareUtils.show(RadioActivity.this,Urls.shareH5(Integer.valueOf(businessInfoDid.getReaderId())),title,description);
                 }else{
                     WXShareUtils.show(RadioActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
                 }
@@ -272,9 +275,7 @@ public class RadioActivity extends BaseActivity implements
             mJcVideoPlayerStandard.setUp(videoUrl
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
         }
-        Picasso.with(this)
-                .load(photoUrl)
-                .into(mJcVideoPlayerStandard.thumbImageView);
+        ImageLoader.getInstance().displayImage(photoUrl,mJcVideoPlayerStandard.thumbImageView);
 
         //屏幕保持常亮
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -291,7 +292,7 @@ public class RadioActivity extends BaseActivity implements
         options.setInteger(AVOptions.KEY_LOG_LEVEL, disableLog ? 5 : 0);
         boolean cache = getIntent().getBooleanExtra("cache", false);
         if (!mIsLiveStreaming && cache) {
-            options.setString(AVOptions.KEY_CACHE_DIR, Config.DEFAULT_CACHE_DIR);
+            options.setString(AVOptions.KEY_CACHE_DIR, Urls.getFilePath());
         }
         boolean vcallback = getIntent().getBooleanExtra("video-data-callback", false);
         if (vcallback) {

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,18 +16,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.inhim.downloader.DownloadService;
-import com.inhim.downloader.config.Config;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
-import com.inhim.pj.dowloadvedio.HaveDownloadedFragment;
-import com.inhim.pj.dowloadvedio.MyItemRecyclerViewAdapter;
-import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerDidViewAdapter;
-import com.inhim.pj.dowloadvedio.adapter.DownloadListDidAdapter;
-import com.inhim.pj.dowloadvedio.domain.MyBusinessInfoDid;
-import com.inhim.pj.dowloadvedio.dummy.DummyContent;
+import com.inhim.pj.dowloadfile.adapter.BaseRecyclerDidViewAdapter;
+import com.inhim.pj.dowloadfile.adapter.DownloadListDidAdapter;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.view.CenterDialog;
 
 import org.litepal.LitePal;
@@ -50,7 +43,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private HaveDownloadedFragment.OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener mListener;
     private static final int REQUEST_DOWNLOAD_DETAIL_PAGE = 100;
 
     private RecyclerView recyclerView;
@@ -130,6 +123,7 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                centerDialog.dismiss();
                 Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
@@ -165,21 +159,17 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     }
 
     public void initData() {
-        try {
-            Config config = new Config();
-            config.setDownloadThread(3);
-            config.setEachDownloadThread(2);
-            config.setConnectTimeout(10000);
-            config.setReadTimeout(10000);
-            DownloadService.getDownloadManager(getActivity().getApplicationContext(), config);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(downloadListAdapter==null){
+            downloadListAdapter = new DownloadListDidAdapter(getActivity());
+            downloadListAdapter.setData(getDownloadListData());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(downloadListAdapter);
+            initListener();
+        }else{
+            downloadListAdapter.setData(getDownloadListData());
+            downloadListAdapter.notifyDataSetChanged();
         }
-        downloadListAdapter = new DownloadListDidAdapter(getActivity());
-        downloadListAdapter.setData(getDownloadListData());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(downloadListAdapter);
-        initListener();
+
     }
 
     private List<MyBusinessInfoDid> getDownloadListData() {
@@ -210,17 +200,6 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
                 setDiaglog();
             }
         });
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
         initData();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -230,7 +209,9 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        initData();
+        if(requestCode==REQUEST_DOWNLOAD_DETAIL_PAGE){
+            initData();
+        }
     }
 
     @Override
@@ -265,6 +246,5 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyContent.DummyItem item);
     }
 }

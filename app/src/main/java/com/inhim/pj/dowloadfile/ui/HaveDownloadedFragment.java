@@ -17,12 +17,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.inhim.downloader.DownloadService;
-import com.inhim.downloader.config.Config;
 import com.inhim.pj.R;
+import com.inhim.pj.dowloadfile.adapter.BaseRecyclerViewAdapter;
 import com.inhim.pj.dowloadfile.adapter.LimitDownloadAdapter;
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
-import com.inhim.pj.dowloadvedio.adapter.BaseRecyclerViewAdapter;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
@@ -100,6 +98,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                centerDialog.dismiss();
                 Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
@@ -155,6 +154,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (getActivity() != null) {
             getActivity().unregisterReceiver(srearchreceiver);
             getActivity().unregisterReceiver(deleteReceiver);
@@ -163,16 +163,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
     public void initData() {
 
-        try {
-            Config config = new Config();
-            config.setDownloadThread(3);
-            config.setEachDownloadThread(2);
-            config.setConnectTimeout(10000);
-            config.setReadTimeout(10000);
-            DownloadService.getDownloadManager(getActivity().getApplicationContext(), config);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         downloadListAdapter = new LimitDownloadAdapter(getActivity(),getDownloadListData());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(downloadListAdapter);
@@ -227,7 +217,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
             downloadListAdapter.updateProgress(info);
 
         }else if (DownloadInfo.DOWNLOAD_OVER.equals(info.getDownloadStatus())){
-
             downloadListAdapter.updateProgress(info);
 
         }else if (DownloadInfo.DOWNLOAD_PAUSE.equals(info.getDownloadStatus())){
@@ -236,13 +225,14 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         }else if (DownloadInfo.DOWNLOAD_CANCEL.equals(info.getDownloadStatus())){
 
             downloadListAdapter.updateProgress(info);
-            BToast.showText("下载取消");
+            //BToast.showText("下载取消");
         }else if (DownloadInfo.DOWNLOAD_WAIT.equals(info.getDownloadStatus())){
 
             downloadListAdapter.updateProgress(info);
             BToast.showText("等待下载");
 
         }else if (DownloadInfo.DOWNLOAD_ERROR.equals(info.getDownloadStatus())){
+            downloadListAdapter.updateProgress(info);
             BToast.showText("下载出错");
         }
     }
@@ -254,12 +244,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
 
     @Override
     public void onItemClick(int position) {
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        EventBus.getDefault().unregister(this);
     }
 
 }

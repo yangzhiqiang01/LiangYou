@@ -1,5 +1,6 @@
 package com.inhim.pj.dowloadfile.download;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 /**
@@ -23,13 +24,15 @@ public class DownloadInfo extends LitePalSupport {
     public static final String DOWNLOAD_ERROR = "error";  // 下载出错
 
     public static final long TOTAL_ERROR = -1;//获取进度失败
-
+    @Column(unique = true)
     private String url;
     private String fileName;
     private String downloadStatus;
     private long total;
     private long progress;
-    private int readerId;
+    //readerId是唯一的，
+    @Column(unique = true)
+    private String readerId;
 
     private String cover;
 
@@ -38,7 +41,6 @@ public class DownloadInfo extends LitePalSupport {
     private String synopsis;
 
     private String content;
-
     private int readerTypeId;
     private String filePath;
     //用来判断是否播放及播放进度是多少
@@ -97,11 +99,11 @@ public class DownloadInfo extends LitePalSupport {
         this.url = url;
     }
 
-    public int getReaderId() {
+    public String getReaderId() {
         return readerId;
     }
 
-    public void setReaderId(int readerId) {
+    public void setReaderId(String readerId) {
         this.readerId = readerId;
     }
 
