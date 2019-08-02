@@ -17,6 +17,7 @@ import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author ChayChan
@@ -41,7 +42,7 @@ public class VideoTypeItemProvider extends BaseItemProvider<ReaderTypeList.List,
             ImageView iv_title = helper.getView(R.id.iv_title);
             TextView tv_title = helper.getView(R.id.tv_title);
             TextView tv_time = helper.getView(R.id.tv_time);
-            GlideUtils.displayFromUrl(news.getIcon(),iv_title,context);
+            ImageLoader.getInstance().displayImage(news.getIcon(),iv_title);
             tv_title.setText(news.getName());
             tv_time.setText(news.getCreateTime());
             ConstraintLayout constran=helper.getView(R.id.constran);

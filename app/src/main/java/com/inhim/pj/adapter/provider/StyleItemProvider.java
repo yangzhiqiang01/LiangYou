@@ -14,6 +14,7 @@ import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author ChayChan
@@ -48,7 +49,7 @@ public class StyleItemProvider extends BaseItemProvider<ReaderStyle.List, BaseVi
                     context.startActivity(intent);
                 }
             });
-            GlideUtils.displayFromUrl(news.getReaderStyleValue().getCover(),iv_title,context);
+            ImageLoader.getInstance().displayImage(news.getReaderStyleValue().getCover(),iv_title);
             tv_num.setText(String.valueOf(news.getTotal()));
             tv_title.setText(news.getReaderStyleValue().getValue());
             tv_time.setText(news.getReaderStyleValue().getUpdateTime());

@@ -13,6 +13,7 @@ import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author ChayChan
@@ -39,7 +40,7 @@ public class CourseOnerItemProvider extends BaseItemProvider<ReaderList.List, Ba
             TextView tv_title = helper.getView(R.id.tv_title);
             TextView tv_num = helper.getView(R.id.tv_num);
             TextView tv_time = helper.getView(R.id.tv_time);
-            GlideUtils.displayFromUrl(news.getCover(),iv_title,context);
+            ImageLoader.getInstance().displayImage(news.getCover(),iv_title);
             tv_num.setText(news.getReadAmount());
             tv_title.setText(news.getTitle());
             tv_time.setText(news.getCreateTime());

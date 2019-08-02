@@ -14,6 +14,7 @@ import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.yczbj.ycrefreshviewlib.adapter.RecyclerArrayAdapter;
 import org.yczbj.ycrefreshviewlib.holder.BaseViewHolder;
@@ -43,7 +44,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            GlideUtils.displayFromUrl(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title,context);
+            ImageLoader.getInstance().displayImage(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title);
             titleHolder.tv_num.setText("共"+readerStyle.getTotal()+"篇文章");
             titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getSynopsis());
             titleHolder.tv_title.setText(readerStyle.getReaderStyleValue().getValue());
@@ -57,7 +58,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            GlideUtils.displayFromUrl(readerType.getIcon(),titleHolder.iv_title,context);
+            ImageLoader.getInstance().displayImage(readerType.getIcon(),titleHolder.iv_title);
             titleHolder.tv_title.setText(readerType.getName());
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
@@ -115,7 +116,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             }else{
                 lin_1.setVisibility(View.VISIBLE);
             }
-            GlideUtils.displayFromUrl(data.getCover(),iv_title,context);
+            ImageLoader.getInstance().displayImage(data.getCover(),iv_title);
             tv_title.setText(data.getTitle());
             tv_content.setText(String.valueOf(data.getReadAmount()));
             if(data.getTimeText()!=null){

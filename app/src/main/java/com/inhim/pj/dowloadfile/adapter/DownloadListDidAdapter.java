@@ -15,6 +15,7 @@ import com.inhim.pj.R;
 import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.utils.FileUtil;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.litepal.LitePal;
 
@@ -91,7 +92,7 @@ public class DownloadListDidAdapter extends
             }else{
                 tv_status.setText("未播放");
             }
-            GlideUtils.displayFromUrl(data.getCover(), imageview1,context);
+            ImageLoader.getInstance().displayImage(data.getCover(),imageview1);
             imageview2.setImageResource(R.mipmap.icon_video);
             if(isCheck){
                 checkbox.setVisibility(View.VISIBLE);

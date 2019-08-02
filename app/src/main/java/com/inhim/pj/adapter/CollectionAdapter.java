@@ -15,6 +15,7 @@ import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.yczbj.ycrefreshviewlib.adapter.RecyclerArrayAdapter;
 import org.yczbj.ycrefreshviewlib.holder.BaseViewHolder;
@@ -58,7 +59,7 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
         @Override
         public void setData(final CollectionList.List data) {
             super.setData(data);
-            GlideUtils.displayFromUrl(data.getReaderEntity().getCover(),iv_title,context);
+            ImageLoader.getInstance().displayImage(data.getReaderEntity().getCover(),iv_title);
             tv_num1.setText(data.getReaderEntity().getReadAmount());
             tv_title.setText(data.getReaderEntity().getTitle());
             if(data.getTimeText()!=null){
