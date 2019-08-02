@@ -34,14 +34,14 @@ public class ReaderTypeProvider extends BaseItemProvider<String, BaseViewHolder>
             //处理相关业务逻辑
             TextView tv_title = helper.getView(R.id.tv_title);
             TextView tv_lookall = helper.getView(R.id.tv_lookall);
-            ImageView iv_arrow = helper.getView(R.id.iv_arrow);
+            //ImageView iv_arrow = helper.getView(R.id.iv_arrow);
             tv_title.setText(news);
             if ("每日推荐".equals(news) || "视频推荐".equals(news)) {
                 tv_lookall.setVisibility(View.INVISIBLE);
-                iv_arrow.setVisibility(View.INVISIBLE);
+                //iv_arrow.setVisibility(View.INVISIBLE);
             } else {
                 tv_lookall.setVisibility(View.VISIBLE);
-                iv_arrow.setVisibility(View.VISIBLE);
+                //iv_arrow.setVisibility(View.VISIBLE);
             }
             tv_lookall.setOnClickListener(new View.OnClickListener() {
                 @Override

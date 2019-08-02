@@ -33,7 +33,7 @@
             android:layout_toRightOf="@+id/iv_title"
             android:layout_width="@dimen/base_dimen_110"
             android:layout_height="@dimen/base_dimen_80"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:layout_constraintLeft_toRightOf="@+id/checkbox"
             tools:ignore="MissingConstraints" />

@@ -16,8 +16,8 @@ public class GlideUtils {
             @Override
             protected void setResource(Bitmap resource) {
                 super.setResource(resource);
-                int width = resource.getWidth();
-                int height = resource.getHeight();
+                int width = imageView.getWidth();
+                int height = imageView.getHeight();
                 //获取imageView的宽
                 int imageViewWidth= imageView.getWidth();
                 //计算缩放比例

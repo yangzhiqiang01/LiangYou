@@ -67,7 +67,7 @@ public class SeriesTitleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             black_constran.getBackground().setAlpha(100);//0~255透明度值
             //动态计算屏幕宽度 一行显示四个item
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) ((context.getResources().getDisplayMetrics().
-                    widthPixels - ScreenUtils.dip2px(context, 5)) / 1.2f),
+                    widthPixels - ScreenUtils.dip2px(context, 5)) / 1.1f),
 
                     ViewGroup.LayoutParams.MATCH_PARENT);
             constran.setLayoutParams(params);

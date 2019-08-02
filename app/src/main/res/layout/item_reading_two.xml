@@ -18,7 +18,7 @@
             android:id="@+id/iv_title1"
             android:layout_width="@dimen/base_dimen_110"
             android:layout_height="@dimen/base_dimen_80"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_margin="@dimen/base_dimen_0"
             android:layout_marginRight="@dimen/base_dimen_0"

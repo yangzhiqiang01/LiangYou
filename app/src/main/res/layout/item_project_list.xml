@@ -18,6 +18,8 @@
             android:id="@+id/iv_title"
             android:layout_width="@dimen/base_dimen_110"
             android:layout_height="@dimen/base_dimen_80"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
             android:layout_marginLeft="@dimen/base_dimen_0"
             android:layout_marginTop="@dimen/base_dimen_0"
             android:layout_marginRight="@dimen/base_dimen_0"
@@ -26,7 +28,6 @@
             android:ellipsize="end"
             android:maxLines="2"
             app:layout_constraintBottom_toTopOf="@+id/lin_1"
-            android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
         <ImageView

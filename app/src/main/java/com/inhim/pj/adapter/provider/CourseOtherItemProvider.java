@@ -2,6 +2,7 @@ package com.inhim.pj.adapter.provider;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.utils.GlideUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author ChayChan
@@ -42,7 +44,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             TextView tv_num = helper.getView(R.id.tv_num1);
             TextView tv_time = helper.getView(R.id.tv_time1);
             ImageView iv_icon=helper.getView(R.id.iv_icon);
-            GlideUtils.displayFromUrl(news.getCover(),iv_title,context);
+            ImageLoader.getInstance().displayImage(news.getCover(),iv_title);
             //1文章 2视频 3音频
             if(news.getType().equals("2")){
                 iv_icon.setVisibility(View.VISIBLE);
@@ -53,7 +55,17 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             }else{
                 iv_icon.setVisibility(View.GONE);
             }
-            tv_num.setText(String.valueOf(news.getReadAmount()));
+            if(news.getReadAmount()!=null){
+                tv_title.setTextColor(Color.parseColor("#999999"));
+                tv_num.setTextColor(Color.parseColor("#999999"));
+                tv_time.setTextColor(Color.parseColor("#999999"));
+                tv_num.setText(news.getReadAmount());
+            }else{
+                tv_title.setTextColor(Color.parseColor("#333333"));
+                tv_num.setTextColor(Color.parseColor("#666666"));
+                tv_time.setTextColor(Color.parseColor("#666666"));
+                tv_num.setText("0");
+            }
             tv_title.setText(news.getTitle());
             if(news.getTimeText()!=null){
                 tv_time.setText(news.getTimeText());
