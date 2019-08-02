@@ -45,8 +45,8 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             );
             GlideUtils.displayFromUrl(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title,context);
             titleHolder.tv_num.setText("共"+readerStyle.getTotal()+"篇文章");
-            titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getValue());
-            titleHolder.tv_title.setText("专题");
+            titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getSynopsis());
+            titleHolder.tv_title.setText(readerStyle.getReaderStyleValue().getValue());
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
         }

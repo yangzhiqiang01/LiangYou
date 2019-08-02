@@ -9,19 +9,19 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constran"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/base_dimen_100"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_dimen_0"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <com.inhim.pj.view.CustomRoundAngleImageView
             android:id="@+id/iv_title"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/base_dimen_110"
+            android:layout_height="@dimen/base_dimen_80"
+            android:scaleType="centerCrop"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:layout_marginLeft="@dimen/base_dimen_0"
             android:layout_weight="1"
-            android:scaleType="fitXY"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
 

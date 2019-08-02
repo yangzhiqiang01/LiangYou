@@ -1,5 +1,7 @@
 package com.inhim.pj.activity;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,10 +22,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<Fragment> fs;
     private RadioButton radio1;
     private RadioButton radio2;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setImmersionStatusBar();
         initView();
     }
 

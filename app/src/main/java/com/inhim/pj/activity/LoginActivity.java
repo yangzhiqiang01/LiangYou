@@ -55,10 +55,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     private IWXAPI api;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setImmersionStatusBar();
         MyApplication.instance.addActivity(this);
         gson = new Gson();
         if (PrefUtils.getBoolean("isLogin", false)) {
