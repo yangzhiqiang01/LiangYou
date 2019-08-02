@@ -1,7 +1,9 @@
 package com.inhim.pj.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -79,12 +81,13 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
     private ImageView search_iv;
     private  Gson gson ;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_search);
+        setImmersionStatusBar();
         gson = new Gson();
         initViews();
         //初始化热搜版数据

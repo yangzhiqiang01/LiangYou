@@ -1,6 +1,8 @@
 package com.inhim.pj.activity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -34,11 +36,12 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
     SmartRefreshLayout home_SwipeRefreshLayout;
     private int mPageNum = 1;
     private Boolean refresh = true;
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_categories);
+        setImmersionStatusBar();
         categoriesList1 = new ArrayList();
         categoriesList2 = new ArrayList();
         categoriesList3 = new ArrayList();

@@ -49,10 +49,12 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
     private Gson gson;
     private int resultCode=100;
     private CenterDialog centerDialog;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_replace_phone);
+        setImmersionStatusBar();
         gson = new Gson();
         initView();
     }

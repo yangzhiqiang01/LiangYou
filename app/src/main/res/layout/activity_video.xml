@@ -6,6 +6,7 @@
 
     <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
         android:id="@+id/jc_video"
+        android:layout_marginTop="@dimen/base_dimen_5"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 

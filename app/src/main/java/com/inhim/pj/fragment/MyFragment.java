@@ -119,7 +119,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         PrefUtils.remove("expire");
                         PrefUtils.remove("token");
                         PrefUtils.remove("isLogin");
-                        tv_name.setText("点击登录");
+                        tv_name.setText("未登录");
                         iv_photo.setImageResource(R.mipmap.user_photo);
                         btn_back_login.setVisibility(View.GONE);
                         BToast.showText(smsResult.getMsg(), Toast.LENGTH_LONG, false);

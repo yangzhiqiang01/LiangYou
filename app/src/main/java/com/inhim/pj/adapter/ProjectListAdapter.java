@@ -35,7 +35,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
     }
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-        PersonViewHolder personViewHolder =new PersonViewHolder(parent);
+        PersonViewHolder personViewHolder =new PersonViewHolder(parent,viewType);
         if(viewType==0&&readerStyle!=null){
             View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_project_list_title,parent,false);
             TitleHolder titleHolder=new TitleHolder(view);
@@ -62,7 +62,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
         }
-        return new PersonViewHolder(parent);
+        return personViewHolder;
     }
     class TitleHolder extends RecyclerView.ViewHolder {
         public TextView tv_title;
@@ -95,17 +95,26 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
         TextView tv_num;
         TextView tv_content;
         ImageView iv_icon;
-        PersonViewHolder(ViewGroup parent){
+        LinearLayout lin_1;
+        int position;
+        PersonViewHolder(ViewGroup parent,int position){
             super(parent, R.layout.item_project_list);
             iv_title = getView(R.id.iv_title);
             tv_title = getView(R.id.tv_title);
             tv_num = getView(R.id.tv_num);
             tv_content = getView(R.id.tv_content);
             iv_icon=getView(R.id.iv_icon);
+            lin_1=getView(R.id.lin_1);
+            position=position;
         }
         @Override
         public void setData(ReaderList.List data) {
             super.setData(data);
+            if(position==getItemCount()-1){
+                lin_1.setVisibility(View.GONE);
+            }else{
+                lin_1.setVisibility(View.VISIBLE);
+            }
             GlideUtils.displayFromUrl(data.getCover(),iv_title,context);
             tv_title.setText(data.getTitle());
             tv_content.setText(String.valueOf(data.getReadAmount()));

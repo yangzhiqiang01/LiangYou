@@ -1,7 +1,9 @@
 package com.inhim.pj.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,10 +41,12 @@ public class ProjectListActivity extends BaseActivity {
     private Boolean refresh=true;
     private int totalPage;
     private Gson gson;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_list);
+        setImmersionStatusBar();
         gson=new Gson();
         ImageView iv_back=findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
@@ -15,7 +17,6 @@ import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
-import com.inhim.pj.utils.GlideUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -27,13 +28,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, BaseViewHolder> {
 
     private Context context;
-
-    public CourseOtherItemProvider(Context context) {
+    private int size;
+    public CourseOtherItemProvider(Context context,int size) {
         this.context=context;
+        this.size=size;
     }
 
     @Override
-    public void convert(BaseViewHolder helper, final ReaderList.List news, int i) {
+    public void convert(BaseViewHolder helper, final ReaderList.List news, int position) {
         if (news == null) {
             //如果没有标题，则直接跳过
             return;
@@ -45,6 +47,14 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             TextView tv_time = helper.getView(R.id.tv_time1);
             ImageView iv_icon=helper.getView(R.id.iv_icon);
             ImageLoader.getInstance().displayImage(news.getCover(),iv_title);
+            LinearLayout lin_1=helper.getView(R.id.lin_1);
+          /*  Log.e("position11",position+"");
+            Log.e("position11",size-1+"");*/
+            /*if(position==size-1){
+                lin_1.setVisibility(View.GONE);
+            }else{
+                lin_1.setVisibility(View.VISIBLE);
+            }*/
             //1文章 2视频 3音频
             if(news.getType().equals("2")){
                 iv_icon.setVisibility(View.VISIBLE);

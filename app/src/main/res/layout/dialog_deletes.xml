@@ -6,8 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constran"
-        android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginLeft="@dimen/base_dimen_80"
+        android:layout_marginRight="@dimen/base_dimen_80"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,19 +17,19 @@
         android:background="@drawable/background_dialog_delete"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="30dp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_20"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="是否确认删除"/>
 
     </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/constran"
+        app:layout_constraintBottom_toBottomOf="@+id/view1"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_20"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="是否确认删除"/>
     <View
         android:id="@+id/view1"
         android:layout_width="0dp"

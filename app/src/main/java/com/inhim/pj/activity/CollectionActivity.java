@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,10 +71,12 @@ public class CollectionActivity extends BaseActivity {
     private RadioGridViewAdapter popupwindowAdapter;
     private int selectedPosition;
     private CenterDialog centerDialog;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
+        setImmersionStatusBar();
         mRecyclerView = findViewById(R.id.onceTask_member_ycView);
         cb_doload = findViewById(R.id.cb_doload);
         lin_caozuo = findViewById(R.id.lin_caozuo);

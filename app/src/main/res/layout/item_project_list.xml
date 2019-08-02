@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    android:orientation="vertical" >
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constran"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_dimen_0"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
@@ -21,13 +20,14 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_marginLeft="@dimen/base_dimen_0"
-            android:layout_marginTop="@dimen/base_dimen_0"
+            android:layout_marginTop="@dimen/base_dimen_15"
             android:layout_marginRight="@dimen/base_dimen_0"
-            android:layout_marginBottom="@dimen/base_dimen_0"
+            android:layout_marginBottom="@dimen/base_dimen_15"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"
-            app:layout_constraintBottom_toTopOf="@+id/lin_1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             tools:ignore="MissingConstraints" />
         <ImageView
@@ -49,6 +49,7 @@
             android:maxLines="2"
             android:textSize="@dimen/text_size_16"
             android:textColor="@color/color333"
+            app:layout_constraintTop_toTopOf="@+id/iv_title"
             app:layout_constraintLeft_toRightOf="@+id/iv_title"
             app:layout_constraintRight_toRightOf="parent"
             tools:ignore="MissingConstraints" />
@@ -90,14 +91,13 @@
 
         <LinearLayout
             android:id="@+id/lin_1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/base_dimen_0"
-            android:layout_marginTop="@dimen/base_dimen_1"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:background="@color/dividing_line_backgroud"
+            app:layout_constraintLeft_toRightOf="@+id/iv_title"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="MissingConstraints,Orientation" />
     </android.support.constraint.ConstraintLayout>
-
 </LinearLayout>

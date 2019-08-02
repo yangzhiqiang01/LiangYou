@@ -1,7 +1,9 @@
 package com.inhim.pj.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,10 +51,12 @@ public class HistoryActivity extends BaseActivity {
     private List<CollectionList.List> historyList;
     private Map vipCollectionIdsMap;
     private CenterDialog centerDialog;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        setImmersionStatusBar();
         tv_clean=findViewById(R.id.tv_clean);
         tv_clean.setOnClickListener(new View.OnClickListener() {
             @Override

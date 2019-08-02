@@ -2,7 +2,9 @@ package com.inhim.pj.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,11 +69,13 @@ public class RadioActivity extends BaseActivity implements
     final String encoding = "UTF-8";
     private String title ;
     private String description;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gson = new Gson();
         setContentView(R.layout.activity_radio);
+        setImmersionStatusBar();
         initView();
         businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除

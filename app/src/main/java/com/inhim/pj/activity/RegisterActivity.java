@@ -1,6 +1,8 @@
 package com.inhim.pj.activity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,10 +30,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_weixin,iv_close;
     private Button btn_login;
     private Gson gson;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setImmersionStatusBar();
         gson=new Gson();
         initView();
     }

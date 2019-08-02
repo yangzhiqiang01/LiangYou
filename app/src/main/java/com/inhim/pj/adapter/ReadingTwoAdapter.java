@@ -2,6 +2,7 @@ package com.inhim.pj.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.MultipleItemRvAdapter;
@@ -43,7 +44,7 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
     public static final int CHAPTER_ITEM = 700;
     //执行一次其他数据再次执行此数据就说明是当前数据的第一条数据
     private Context context;
-
+    private int size=0;
     public ReadingTwoAdapter(@Nullable List<T> data, Context context) {
         super(data);
         this.context = context;
@@ -52,6 +53,13 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
 
     @Override
     protected int getViewType(T news) {
+        //纪录隐藏最后一个课程数据item的横线
+        /*if(news instanceof ReaderList.List){
+            size++;
+            Log.e("position11",size+"");
+        }else{
+            size=0;
+        }*/
         if (news instanceof BannerList) {
             return BANNER;
         } else if (news instanceof ReaderStyle) {
@@ -75,7 +83,7 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
         mProviderDelegate.registerProvider(new BannerItemProvider());
         mProviderDelegate.registerProvider(new SeriesProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
-        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));
+        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size));
         mProviderDelegate.registerProvider(new ReaderTypeProvider());
         //圆形类别 如牧师讲道
         mProviderDelegate.registerProvider(new ChapterItemProvider(context));

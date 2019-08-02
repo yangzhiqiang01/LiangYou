@@ -5,7 +5,7 @@
         android:id="@+id/constran"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/base_dimen_102"
+        android:layout_height="wrap_content"
         android:background="@color/white">
         <CheckBox
             android:id="@+id/checkbox"
@@ -25,8 +25,8 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_marginLeft="@dimen/base_dimen_0"
-            android:layout_marginTop="@dimen/base_dimen_0"
-            android:layout_marginBottom="@dimen/base_dimen_0"
+            android:layout_marginTop="@dimen/base_dimen_15"
+            android:layout_marginBottom="@dimen/base_dimen_15"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/checkbox"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -79,9 +79,10 @@
             app:layout_constraintRight_toRightOf="parent" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="@dimen/base_dimen_0"
-            android:background="@color/dividing_line_backgroud"
-            app:layout_constraintTop_toBottomOf="@+id/imageview1" />
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/imageview1"
+           app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/dividing_line_backgroud" />
     </android.support.constraint.ConstraintLayout>

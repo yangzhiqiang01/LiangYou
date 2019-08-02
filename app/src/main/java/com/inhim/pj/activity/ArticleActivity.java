@@ -1,5 +1,7 @@
 package com.inhim.pj.activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,7 +31,7 @@ import java.util.HashMap;
 import okhttp3.Request;
 
 public class ArticleActivity extends BaseActivity {
-    private TextView textview1,textview2,textview3,textview4;
+    private TextView textview1,textview2,textview3,textview4,textview;
     private CustomRoundAngleImageView custImageview;
     private ImageView iv_back,iv_share;
     private CheckBox checkbox;
@@ -41,10 +43,12 @@ public class ArticleActivity extends BaseActivity {
     final String encoding = "UTF-8";
     private String title ;
     private String description;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
+        setImmersionStatusBar();
         gson=new Gson();
         initView();
         getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
@@ -110,6 +114,7 @@ public class ArticleActivity extends BaseActivity {
                 finish();
             }
         });
+        textview=findViewById(R.id.textview);
     }
 
     private void getReaderInfo(int readerId) {
@@ -131,6 +136,10 @@ public class ArticleActivity extends BaseActivity {
                     Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
                     title=readerInfo.getTitle() ;
                     description=readerInfo.getSynopsis();
+                    if(description!=null){
+                        textview.setVisibility(View.VISIBLE);
+                        textview.setText(description);
+                    }
                     checkbox.setChecked(readerInfo.getCollectionStatus());
                     textview1.setText(readerInfo.getTitle());
                     textview2.setText("类别："+readerInfo.getReaderTypeText());

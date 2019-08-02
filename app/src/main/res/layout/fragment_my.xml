@@ -14,15 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_dimen_5"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color333"
-                android:textSize="@dimen/text_size_20"
-                android:layout_margin="@dimen/base_dimen_0"
-                android:text="@string/my"/>
-            <include layout="@layout/dividing_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,7 +40,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/base_dimen_0"
-                        android:text="点击登录"
+                        android:textStyle="bold"
+                        android:text="未登录"
                         android:textSize="@dimen/text_size_25"
                          />
 
@@ -80,8 +74,8 @@
                     tools:ignore="MissingConstraints">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/base_dimen_5"
+                        android:layout_height="@dimen/base_dimen_5"
                         android:layout_gravity="center"
                         android:src="@mipmap/jibenziliao" />
 
@@ -94,7 +88,7 @@
                         android:textSize="@dimen/text_size_15" />
                 </LinearLayout>
                 <View
-                    android:layout_width="1dp"
+                    android:layout_width="0.5dp"
                     android:layout_height="@dimen/base_dimen_5"
                     android:background="@color/dividing_line_backgroud"
                     app:layout_constraintLeft_toRightOf="@+id/lin_1"
@@ -113,8 +107,8 @@
                     tools:ignore="MissingConstraints">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/base_dimen_5"
+                        android:layout_height="@dimen/base_dimen_5"
                         android:layout_gravity="center"
                         android:src="@mipmap/shoucang" />
 
@@ -127,7 +121,7 @@
                         android:textSize="@dimen/text_size_15" />
                 </LinearLayout>
                 <View
-                    android:layout_width="1dp"
+                    android:layout_width="0.5dp"
                     android:layout_height="@dimen/base_dimen_5"
                     android:background="@color/dividing_line_backgroud"
                     app:layout_constraintLeft_toRightOf="@+id/lin_2"
@@ -146,8 +140,8 @@
                     tools:ignore="MissingConstraints">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/base_dimen_5"
+                        android:layout_height="@dimen/base_dimen_5"
                         android:layout_gravity="center"
                         android:src="@mipmap/lishi" />
 
@@ -170,8 +164,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/base_dimen_5"
+                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/dowloadlist" />
 
@@ -202,8 +197,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/base_dimen_5"
+                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/setting" />
 
@@ -235,8 +231,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/base_dimen_5"
+                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/update" />
 
@@ -278,8 +275,9 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/base_dimen_5"
+                        android:layout_height="@dimen/base_dimen_5"
+                        android:layout_gravity="center"
                         android:layout_margin="@dimen/base_dimen_0"
                         android:src="@mipmap/about" />
 
@@ -311,8 +309,9 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/base_dimen_5"
+                        android:layout_height="@dimen/base_dimen_5"
+                        android:layout_gravity="center"
                         android:layout_margin="@dimen/base_dimen_0"
                         android:src="@mipmap/fenxaing" />
 

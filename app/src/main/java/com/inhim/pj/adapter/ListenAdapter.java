@@ -41,7 +41,7 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
     public static final int STYLE_TITLE = 600;
     public static final int CHAPTER_ITEM = 700;
     private Context context;
-
+    private int size=0;
     public ListenAdapter(@Nullable List<T> data, Context context) {
         super(data);
         this.context = context;
@@ -50,6 +50,12 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
 
     @Override
     protected int getViewType(T news) {
+        //纪录隐藏最后一个课程数据item的横线
+       /* if(news instanceof ReaderList.List){
+            size++;
+        }else{
+            size=0;
+        }*/
         if (news instanceof BannerList) {
             return BANNER;
         }  else if (news instanceof String) {
@@ -71,7 +77,7 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
         mProviderDelegate.registerProvider(new BannerItemProvider());
         mProviderDelegate.registerProvider(new StyleItemProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
-        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context));
+        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size));
         mProviderDelegate.registerProvider(new ListenReaderTypeProvider());
         mProviderDelegate.registerProvider(new ChapterItemProvider(context));
     }

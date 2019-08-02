@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -73,11 +74,12 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private Gson gson;
     private int resultCode = 100;
     private UserInfo.User userInfo;
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_myinfo);
+        setImmersionStatusBar();
         gson = new Gson();
         initView();
         userInfo = (UserInfo.User) getIntent().getSerializableExtra("result");

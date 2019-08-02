@@ -1,7 +1,8 @@
 package com.inhim.pj.activity;
 
-import android.graphics.Movie;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +30,12 @@ public class SettingActivity extends BaseActivity {
     TextView tv_size;
     CheckBox checkbox;
     private CenterDialog centerDialog;
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        setImmersionStatusBar();
         initView();
     }
 
@@ -60,6 +62,8 @@ public class SettingActivity extends BaseActivity {
         View outerView = LayoutInflater.from(SettingActivity.this).inflate(R.layout.dialog_deletes, null);
         Button btn_ok = outerView.findViewById(R.id.btn_ok);
         Button btn_cancel = outerView.findViewById(R.id.btn_cancel);
+        TextView tvTitle=outerView.findViewById(R.id.tv_title);
+        tvTitle.setText("确定要清除缓存吗？");
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,8 @@
 package com.inhim.pj.activity;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.adapter.ProjectAdapter;
+import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
@@ -24,15 +27,17 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ProjectActivity extends BaseActivity {
     private YCRefreshView ycRefreshView;
     private List<ReaderStyle.List> typeList;
     private ProjectAdapter mAdapter;
     private TextView tvCourse;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
+        setImmersionStatusBar();
         ycRefreshView=findViewById(R.id.ycRefreshView);
         tvCourse=findViewById(R.id.tvCourse);
         tvCourse.setText("系列专题");

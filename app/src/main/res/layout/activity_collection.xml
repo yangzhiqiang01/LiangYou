@@ -11,6 +11,7 @@
         android:id="@+id/rela_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_dimen_5"
         tools:ignore="MissingConstraints">
 
         <ImageView
