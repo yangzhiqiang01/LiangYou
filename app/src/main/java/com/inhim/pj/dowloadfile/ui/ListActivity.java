@@ -1,7 +1,10 @@
 package com.inhim.pj.dowloadfile.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -32,10 +35,12 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
   private boolean isOneFragment=true;
   private Fragment goOutFragment;
   private Fragment goOutTwoFragment;
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_list);
+    setImmersionStatusBar();
     initView();
     fs=new ArrayList<>();
     goOutFragment=new HaveDownloadedFragment();
@@ -50,7 +55,25 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
     viewPager.setAdapter(adapter);
     setListener();
   }
+  /**
+   * 沉浸式状态栏
+   */
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  public void setImmersionStatusBar() {
+//        getSupportActionBar().hide();
+//        View decorView = getWindow().getDecorView();
+//        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//        decorView.setSystemUiVisibility(option);
+//        getWindow().setStatusBarColor(Color.TRANSPARENT);
+    if (Build.VERSION.SDK_INT >= 21) {
+      View decorView = getWindow().getDecorView();
+      int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+              | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+      decorView.setSystemUiVisibility(option);
+      getWindow().setStatusBarColor(Color.TRANSPARENT);
+    }
 
+  }
   private void setListener() {
     // TODO Auto-generated method stub
     viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@+id/rela_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:layout_marginTop="@dimen/base_dimen_5"
+        android:layout_marginTop="@dimen/title_top"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp">
 
