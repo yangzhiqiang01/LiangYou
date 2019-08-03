@@ -196,7 +196,9 @@ public class HistoryActivity extends BaseActivity {
             public void onItemClick(int position) {
                 CollectionList.List data=adapter.getAllData().get(position);
                 Intent intent;
-                if(data.getReaderEntity()!=null){
+                if(data.getStatus()!=null&&data.getStatus().equals("0")){
+
+                }else{
                     if(data.getReaderEntity().getType().equals("2")){
                         intent=new Intent(HistoryActivity.this, VideoActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

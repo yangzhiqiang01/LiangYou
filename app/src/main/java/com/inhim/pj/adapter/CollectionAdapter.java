@@ -61,7 +61,12 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
         @Override
         public void setData(final CollectionList.List data) {
             super.setData(data);
-            if(data.getReaderEntity()!=null){
+            if(data.getStatus()!=null&&data.getStatus().equals("0")){
+                iv_icon.setVisibility(View.GONE);
+                iv_glasses1.setVisibility(View.GONE);
+                tv_title.setText("此数据已被管理员删除");
+                iv_title.setImageResource(R.mipmap.readerinfo_delete);
+            }else{
                 ImageLoaderUtils.setImage(data.getReaderEntity().getCover(), iv_title);
                 tv_num1.setText(data.getReaderEntity().getReadAmount());
                 tv_title.setText(data.getReaderEntity().getTitle());
@@ -89,10 +94,6 @@ public class CollectionAdapter extends RecyclerArrayAdapter<CollectionList.List>
                     checkbox.setChecked(false);
                 }
 
-            }else{
-                iv_icon.setVisibility(View.GONE);
-                iv_glasses1.setVisibility(View.GONE);
-                tv_title.setText("此数据已被管理员删除");
             }
 
         }

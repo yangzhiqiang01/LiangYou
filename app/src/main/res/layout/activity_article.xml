@@ -80,6 +80,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_margin="@dimen/base_dimen_0"
+                android:visibility="gone"
                 android:textSize="@dimen/text_size_14"
                 android:padding="@dimen/base_dimen_0"
                 android:textColor="@color/color6666"
