@@ -21,6 +21,7 @@ import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
@@ -258,16 +259,43 @@ public class RadioActivity extends BaseActivity implements
         checkbox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLoading("收藏中");
                 MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
                 myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
                         new MyOkHttpClient.HttpCallBack() {
                             @Override
                             public void onError(Request request, IOException e) {
-
+                                hideLoading();
+                                if(checkbox.isChecked()){
+                                    checkbox.setChecked(false);
+                                }else{
+                                    checkbox.setChecked(true);
+                                }
                             }
 
                             @Override
                             public void onSuccess(Request request, String result) {
+                                hideLoading();
+                                try {
+                                    JSONObject jsonObject=new JSONObject(result);
+                                    if(jsonObject.getInt("code")!=0){
+                                        BToast.showText(jsonObject.getString("msg"),false);
+                                        //收藏失败时将按钮状态还原
+                                        if(checkbox.isChecked()){
+                                            checkbox.setChecked(false);
+                                        }else{
+                                            checkbox.setChecked(true);
+                                        }
+                                    }else{
+                                        if(checkbox.isChecked()){
+                                            BToast.showText("收藏成功",true);
+                                        }else{
+                                            BToast.showText("已取消收藏",true);
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
             }
@@ -296,7 +324,7 @@ public class RadioActivity extends BaseActivity implements
             mJcVideoPlayerStandard.setUp(videoUrl
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, name);
         }
-        ImageLoader.getInstance().displayImage(photoUrl,mJcVideoPlayerStandard.thumbImageView);
+        ImageLoaderUtils.setImage(photoUrl,mJcVideoPlayerStandard.thumbImageView);
 
         //屏幕保持常亮
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

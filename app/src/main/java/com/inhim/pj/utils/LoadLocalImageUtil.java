@@ -32,7 +32,7 @@ public class LoadLocalImageUtil {
          */
         public void displayFromSDCard(String uri, ImageView imageView) {
             // String imageUri = "file:///mnt/sdcard/image.png"; // from SD card
-            ImageLoader.getInstance().displayImage("file://" + uri, imageView);
+            ImageLoaderUtils.setImage("file://" + uri, imageView);
         }
 
         /**
@@ -57,12 +57,12 @@ public class LoadLocalImageUtil {
         public void displayFromDrawable(int imageId, ImageView imageView) {
             // String imageUri = "drawable://" + R.drawable.image; // from drawables
             // (only images, non-9patch)
-            ImageLoader.getInstance().displayImage("drawable://" + imageId,
+            ImageLoaderUtils.setImage("drawable://" + imageId,
                     imageView);
         }
 
         public void displayImage(Object path, ImageView imageView) {
-            ImageLoader.getInstance().displayImage((String) path,imageView);
+            ImageLoaderUtils.setImage((String) path,imageView);
         }
         /**
          * 从内容提提供者中抓取图片
@@ -70,7 +70,7 @@ public class LoadLocalImageUtil {
         public void displayFromContent(String uri, ImageView imageView) {
             // String imageUri = "content://media/external/audio/albumart/13"; //
             // from content provider
-            ImageLoader.getInstance().displayImage("content://" + uri, imageView);
+            ImageLoaderUtils.setImage("content://" + uri, imageView);
         }
     /**
      * 从网络加载图片
@@ -83,8 +83,9 @@ public class LoadLocalImageUtil {
                 /*.showImageForEmptyUri(R.mipmap.pic_default)//图片地址有误
                 .showImageOnFail(R.mipmap.pic_default)//当图片加载出现错误的时候显示的图片
                 .showImageOnLoading(R.mipmap.pic_default)//图片正在加载的时候显示的图片*/
-
-        ImageLoader.getInstance().displayImage(url,imageView,options);
+        if(url!=null&&!"".equals(url)) {
+            ImageLoader.getInstance().displayImage(url, imageView, options);
+        }
     }
 
 }

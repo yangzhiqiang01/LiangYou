@@ -13,6 +13,7 @@ import com.inhim.pj.activity.ProjectListActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.utils.GlideUtils;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.view.CustomRoundAngleImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -38,7 +39,7 @@ public class StyleTitleProvider extends BaseItemProvider<ReaderStyle.List, BaseV
         try{
             //处理相关业务逻辑
             CustomRoundAngleImageView imageview = helper.getView(R.id.imageview);
-            ImageLoader.getInstance().displayImage(news.getReaderStyleValue().getCover(),imageview);
+            ImageLoaderUtils.setImage(news.getReaderStyleValue().getCover(),imageview);
             ConstraintLayout constran = helper.getView(R.id.constran);
             constran.getBackground().setAlpha(100);//0~255透明度值
             TextView textview1 = helper.getView(R.id.textview1);

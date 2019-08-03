@@ -52,6 +52,7 @@ public class ReadingTwoFragment extends Fragment {
     private Boolean refresh = true;
     private ReaderStyle rederType;
     private LoadingView loadingView;
+    private String TAG="ReadingTwoFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class ReadingTwoFragment extends Fragment {
     }
 
     private void initAdapter() {
-        mAdapter = new ReadingTwoAdapter(homeList,getActivity());
+        mAdapter = new ReadingTwoAdapter(homeList,getActivity(),TAG);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

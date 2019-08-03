@@ -33,6 +33,7 @@ import com.inhim.pj.fragment.JIangyiFragment;
 import com.inhim.pj.fragment.MuluFragment;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
@@ -82,6 +83,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private MyBusinessInfoDid businessInfoDid;
     private String title;
     private String description;
+    private String TAG;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         gson = new Gson();
         instance = this;
         setContentView(R.layout.activity_video);
+        TAG=getIntent().getStringExtra("TAG");
         setImmersionStatusBar();
         initView();
         srearchreceiver = new FullScreenReceiver();
@@ -176,12 +179,20 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
             muluBl.putSerializable("ReaderId", readerInfo.getReaderId());
             fs = new ArrayList<>();
             JIangyiFragment jiangyiFm = new JIangyiFragment();
-            MuluFragment muluFragment = new MuluFragment();
-            muluFragment.setvedioLinear(VideoActivity.this);
             jiangyiFm.setArguments(jiangyiBl);
-            muluFragment.setArguments(muluBl);
             fs.add(jiangyiFm);
-            fs.add(muluFragment);
+            //只有从首页的视频页面进入视频才显示目录
+            if(TAG.equals("VideoFragment")){
+                MuluFragment muluFragment = new MuluFragment();
+                muluFragment.setvedioLinear(VideoActivity.this);
+                muluFragment.setArguments(muluBl);
+                fs.add(muluFragment);
+                mulu.setVisibility(View.VISIBLE);
+                jiangyi.setVisibility(View.VISIBLE);
+            }
+           /* if(!readerInfo.getReaderStyleIdLink().contains("#3")){
+
+            }*/
             FragmentManager fm = getSupportFragmentManager();
             MyPagerAdapter adapter = new MyPagerAdapter(fm);
             viewPager.setAdapter(adapter);
@@ -393,10 +404,17 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                                     JSONObject jsonObject = new JSONObject(result);
                                     if (jsonObject.getInt("code") != 0) {
                                         BToast.showText(jsonObject.getString("msg"), false);
-                                        if (checkbox.isChecked()) {
+                                        //收藏失败时将按钮状态还原
+                                        if(checkbox.isChecked()){
                                             checkbox.setChecked(false);
-                                        } else {
+                                        }else{
                                             checkbox.setChecked(true);
+                                        }
+                                    }else{
+                                        if(checkbox.isChecked()){
+                                            BToast.showText("收藏成功",true);
+                                        }else{
+                                            BToast.showText("已取消收藏",true);
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -429,7 +447,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         /*Picasso.with(this)
                 .load(photoUrl)
                 .into(mJcVideoPlayerStandard.thumbImageView);*/
-        ImageLoader.getInstance().displayImage(photoUrl, mJcVideoPlayerStandard.thumbImageView);
+        ImageLoaderUtils.setImage(photoUrl, mJcVideoPlayerStandard.thumbImageView);
         //屏幕保持常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

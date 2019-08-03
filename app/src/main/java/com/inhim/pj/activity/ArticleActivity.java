@@ -2,6 +2,7 @@ package com.inhim.pj.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -80,10 +81,17 @@ public class ArticleActivity extends BaseActivity {
                                     JSONObject jsonObject=new JSONObject(result);
                                     if(jsonObject.getInt("code")!=0){
                                         BToast.showText(jsonObject.getString("msg"),false);
+                                        //收藏失败时将按钮状态还原
                                         if(checkbox.isChecked()){
                                             checkbox.setChecked(false);
                                         }else{
                                             checkbox.setChecked(true);
+                                        }
+                                    }else{
+                                        if(checkbox.isChecked()){
+                                            BToast.showText("收藏成功",true);
+                                        }else{
+                                            BToast.showText("已取消收藏",true);
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -136,7 +144,7 @@ public class ArticleActivity extends BaseActivity {
                     Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
                     title=readerInfo.getTitle() ;
                     description=readerInfo.getSynopsis();
-                    if(description!=null){
+                    if(description!=null&&"".equals(description)){
                         textview.setVisibility(View.VISIBLE);
                         textview.setText(description);
                     }

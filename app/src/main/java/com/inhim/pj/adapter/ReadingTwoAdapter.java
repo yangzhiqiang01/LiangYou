@@ -45,8 +45,10 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
     //执行一次其他数据再次执行此数据就说明是当前数据的第一条数据
     private Context context;
     private int size=0;
-    public ReadingTwoAdapter(@Nullable List<T> data, Context context) {
+    private String TAG;
+    public ReadingTwoAdapter(@Nullable List<T> data, Context context,String TAG) {
         super(data);
+        this.TAG=TAG;
         this.context = context;
         finishInitialize();//调用该方法告知MultipleItemRvAdapter1已初始化完构造函数参数的传递
     }
@@ -83,10 +85,10 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
         mProviderDelegate.registerProvider(new BannerItemProvider());
         mProviderDelegate.registerProvider(new SeriesProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
-        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size));
+        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size,TAG));
         mProviderDelegate.registerProvider(new ReaderTypeProvider());
         //圆形类别 如牧师讲道
-        mProviderDelegate.registerProvider(new ChapterItemProvider(context));
+        mProviderDelegate.registerProvider(new ChapterItemProvider(context,TAG));
         //mProviderDelegate.registerProvider(new VideoTypeItemProvider(context));
     }
 }

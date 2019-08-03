@@ -22,7 +22,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Design.Light.NoActionBar">
+        android:theme="@style/AppTheme">
         <provider
             android:name="com.tencent.bugly.beta.utils.BuglyFileProvider"
             android:authorities="com.inhim.pj.fileProvider"
@@ -34,7 +34,8 @@
                 android:resource="@xml/provider_paths"
                 tools:replace="name,resource" />
         </provider>
-
+        <activity android:name=".app.BaseActivity"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".activity.ArticleActivity"></activity>
         <activity android:name=".activity.ProjectActivity" />
         <activity android:name=".activity.WebViewActivity" />

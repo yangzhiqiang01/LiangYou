@@ -51,6 +51,7 @@ public class VideoFragment extends Fragment {
     private Boolean refresh = true;
     private ReaderStyle.List rederType;
     private LoadingView loadingView;
+    private String TAG="VideoFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +103,7 @@ public class VideoFragment extends Fragment {
     }
 
     private void initAdapter() {
-        mAdapter = new ReadingTwoAdapter(homeList, getActivity());
+        mAdapter = new ReadingTwoAdapter(homeList, getActivity(),TAG);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

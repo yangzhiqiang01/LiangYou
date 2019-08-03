@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.inhim.pj.R;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.utils.GlideCircleUtils;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.ScreenUtils;
 import com.inhim.pj.view.CircleImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,7 +39,7 @@ public class ChapterItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof PersonViewHolder) {
             try{
-                ImageLoader.getInstance().displayImage(datas.get(position).getIcon(),((PersonViewHolder) viewHolder).circleImageView);
+                ImageLoaderUtils.setImage(datas.get(position).getIcon(),((PersonViewHolder) viewHolder).circleImageView);
                 /*GlideCircleUtils.displayFromUrl(datas.get(position).getIcon(),
                         ((PersonViewHolder) viewHolder).circleImageView,context);*/
                 ((PersonViewHolder) viewHolder).textview.setText(datas.get(position).getName());

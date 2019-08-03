@@ -235,6 +235,7 @@ public class CollectionActivity extends BaseActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                centerDialog.dismiss();
                 deleteCollection();
             }
         });
@@ -303,16 +304,18 @@ public class CollectionActivity extends BaseActivity {
             public void onItemClick(int position) {
                 CollectionList.List data=mAdapter.getAllData().get(position);
                 Intent intent;
-                if(data.getReaderEntity().getType().equals("2")){
-                    intent=new Intent(CollectionActivity.this, VideoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                }else if(data.getReaderEntity().getType().equals("3")){
-                    intent=new Intent(CollectionActivity.this, RadioActivity.class);
-                }else{
-                    intent=new Intent(CollectionActivity.this, ArticleActivity.class);
+                if(data.getStatus()!=null){
+                    if(data.getReaderEntity().getType().equals("2")){
+                        intent=new Intent(CollectionActivity.this, VideoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    }else if(data.getReaderEntity().getType().equals("3")){
+                        intent=new Intent(CollectionActivity.this, RadioActivity.class);
+                    }else{
+                        intent=new Intent(CollectionActivity.this, ArticleActivity.class);
+                    }
+                    intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
+                    startActivity(intent);
                 }
-                intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
-                startActivity(intent);
             }
         });
 

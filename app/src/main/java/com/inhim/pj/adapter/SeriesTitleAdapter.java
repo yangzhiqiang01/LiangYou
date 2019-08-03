@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.inhim.pj.R;
 import com.inhim.pj.entity.ReaderStyle;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.ScreenUtils;
 import com.inhim.pj.view.CustomRoundAngleImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,7 +38,7 @@ public class SeriesTitleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof PersonViewHolder) {
             try{
-                ImageLoader.getInstance().displayImage(datas.get(position).getReaderStyleValue().getCover(),
+                ImageLoaderUtils.setImage(datas.get(position).getReaderStyleValue().getCover(),
                         ((PersonViewHolder) viewHolder).imageview);
                 ((PersonViewHolder) viewHolder).textview1.setText(datas.get(position).getReaderStyleValue().getValue());
                 ((PersonViewHolder) viewHolder).textview2.setText("共"+datas.get(position).getTotal()+"篇文章");

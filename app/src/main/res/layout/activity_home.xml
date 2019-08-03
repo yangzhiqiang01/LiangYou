@@ -19,7 +19,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color6666" />
+        android:background="@color/color_d5d5" />
 
     <RadioGroup
         android:layout_width="match_parent"

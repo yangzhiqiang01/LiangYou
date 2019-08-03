@@ -164,8 +164,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/base_dimen_5"
-                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_width="@dimen/base_dimen_4"
+                    android:layout_height="@dimen/base_dimen_4"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/dowloadlist" />
@@ -174,7 +174,8 @@
                     android:id="@+id/dowload_list"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/base_dimen_15"
+                    android:layout_marginTop="@dimen/base_dimen_15"
+                    android:layout_marginBottom="@dimen/base_dimen_15"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/download_list"
@@ -197,8 +198,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/base_dimen_5"
-                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_width="@dimen/base_dimen_4"
+                    android:layout_height="@dimen/base_dimen_4"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/setting" />
@@ -207,7 +208,8 @@
                     android:id="@+id/tv_setting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/base_dimen_15"
+                    android:layout_marginTop="@dimen/base_dimen_15"
+                    android:layout_marginBottom="@dimen/base_dimen_15"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/setting"
@@ -231,8 +233,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/base_dimen_5"
-                    android:layout_height="@dimen/base_dimen_5"
+                    android:layout_width="@dimen/base_dimen_4"
+                    android:layout_height="@dimen/base_dimen_4"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/base_dimen_0"
                     android:src="@mipmap/update" />
@@ -241,7 +243,8 @@
                     android:id="@+id/mygrades"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/base_dimen_15"
+                    android:layout_marginTop="@dimen/base_dimen_15"
+                    android:layout_marginBottom="@dimen/base_dimen_15"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/check_update"
@@ -275,8 +278,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/base_dimen_5"
-                        android:layout_height="@dimen/base_dimen_5"
+                        android:layout_width="@dimen/base_dimen_4"
+                        android:layout_height="@dimen/base_dimen_4"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/base_dimen_0"
                         android:src="@mipmap/about" />
@@ -285,7 +288,8 @@
                         android:id="@+id/mycollection"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/base_dimen_15"
+                        android:layout_marginTop="@dimen/base_dimen_15"
+                        android:layout_marginBottom="@dimen/base_dimen_15"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/about_us"
@@ -309,8 +313,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/base_dimen_5"
-                        android:layout_height="@dimen/base_dimen_5"
+                        android:layout_width="@dimen/base_dimen_4"
+                        android:layout_height="@dimen/base_dimen_4"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/base_dimen_0"
                         android:src="@mipmap/fenxaing" />
@@ -319,7 +323,8 @@
                         android:id="@+id/myactivities"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/base_dimen_15"
+                        android:layout_marginTop="@dimen/base_dimen_15"
+                        android:layout_marginBottom="@dimen/base_dimen_15"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/share_app"

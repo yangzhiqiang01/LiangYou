@@ -17,6 +17,7 @@ import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.download.limit.DownloadLimitManager;
 import com.inhim.pj.dowloadfile.utils.FileUtil;
 import com.inhim.pj.utils.GlideUtils;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.litepal.LitePal;
@@ -198,7 +199,7 @@ public class LimitDownloadAdapter extends BaseRecyclerDidViewAdapter<DownloadInf
             //等待中
             if (info.getTotal() == 0){
 
-                ImageLoader.getInstance().displayImage(info.getCover(),holder.imageview1);
+                ImageLoaderUtils.setImage(info.getCover(),holder.imageview1);
                 holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
                 holder.tv_size.setText(FileUtil
                         .formatFileSize(info.getTotal()));
@@ -210,7 +211,7 @@ public class LimitDownloadAdapter extends BaseRecyclerDidViewAdapter<DownloadInf
                 });
                 holder.tv_name.setText(info.getTitle());
             }else {
-                ImageLoader.getInstance().displayImage(info.getCover(),holder.imageview1);
+                ImageLoaderUtils.setImage(info.getCover(),holder.imageview1);
                 holder.tv_status.setText(FileUtil.formatFileSize(info.getProgress()));
                 holder.tv_size.setText(FileUtil
                         .formatFileSize(info.getTotal()));

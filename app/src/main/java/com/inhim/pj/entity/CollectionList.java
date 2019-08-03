@@ -39,7 +39,6 @@ public class CollectionList implements Serializable {
 
         private String typeText;
 
-
         public void setReaderId(int readerId){
             this.readerId = readerId;
         }
@@ -162,7 +161,7 @@ public class CollectionList implements Serializable {
         private ReaderEntity readerEntity;
 
         private String timeText;
-
+        private String status;
         public void setVipCollectionId(int vipCollectionId){
             this.vipCollectionId = vipCollectionId;
         }
@@ -211,7 +210,13 @@ public class CollectionList implements Serializable {
         public String getTimeText(){
             return this.timeText;
         }
+        public String getStatus() {
+            return status;
+        }
 
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 /*=================================*/
 

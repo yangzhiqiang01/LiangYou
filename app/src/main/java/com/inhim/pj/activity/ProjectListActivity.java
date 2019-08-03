@@ -41,6 +41,7 @@ public class ProjectListActivity extends BaseActivity {
     private Boolean refresh=true;
     private int totalPage;
     private Gson gson;
+    private String TAG;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class ProjectListActivity extends BaseActivity {
         ycRefreshView=findViewById(R.id.ycRefreshView);
         readerstyle= (ReaderStyle.List) getIntent().getSerializableExtra("ReaderStyle");
         readerType= (ReaderTypeList.List) getIntent().getSerializableExtra("ReaderTypeList");
+        TAG=getIntent().getStringExtra("TAG");
         initAdapter();
         getReaderList();
     }
@@ -91,6 +93,7 @@ public class ProjectListActivity extends BaseActivity {
                 Intent intent;
                 if(reader.getType().equals("2")){
                     intent=new Intent(ProjectListActivity.this, VideoActivity.class);
+                    intent.putExtra("TAG",TAG);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 }else if(reader.getType().equals("3")){
                     intent=new Intent(ProjectListActivity.this, RadioActivity.class);

@@ -81,9 +81,12 @@ public class HistoryActivity extends BaseActivity {
         View outerView = LayoutInflater.from(HistoryActivity.this).inflate(R.layout.dialog_deletes, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);
         Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
+        TextView tv_title=findViewById(R.id.tv_title);
+        tv_title.setText("是否确认清空？");
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                centerDialog.dismiss();
                 deleteAllHistory();
             }
         });
@@ -193,16 +196,18 @@ public class HistoryActivity extends BaseActivity {
             public void onItemClick(int position) {
                 CollectionList.List data=adapter.getAllData().get(position);
                 Intent intent;
-                if(data.getReaderEntity().getType().equals("2")){
-                    intent=new Intent(HistoryActivity.this, VideoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                }else if(data.getReaderEntity().getType().equals("3")){
-                    intent=new Intent(HistoryActivity.this, RadioActivity.class);
-                }else{
-                    intent=new Intent(HistoryActivity.this, ArticleActivity.class);
+                if(data.getReaderEntity()!=null){
+                    if(data.getReaderEntity().getType().equals("2")){
+                        intent=new Intent(HistoryActivity.this, VideoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    }else if(data.getReaderEntity().getType().equals("3")){
+                        intent=new Intent(HistoryActivity.this, RadioActivity.class);
+                    }else{
+                        intent=new Intent(HistoryActivity.this, ArticleActivity.class);
+                    }
+                    intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
+                    startActivity(intent);
                 }
-                intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
-                startActivity(intent);
             }
         });
     }

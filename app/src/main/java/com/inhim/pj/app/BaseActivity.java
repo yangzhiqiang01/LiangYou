@@ -10,9 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.inhim.pj.utils.FontUtils;
 import com.inhim.pj.view.TransparentProgressDialog;
 
 public class BaseActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     private TransparentProgressDialog mProgressDialog;
     public void showLoading(String text) {
         if (mProgressDialog == null) {

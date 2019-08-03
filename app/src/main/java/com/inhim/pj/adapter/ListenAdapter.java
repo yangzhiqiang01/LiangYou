@@ -42,8 +42,10 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
     public static final int CHAPTER_ITEM = 700;
     private Context context;
     private int size=0;
-    public ListenAdapter(@Nullable List<T> data, Context context) {
+    private String TAG;
+    public ListenAdapter(@Nullable List<T> data, Context context,String TAG) {
         super(data);
+        this.TAG=TAG;
         this.context = context;
         finishInitialize();//调用该方法告知MultipleItemRvAdapter1已初始化完构造函数参数的传递
     }
@@ -77,9 +79,9 @@ public class ListenAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolder> {
         mProviderDelegate.registerProvider(new BannerItemProvider());
         mProviderDelegate.registerProvider(new StyleItemProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
-        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size));
+        mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size,TAG));
         mProviderDelegate.registerProvider(new ListenReaderTypeProvider());
-        mProviderDelegate.registerProvider(new ChapterItemProvider(context));
+        mProviderDelegate.registerProvider(new ChapterItemProvider(context,TAG));
     }
 }
 

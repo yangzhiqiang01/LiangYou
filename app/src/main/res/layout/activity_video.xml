@@ -30,6 +30,7 @@
             android:onClick="onClick"
             android:padding="5.0dip"
             android:text="@string/action_notes"
+            android:visibility="gone"
             android:textColor="@color/tabtext_choose"
             android:textSize="@dimen/text_size_12" />
 
@@ -39,6 +40,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="3dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:background="@null"
             android:button="@null"
             android:gravity="center"

@@ -31,6 +31,7 @@ import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.DateUtils;
 import com.inhim.pj.utils.GlideCircleUtils;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.OkhttpUploadUtils;
 import com.inhim.pj.utils.PermissionUtils;
 import com.inhim.pj.utils.ViewShowUtils;
@@ -129,9 +130,9 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         ViewShowUtils.show(tv_kiddo, userInfoEntity.getChildrenStatus());
         ViewShowUtils.show(tv_education, userInfoEntity.getEducationLevel());
         if (userInfo.getHeadimgurl() == null || "".equals(userInfo.getHeadimgurl())) {
-            ImageLoader.getInstance().displayImage(userInfo.getWechatUser().getHeadimgurl(), iv_photo);
+            ImageLoaderUtils.setImage(userInfo.getWechatUser().getHeadimgurl(), iv_photo);
         } else {
-            ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(), iv_photo);
+            ImageLoaderUtils.setImage(userInfo.getHeadimgurl(), iv_photo);
         }
         //GlideCircleUtils.displayFromUrl(userInfoEntity.getHeadimgurl(),iv_photo,MyInfoActivity.this);
     }

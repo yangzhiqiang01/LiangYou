@@ -12,6 +12,7 @@ import android.support.multidex.MultiDex;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.HomeActivity;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.FontUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;

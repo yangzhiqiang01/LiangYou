@@ -52,6 +52,7 @@ public class ListenFragment extends Fragment {
     private Boolean refresh = true;
     private ReaderStyle.List rederType;
     private LoadingView loadingView;
+    private String TAG="ListenFragment";
     @Override
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class ListenFragment extends Fragment {
     }
 
     private void initAdapter () {
-        mAdapter = new ListenAdapter(homeList,getActivity());
+        mAdapter = new ListenAdapter(homeList,getActivity(),TAG);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

@@ -17,6 +17,7 @@ import com.inhim.pj.activity.RadioActivity;
 import com.inhim.pj.activity.VideoActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.entity.ReaderList;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -29,9 +30,11 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
 
     private Context context;
     private int size;
-    public CourseOtherItemProvider(Context context,int size) {
+    private String TAG;
+    public CourseOtherItemProvider(Context context,int size,String TAG) {
         this.context=context;
         this.size=size;
+        this.TAG=TAG;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
             TextView tv_num = helper.getView(R.id.tv_num1);
             TextView tv_time = helper.getView(R.id.tv_time1);
             ImageView iv_icon=helper.getView(R.id.iv_icon);
-            ImageLoader.getInstance().displayImage(news.getCover(),iv_title);
+            ImageLoaderUtils.setImage(news.getCover(),iv_title);
             LinearLayout lin_1=helper.getView(R.id.lin_1);
           /*  Log.e("position11",position+"");
             Log.e("position11",size-1+"");*/
@@ -88,6 +91,7 @@ public class CourseOtherItemProvider extends BaseItemProvider<ReaderList.List, B
                     if(news.getType().equals("2")){
                         intent=new Intent(context, VideoActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra("TAG",TAG);
                     }else if(news.getType().equals("3")){
                         intent=new Intent(context, RadioActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

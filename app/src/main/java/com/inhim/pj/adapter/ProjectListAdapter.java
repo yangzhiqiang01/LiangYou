@@ -1,6 +1,7 @@
 package com.inhim.pj.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.utils.GlideUtils;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.yczbj.ycrefreshviewlib.adapter.RecyclerArrayAdapter;
@@ -44,7 +46,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            ImageLoader.getInstance().displayImage(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title);
+            ImageLoaderUtils.setImage(readerStyle.getReaderStyleValue().getCover(),titleHolder.iv_title);
             titleHolder.tv_num.setText("共"+readerStyle.getTotal()+"篇文章");
             titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getSynopsis());
             titleHolder.tv_title.setText(readerStyle.getReaderStyleValue().getValue());
@@ -58,7 +60,7 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            ImageLoader.getInstance().displayImage(readerType.getIcon(),titleHolder.iv_title);
+            ImageLoaderUtils.setImage(readerType.getIcon(),titleHolder.iv_title);
             titleHolder.tv_title.setText(readerType.getName());
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
@@ -116,9 +118,19 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             }else{
                 lin_1.setVisibility(View.VISIBLE);
             }
-            ImageLoader.getInstance().displayImage(data.getCover(),iv_title);
+            if(data.getReadAmount()!=null){
+                tv_title.setTextColor(Color.parseColor("#999999"));
+                tv_num.setTextColor(Color.parseColor("#999999"));
+                tv_content.setTextColor(Color.parseColor("#999999"));
+                tv_content.setText(data.getReadAmount());
+            }else{
+                tv_title.setTextColor(Color.parseColor("#333333"));
+                tv_num.setTextColor(Color.parseColor("#666666"));
+                tv_content.setTextColor(Color.parseColor("#666666"));
+                tv_content.setText("0");
+            }
+            ImageLoaderUtils.setImage(data.getCover(),iv_title);
             tv_title.setText(data.getTitle());
-            tv_content.setText(String.valueOf(data.getReadAmount()));
             if(data.getTimeText()!=null){
                 tv_num.setText(data.getTimeText());
             }

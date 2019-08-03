@@ -28,8 +28,10 @@ import com.inhim.pj.utils.ScreenUtils;
 public class ChapterItemProvider extends BaseItemProvider<ReaderTypeList, BaseViewHolder> {
 
     private Context context;
-    public ChapterItemProvider(Context context) {
+    private String TAG;
+    public ChapterItemProvider(Context context,String TAG) {
         this.context=context;
+        this.TAG=TAG;
     }
 
     @Override
@@ -54,6 +56,7 @@ public class ChapterItemProvider extends BaseItemProvider<ReaderTypeList, BaseVi
                 @Override
                 public void onItemClick(View view, int position) {
                 Intent intent=new Intent(context, ProjectListActivity.class);
+                intent.putExtra("TAG",TAG);
                 intent.putExtra("ReaderTypeList",news.getPage().getList().get(position));
                 context.startActivity(intent);
                 }

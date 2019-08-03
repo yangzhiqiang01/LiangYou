@@ -29,6 +29,7 @@ import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
@@ -109,11 +110,15 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                             intent1.putExtra("result",userInfo);
                             startActivity(intent1);
                         }
-                        tv_name.setText(userInfo.getRealname());
-                        if(userInfo.getHeadimgurl()==null||"".equals(userInfo.getHeadimgurl())){
-                            ImageLoader.getInstance().displayImage(userInfo.getWechatUser().getHeadimgurl(),iv_photo);
+                        if(userInfo.getUsername()==null||"".equals(userInfo.getUsername())){
+                            tv_name.setText(userInfo.getWechatUser().getNickname());
                         }else{
-                            ImageLoader.getInstance().displayImage(userInfo.getHeadimgurl(),iv_photo);
+                            tv_name.setText(userInfo.getUsername());
+                        }
+                        if(userInfo.getHeadimgurl()==null||"".equals(userInfo.getHeadimgurl())){
+                            ImageLoaderUtils.setImage(userInfo.getWechatUser().getHeadimgurl(),iv_photo);
+                        }else{
+                            ImageLoaderUtils.setImage(userInfo.getHeadimgurl(),iv_photo);
                         }
                     }else if(smsResult.getCode()==500){
                         PrefUtils.remove("expire");
