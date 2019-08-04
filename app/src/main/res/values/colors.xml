@@ -14,7 +14,7 @@
     <color name="color999">#999999</color>
     <color name="colorD7">#0079D7</color>
     <color name="toast_color">#7E7E7E</color>
-    <color name="dividing_line_backgroud">#DDDDDD</color>
+    <color name="dividing_line_backgroud">#F5F5F5</color>
     <color name="_secondary_color">#727272</color>
     <!-- dialog背景-->
     <color name="dialog_backgroud">#FAFAFA</color>

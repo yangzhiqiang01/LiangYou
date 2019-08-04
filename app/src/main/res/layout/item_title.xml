@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_18"
             android:textColor="@color/color333"
+            android:textStyle="bold"
             android:padding="@dimen/base_dimen_0"
             android:layout_toRightOf="@+id/iv_lazu"
             android:layout_gravity="center"/>

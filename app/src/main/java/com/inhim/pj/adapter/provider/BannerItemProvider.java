@@ -1,6 +1,7 @@
 package com.inhim.pj.adapter.provider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,9 +10,12 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chaychan.adapter.BaseItemProvider;
 import com.inhim.pj.R;
+import com.inhim.pj.activity.BannerWebViewActivity;
+import com.inhim.pj.activity.WebViewActivity;
 import com.inhim.pj.adapter.ReadingTwoAdapter;
 import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.BannerList;
+import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.view.CustomRoundAngleImageView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -26,12 +30,13 @@ import java.util.List;
  */
 
 public class BannerItemProvider extends BaseItemProvider<BannerList, BaseViewHolder> {
-
-    public BannerItemProvider() {
+    private Context context;
+    public BannerItemProvider(Context context) {
+        this.context=context;
     }
 
     @Override
-    public void convert(BaseViewHolder helper, BannerList news, int i) {
+    public void convert(BaseViewHolder helper, final BannerList news, int i) {
         if (news.getData() == null) {
             //如果没有标题，则直接跳过
             return;
@@ -43,7 +48,11 @@ public class BannerItemProvider extends BaseItemProvider<BannerList, BaseViewHol
             mMZBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
                 @Override
                 public void onPageClick(View view, int position) {
-
+                    if(news.getData().get(position).getLink()!=null){
+                        Intent intent=new Intent(context, BannerWebViewActivity.class);
+                        intent.putExtra("url",news.getData().get(position).getLink());
+                        context.startActivity(intent);
+                    }
                 }
             });
             // 设置数据
@@ -89,8 +98,8 @@ public class BannerItemProvider extends BaseItemProvider<BannerList, BaseViewHol
         @Override
         public void onBind(Context context, int position, BannerList.Data data) {
             // 数据绑定
-            Glide.with(MyApplication.getContext()).load(data.getLink()).into(imageView);
-            //imageView.setImageResource(R.mipmap.ic_launcher);
+            //ImageLoaderUtils.setImage(data.getImgUrl(),imageView);
+            Glide.with(MyApplication.getContext()).load(data.getImgUrl()).into(imageView);
         }
     }
 }

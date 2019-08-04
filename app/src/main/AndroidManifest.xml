@@ -75,10 +75,6 @@
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.ReplacePhoneActivity" />
         <activity android:name=".activity.ProjectListActivity" />
-        <activity android:name=".dowloadvedio.DownloadDetailActivity" />
-        <activity
-            android:name=".dowloadvedio.ListActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".dowloadfile.ui.ListActivity"
             android:screenOrientation="portrait" />
@@ -87,6 +83,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.BannerWebViewActivity"/>
     </application>
 
 </manifest>

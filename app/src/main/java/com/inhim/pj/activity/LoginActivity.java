@@ -83,11 +83,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().length()>=11){
                     btn_gecode.setEnabled(true);
-                    btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode2);
+                    //btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode2);
                     btn_gecode.setTextColor(Color.parseColor("#0079D7"));
                 }else{
                     btn_gecode.setEnabled(false);
-                    btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode1);
+                    //btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode1);
                     btn_gecode.setTextAppearance(R.style.btn_getcode);
                     btn_gecode.setTextColor(Color.parseColor("#999999"));
                 }
@@ -218,7 +218,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         public void onTick(long millisUntilFinished) {
             btn_gecode.setEnabled(false);
-            btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode2);
+            //btn_gecode.setBackgroundResource(R.drawable.backgroud_button_getcode2);
             SpannableString spannableString = new SpannableString(
                     millisUntilFinished / 1000 + "秒后再获取");
             //设置颜色

@@ -32,8 +32,8 @@
     <string name="check_update">检查更新</string>
     <string name="about_us">关于我们</string>
     <string name="share_app">分享APP</string>
-    <string name="login_instructions">登录即标识您同意</string>
-    <string name="login_agreement">《InHim个人用户协议》</string>
+    <string name="login_instructions">我已阅读并同意</string>
+    <string name="login_agreement">《InHim用户服务协议》</string>
     <string name="look_all">查看全部</string>
 
     <!--我的信息界面-->

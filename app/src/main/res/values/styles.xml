@@ -48,7 +48,8 @@
         <item name="android:minHeight">40dip</item>
         <item name="android:paddingLeft">@dimen/base_dimen_5</item>
         <item name="android:paddingRight">@dimen/base_dimen_5</item>
-        <item name="android:background">@drawable/style_button_getcode</item>
+        <item name="android:background">@null</item>
+       <!-- <item name="android:background">@drawable/style_button_getcode</item>-->
     </style>
 
     <style name="text_size_14_black">

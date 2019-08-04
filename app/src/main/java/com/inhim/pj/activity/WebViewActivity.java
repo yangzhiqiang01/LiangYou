@@ -61,6 +61,12 @@ public class WebViewActivity extends BaseActivity {
                 }else{
                     BToast.showText(aboutEntity.getMsg(),false);
                 }
+                webView.getSettings().setDomStorageEnabled(true);
+                if (content == null || content.length() == 0) {
+                    content = "暂无内容";
+                }
+                webView.loadDataWithBaseURL(null, content, mimeType, encoding, null);
+                webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             }
         });
     }
@@ -84,11 +90,6 @@ public class WebViewActivity extends BaseActivity {
         //设置 缓存模式
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         // 开启 DOM storage API 功能
-        webView.getSettings().setDomStorageEnabled(true);
-        if (content == null || content.length() == 0) {
-            content = "暂无内容";
-        }
-        webView.loadDataWithBaseURL(null, content, mimeType, encoding, null);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
     }
 }

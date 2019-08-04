@@ -51,7 +51,7 @@ import okhttp3.Request;
  * Activities that contain this fragment must implement the
  */
 public class MyFragment extends Fragment implements View.OnClickListener {
-    private LinearLayout lin_1,lin_2,lin_3,lin_7,lin_4,lin_5,lin_6,lin_8;
+    private LinearLayout lin_2,lin_3,lin_7,lin_4,lin_5,lin_6,lin_8;
     private Button btn_back_login;
     private Context mContext;
     private TextView tv_setting,mycollection,dowload_list,tv_code;
@@ -145,7 +145,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         tv_code.setText("当前版本V."+MyApplication.getVersion());
         dowload_list=view.findViewById(R.id.dowload_list);
         dowload_list.setOnClickListener(this);
-        lin_1=view.findViewById(R.id.lin_1);
         lin_2=view.findViewById(R.id.lin_2);
         lin_3=view.findViewById(R.id.lin_3);
         lin_4=view.findViewById(R.id.lin_4);
@@ -153,7 +152,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         lin_6=view.findViewById(R.id.lin_6);
         lin_7=view.findViewById(R.id.lin_7);
         lin_8=view.findViewById(R.id.lin_8);
-        lin_1.setOnClickListener(this);
         lin_2.setOnClickListener(this);
         lin_3.setOnClickListener(this);
         lin_4.setOnClickListener(this);
@@ -175,20 +173,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.lin_1:
-                if(token.equals("")){
-                    Intent login=new Intent(mContext,LoginActivity.class);
-                    startActivity(login);
-                }else{
-                    if(userInfo==null){
-                        getInfo(true);
-                    }else{
-                        Intent intent1=new Intent(mContext, MyInfoActivity.class);
-                        intent1.putExtra("result",userInfo);
-                        startActivity(intent1);
-                    }
-                }
-                break;
             case R.id.lin_2:
                 if(token.equals("")){
                     Intent login=new Intent(mContext,LoginActivity.class);
@@ -282,6 +266,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         PrefUtils.remove("expire");
                         PrefUtils.remove("token");
                         PrefUtils.remove("isLogin");
+                        token="";
                         tv_name.setText("点击登录");
                         iv_photo.setImageResource(R.mipmap.user_photo);
                         btn_back_login.setVisibility(View.GONE);

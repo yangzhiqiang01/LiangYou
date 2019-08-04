@@ -47,14 +47,6 @@
             android:paddingBottom="@dimen/base_dimen_5dp"
             >
 
-            <ImageView
-                android:layout_width="@dimen/base_dimen_8"
-                android:layout_height="@dimen/base_dimen_8"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/base_dimen_0"
-                android:layout_marginRight="@dimen/base_dimen_0"
-                android:src="@mipmap/phone" />
-
             <EditText
                 android:id="@+id/ed_mobile"
                 android:layout_width="match_parent"
@@ -62,8 +54,9 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:hint="@string/user_hint"
+                android:layout_marginLeft="@dimen/base_dimen_15"
                 android:inputType="number"
-                android:textColor="@color/color999"
+                android:textColor="@color/color333"
                 android:textColorHint="@color/color999"
                 android:textSize="@dimen/text_size_18" />
         </LinearLayout>
@@ -82,14 +75,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="@dimen/base_dimen_8"
-                android:layout_height="@dimen/base_dimen_8"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/base_dimen_0"
-                android:layout_marginRight="@dimen/base_dimen_0"
-                android:src="@mipmap/emi_code" />
-
             <EditText
                 android:id="@+id/ed_password"
                 android:layout_width="0dp"
@@ -98,8 +83,9 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="@string/please_enter_code"
+                android:layout_marginLeft="@dimen/base_dimen_15"
                 android:inputType="number"
-                android:textColor="@color/color999"
+                android:textColor="@color/color333"
                 android:textColorHint="@color/color999"
                 android:textSize="@dimen/text_size_18" />
 

@@ -82,7 +82,7 @@ public class ReadingTwoAdapter<T> extends MultipleItemRvAdapter<T, BaseViewHolde
     @Override
     public void registerItemProvider() {
         //注册itemProvider
-        mProviderDelegate.registerProvider(new BannerItemProvider());
+        mProviderDelegate.registerProvider(new BannerItemProvider(context));
         mProviderDelegate.registerProvider(new SeriesProvider(context));
         //mProviderDelegate.registerProvider(new CourseOnerItemProvider(context));
         mProviderDelegate.registerProvider(new CourseOtherItemProvider(context,size,TAG));
