@@ -1,11 +1,19 @@
 package com.inhim.pj.activity;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +30,7 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CustomRoundAngleImageView;
 import com.inhim.pj.view.MyScrollView;
+import com.inhim.pj.view.NoScrollWebView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,21 +47,28 @@ public class ArticleActivity extends BaseActivity {
     private CheckBox checkbox;
     private ReaderInfo.Reader readerInfo;
     private Gson gson;
-    private WebView webView;
+    private NoScrollWebView webView;
     String content;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
     private String title ;
     private String description;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_article;
+    }
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson=new Gson();
         initView();
         getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {
@@ -108,6 +124,12 @@ public class ArticleActivity extends BaseActivity {
         textview4 = findViewById(R.id.textview4);
         custImageview = findViewById(R.id.custImageview);
         webView=findViewById(R.id.webView);
+        initWebview();
+        /*webView.getSettings().setJavaScriptEnabled(true);
+        //设置 缓存模式
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 开启 DOM storage API 功能
+        webView.getSettings().setDomStorageEnabled(true);*/
         iv_share = findViewById(R.id.iv_share);
         iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +146,58 @@ public class ArticleActivity extends BaseActivity {
         });
         textview=findViewById(R.id.textview);
     }
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initWebview() {
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        //启用应用缓存
+        webSettings.setAppCacheEnabled(false);
+        webSettings.setDatabaseEnabled(false);
+        //开启DOM缓存，关闭的话H5自身的一些操作是无效的
+        webSettings.setDomStorageEnabled(true);
+        //适应屏幕
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                //解决android7.0以后版本加载异常问题
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.loadUrl(request.getUrl().toString());
+                } else {
+                    view.loadUrl(request.toString());
+                }
+                return true;
+            }
 
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            @TargetApi(android.os.Build.VERSION_CODES.M)
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+                // 这个方法在6.0才出现
+                int statusCode = errorResponse.getStatusCode();
+                if (404 == statusCode || 500 == statusCode) {
+                }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                //接受证书
+                handler.proceed();
+            }
+        });
+    }
     private void getReaderInfo(int readerId) {
         showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
@@ -154,11 +227,6 @@ public class ArticleActivity extends BaseActivity {
                     textview3.setText(String.valueOf(readerInfo.getReadAmount()));
                     textview4.setText(readerInfo.getTimeText());
                     content=readerInfo.getContent();
-                    webView.getSettings().setJavaScriptEnabled(true);
-                    //设置 缓存模式
-                    webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-                    // 开启 DOM storage API 功能
-                    webView.getSettings().setDomStorageEnabled(true);
                     if (content == null || content.length() == 0) {
                         content = "暂无内容";
                     }

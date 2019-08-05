@@ -75,12 +75,15 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     private Gson gson;
     private int resultCode = 100;
     private UserInfo.User userInfo;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle arg0) {
-        super.onCreate(arg0);
-        setContentView(R.layout.activity_myinfo);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_myinfo;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson = new Gson();
         initView();
         userInfo = (UserInfo.User) getIntent().getSerializableExtra("result");
@@ -93,6 +96,11 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         kiddoList.add("有");
         calendar = Calendar.getInstance();
         setLinear();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {

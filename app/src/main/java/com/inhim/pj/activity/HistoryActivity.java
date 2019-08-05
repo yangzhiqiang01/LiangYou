@@ -51,12 +51,15 @@ public class HistoryActivity extends BaseActivity {
     private List<CollectionList.List> historyList;
     private Map vipCollectionIdsMap;
     private CenterDialog centerDialog;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_history;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         tv_clean=findViewById(R.id.tv_clean);
         tv_clean.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +80,12 @@ public class HistoryActivity extends BaseActivity {
         handleRecyclerViewInfo();
         getHistoryList();
     }
+
+    @Override
+    public void destory() {
+
+    }
+
     private void setDiaglog(){
         View outerView = LayoutInflater.from(HistoryActivity.this).inflate(R.layout.dialog_deletes, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);

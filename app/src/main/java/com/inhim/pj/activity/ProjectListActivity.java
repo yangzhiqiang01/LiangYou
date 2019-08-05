@@ -42,12 +42,15 @@ public class ProjectListActivity extends BaseActivity {
     private int totalPage;
     private Gson gson;
     private String TAG;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_list);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_project_list;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson=new Gson();
         ImageView iv_back=findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +66,12 @@ public class ProjectListActivity extends BaseActivity {
         initAdapter();
         getReaderList();
     }
+
+    @Override
+    public void destory() {
+
+    }
+
     private void initAdapter() {
         mAdapter = new ProjectListAdapter(ProjectListActivity.this);
         ycRefreshView.setLayoutManager(new LinearLayoutManager(ProjectListActivity.this));

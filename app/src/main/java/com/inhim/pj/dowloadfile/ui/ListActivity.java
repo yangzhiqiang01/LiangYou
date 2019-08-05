@@ -40,7 +40,6 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_list);
-    setImmersionStatusBar();
     initView();
     fs=new ArrayList<>();
     goOutFragment=new HaveDownloadedFragment();
@@ -54,25 +53,6 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
     MyPagerAdapter adapter=new MyPagerAdapter(fm);
     viewPager.setAdapter(adapter);
     setListener();
-  }
-  /**
-   * 沉浸式状态栏
-   */
-  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-  public void setImmersionStatusBar() {
-//        getSupportActionBar().hide();
-//        View decorView = getWindow().getDecorView();
-//        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-//        decorView.setSystemUiVisibility(option);
-//        getWindow().setStatusBarColor(Color.TRANSPARENT);
-    if (Build.VERSION.SDK_INT >= 21) {
-      View decorView = getWindow().getDecorView();
-      int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-              | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-      decorView.setSystemUiVisibility(option);
-      getWindow().setStatusBarColor(Color.TRANSPARENT);
-    }
-
   }
   private void setListener() {
     // TODO Auto-generated method stub

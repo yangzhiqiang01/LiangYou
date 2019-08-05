@@ -84,15 +84,18 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     private String title;
     private String description;
     private String TAG;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Object offerLayout() {
+        return R.layout.activity_video;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson = new Gson();
         instance = this;
-        setContentView(R.layout.activity_video);
         TAG=getIntent().getStringExtra("TAG");
-        setImmersionStatusBar();
         initView();
         srearchreceiver = new FullScreenReceiver();
         IntentFilter finishfilter1 = new IntentFilter();
@@ -105,6 +108,12 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         } else {
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0), true);
         }
+    }
+
+    @Override
+    public void destory() {
+        unregisterReceiver(srearchreceiver);
+        JCVideoPlayer.releaseAllVideos();
     }
 
     private void getReaderInfo(int readerId, final boolean isOne) {
@@ -333,13 +342,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
                 myBusinessInfoDid.updateAll("readerId = ?", businessInfoDid.getReaderId());
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(srearchreceiver);
-        JCVideoPlayer.releaseAllVideos();
     }
 
     public int getDuration() {

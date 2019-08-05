@@ -1,7 +1,13 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="NewApi">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.Design.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:typeface">serif</item>
     </style>
     <style name="tab_style">
@@ -10,6 +16,7 @@
         <item name="android:background">@drawable/table_icon_pressed</item>
         <item name="android:textColor">@drawable/tabtext_choose</item>
     </style>
+
     <style name="home_tab1">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_10</item>
@@ -17,6 +24,7 @@
         <item name="android:drawableTop">@drawable/table_home1</item>
         <item name="android:textColor">@drawable/tabtext_home</item>
     </style>
+
     <style name="home_tab2">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_10</item>
@@ -24,38 +32,41 @@
         <item name="android:drawableTop">@drawable/table_home2</item>
         <item name="android:textColor">@drawable/tabtext_home</item>
     </style>
+
     <style name="btn_login_style">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">18.0sp</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:background">@drawable/button_color</item>
     </style>
+
     <style name="btn_call_style">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">16.0sp</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:background">@drawable/button_logout_color</item>
     </style>
+
     <style name="btn_logout_style">
         <item name="android:textColor">@color/color333</item>
         <item name="android:textSize">18.0sp</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:background">@drawable/button_logout_color</item>
     </style>
+
     <style name="btn_getcode">
         <item name="android:textColor">@drawable/button_getcode_text</item>
         <item name="android:textSize">16.0sp</item>
         <item name="android:minHeight">40dip</item>
-        <item name="android:paddingLeft">@dimen/base_dimen_5</item>
-        <item name="android:paddingRight">@dimen/base_dimen_5</item>
         <item name="android:background">@null</item>
-       <!-- <item name="android:background">@drawable/style_button_getcode</item>-->
+        <!-- <item name="android:background">@drawable/style_button_getcode</item>-->
     </style>
 
     <style name="text_size_14_black">
         <item name="android:textSize">14.0dip</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="dialog" parent="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -75,10 +86,12 @@
         <item name="android:windowEnterAnimation">@anim/actionsheet_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
     </style>
+
     <style name="ActionSheetDialogAnimationBotoom" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/actionsheet_dialog_out</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_in</item>
     </style>
+
     <style name="ActionSheetDialogStyle" parent="@android:style/Theme.Dialog">
 
         <!-- 背景透明 -->
@@ -114,7 +127,7 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">true</item>
         <!-- Dialog进入及退出动画 -->
-       <!-- <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimationBotoom</item>-->
+        <!-- <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimationBotoom</item>-->
     </style>
     <!-- 发文查阅状态，tab按钮 -->
     <style name="post_read">
@@ -124,12 +137,14 @@
         <item name="android:textSize">13.5sp</item>
         <item name="android:background">@drawable/post_read_selector</item>
     </style>
+
     <style name="Dialog" parent="android:style/Theme.Dialog">
         <item name="android:background">#00000000</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+
     <style name="post_unread">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@drawable/post_text_selector</item>

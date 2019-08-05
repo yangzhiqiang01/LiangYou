@@ -17,7 +17,7 @@ android {
         release {
             //SHA1: 4A2FD3626FFED787BB9D9C11FF0443914F0CD3F0
             //      409E5F60CD8EB4F00F5C5BE63A70A29E
-            storeFile file('E:\\HS_autograph\\HS_qianming')
+            storeFile file('/Users/apple/Desktop/HS_autograph/HS_qianming')
             storePassword '13772914588'
             keyAlias = 'hs_oa'
             keyPassword '13772914588'
@@ -54,6 +54,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta2'
     implementation 'com.android.support:support-v4:28.0.0'
@@ -78,6 +79,7 @@ dependencies {
     implementation 'com.j256.ormlite:ormlite-android:5.1'
     implementation 'com.j256.ormlite:ormlite-core:5.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //下拉刷新
     implementation 'org.yczbj:YCRefreshViewLib:2.5.7'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.1'
@@ -95,4 +97,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'org.litepal.android:java:3.0.0'
     implementation files('libs/pldroid-player-2.0.6.jar')
+    //屏幕适配
+    implementation 'com.github.jarryleo:MagicScreenAdapter:v1.5'
+    //设置字体
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
 }

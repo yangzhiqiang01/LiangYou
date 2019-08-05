@@ -1,9 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,7 +13,6 @@ import com.inhim.pj.entity.AboutEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
-
 import java.io.IOException;
 
 import okhttp3.Request;
@@ -30,15 +25,23 @@ public class WebViewActivity extends BaseActivity {
     private String Type;
     private ImageView iv_back;
     private TextView tvCourse;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_view);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_web_view;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         Type=getIntent().getStringExtra("Type");
         initView();
         getAppAbout();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void getAppAbout() {

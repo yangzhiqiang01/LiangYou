@@ -19,7 +19,7 @@
             <enum name="center" value="354"/>
             <enum name="right" value="894"/>
         </attr>
-
+        <attr name="textFieldStyle" format="reference"/>
     </declare-styleable>
 
 </resources>

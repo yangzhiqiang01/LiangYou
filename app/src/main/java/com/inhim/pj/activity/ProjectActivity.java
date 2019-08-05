@@ -32,12 +32,15 @@ public class ProjectActivity extends BaseActivity {
     private List<ReaderStyle.List> typeList;
     private ProjectAdapter mAdapter;
     private TextView tvCourse;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_project;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         ycRefreshView=findViewById(R.id.ycRefreshView);
         tvCourse=findViewById(R.id.tvCourse);
         tvCourse.setText("系列专题");
@@ -52,6 +55,12 @@ public class ProjectActivity extends BaseActivity {
         initAdapter();
         getReaderStyle();
     }
+
+    @Override
+    public void destory() {
+
+    }
+
     private void initAdapter() {
         typeList=new ArrayList();
         mAdapter = new ProjectAdapter(ProjectActivity.this);

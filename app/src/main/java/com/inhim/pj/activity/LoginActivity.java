@@ -31,6 +31,7 @@ import com.inhim.pj.entity.SMSResult;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -59,8 +60,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        setImmersionStatusBar();
+
+    }
+
+    @Override
+    public Object offerLayout() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
+        StatusBarUtils.setAndroidNativeLightStatusBar(this,false);
         MyApplication.instance.addActivity(this);
         gson = new Gson();
         if (PrefUtils.getBoolean("isLogin", false)) {
@@ -69,6 +80,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             finish();
         }
         initView();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {
@@ -209,10 +225,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     CountDownTimer timer = new CountDownTimer(50000, 1000) {
         @Override
@@ -279,25 +291,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
- /*   @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 0) {
-            String code = data.getStringExtra("code");
-            MyOkHttpClient.getInstance().asyncGet(Urls.wechatCallback(code), new MyOkHttpClient.HttpCallBack() {
-                @Override
-                public void onError(Request request, IOException e) {
-
-                }
-
-                @Override
-                public void onSuccess(Request request, String result) {
-                    Log.e("result", result);
-                }
-            });
-        }
-    }
-*/
     private void setCenterDiaolog() {
         View outerView = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_about, null);
         Button btn_ok = outerView.findViewById(R.id.btn_ok);

@@ -57,6 +57,10 @@ public class BannerItemProvider extends BaseItemProvider<BannerList, BaseViewHol
             });
             // 设置数据
             List<BannerList.Data> bannlist1 =news.getData();
+            if(bannlist1.size()==1){
+                mMZBanner.setCanLoop(false);
+                mMZBanner.setIndicatorVisible(false);
+            }
             // 设置数据
             mMZBanner.setPages(bannlist1, new MZHolderCreator<LocalImageHolderView>() {
                 @Override
@@ -98,7 +102,6 @@ public class BannerItemProvider extends BaseItemProvider<BannerList, BaseViewHol
         @Override
         public void onBind(Context context, int position, BannerList.Data data) {
             // 数据绑定
-            //ImageLoaderUtils.setImage(data.getImgUrl(),imageView);
             Glide.with(MyApplication.getContext()).load(data.getImgUrl()).into(imageView);
         }
     }

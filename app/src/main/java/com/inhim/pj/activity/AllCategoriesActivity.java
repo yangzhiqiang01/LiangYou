@@ -36,12 +36,15 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
     SmartRefreshLayout home_SwipeRefreshLayout;
     private int mPageNum = 1;
     private Boolean refresh = true;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_categories);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_all_categories;
+    }
+    @Override
+    public void onBindView() {
+        hideActionBar();
         categoriesList1 = new ArrayList();
         categoriesList2 = new ArrayList();
         categoriesList3 = new ArrayList();
@@ -50,6 +53,11 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
         initView();
         initAdapter();
         getReaderTypeList();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initAdapter() {

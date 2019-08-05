@@ -47,16 +47,24 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     /**
      * 微信登录相关
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bind_phone);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_bind_phone;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         openId=getIntent().getStringExtra("openId");
         MyApplication.instance.addActivity(this);
         gson = new Gson();
         initView();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {

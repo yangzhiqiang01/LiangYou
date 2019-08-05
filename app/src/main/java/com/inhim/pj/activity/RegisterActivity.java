@@ -30,15 +30,24 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_weixin,iv_close;
     private Button btn_login;
     private Gson gson;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_register;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson=new Gson();
         initView();
     }
+
+    @Override
+    public void destory() {
+
+    }
+
     private void initView(){
         iv_close=findViewById(R.id.iv_close);
         iv_close.setOnClickListener(this);

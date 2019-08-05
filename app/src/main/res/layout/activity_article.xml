@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".activity.ArticleActivity">
 
-    <com.inhim.pj.view.MyScrollView
+    <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,6 +17,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         android:layout_marginTop="@dimen/title_top"
+        android:descendantFocusability="blocksDescendants"
+        android:fillViewport="true"
+        android:scrollbars="none"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp">
 
@@ -98,7 +101,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textview"
                 tools:ignore="MissingConstraints" />
 
-            <WebView
+            <com.inhim.pj.view.NoScrollWebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,10 +110,10 @@
                 android:padding="@dimen/base_dimen_0"
                 tools:ignore="MissingConstraints,WebViewLayout">
 
-            </WebView>
+            </com.inhim.pj.view.NoScrollWebView>
 
         </android.support.constraint.ConstraintLayout>
-    </com.inhim.pj.view.MyScrollView>
+    </ScrollView>
     <RelativeLayout
         android:id="@+id/rela_title"
         android:layout_width="match_parent"

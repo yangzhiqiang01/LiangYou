@@ -49,14 +49,22 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
     private Gson gson;
     private int resultCode=100;
     private CenterDialog centerDialog;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_replace_phone);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_replace_phone;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson = new Gson();
         initView();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {
@@ -147,11 +155,6 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     CountDownTimer timer = new CountDownTimer(50000, 1000) {

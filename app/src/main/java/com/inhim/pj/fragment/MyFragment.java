@@ -215,12 +215,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 UpgradeInfo upgradeInfo = Beta.getUpgradeInfo();
 
                 if (upgradeInfo == null) {
-                    BToast.showText("已是最新版本");
+                    BToast.showText("已是最新版本",true);
                     return;
                 }else if(upgradeInfo.versionCode> MyApplication.getVersionCode()){
                     Beta.checkUpgrade();
                 }else{
-                    BToast.showText("已是最新版本");
+                    BToast.showText("已是最新版本",true);
                 }
                 break;
             case R.id.lin_8:

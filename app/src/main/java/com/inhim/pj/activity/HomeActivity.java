@@ -1,6 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.app.Activity;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -9,14 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RadioButton;
 
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.fragment.MyFragment;
 import com.inhim.pj.fragment.ReadingFragment;
+import com.inhim.pj.utils.StatusBarUtils;
 
 import java.util.ArrayList;
 
@@ -25,28 +23,24 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<Fragment> fs;
     private RadioButton radio1;
     private RadioButton radio2;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        //setStatusBarColor(this, R.color.colorD7);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_home;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         initView();
     }
-    /**
-     * 修改状态栏颜色，支持4.4以上版本
-     * @param activity
-     * @param colorId
-     */
-    public static void setStatusBarColor(Activity activity, int colorId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = activity.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(colorId));
-        }
+
+    @Override
+    public void destory() {
+
     }
+
     private void initView() {
         viewPager=findViewById(R.id.viewPager);
         radio1=findViewById(R.id.radio1);

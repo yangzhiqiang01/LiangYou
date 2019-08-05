@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/magin"
-            android:background="@color/dialog_backgroud"
+            android:background="@drawable/backgroud_white"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:layout_marginLeft="@dimen/base_dimen_0"
             android:layout_height="wrap_content">
@@ -20,7 +20,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="@dimen/text_size_18"
-                android:layout_marginTop="@dimen/base_dimen_1"
+                android:layout_marginTop="@dimen/base_dimen_11"
+                android:textColor="@color/color333"
                 android:gravity="center"
                 android:text="遇到问题" />
             <TextView
@@ -35,9 +36,9 @@
 
             <TextView
                 android:id="@+id/email"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:textSize="@dimen/textsize16"
                 android:layout_margin="@dimen/magin"
                 android:text="邮箱：6648013@qq.com"
@@ -52,8 +53,8 @@
                     style="@style/btn_login_style"
                     android:layout_marginTop="@dimen/base_dimen_1"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/base_dimen_1"
-                    android:text="@string/ok"/>
+                    android:layout_marginBottom="@dimen/base_dimen_11"
+                    android:text="@string/close"/>
             </RelativeLayout>
 
         </LinearLayout>

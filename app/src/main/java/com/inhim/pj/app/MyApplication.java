@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -28,6 +30,9 @@ import org.litepal.LitePalApplication;
 import java.io.File;
 import java.util.Stack;
 
+import cn.leo.magic.screen.MagicScreenAdapter;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 public class MyApplication extends LitePalApplication {
     private static Context context;
     private static Context mContext;
@@ -43,10 +48,14 @@ public class MyApplication extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        //设置全局默认字体样式
+        FontUtils.setDefaultFont(this,"SERIF","fonts/iconfont.ttf");
         //已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex
         MultiDex.install(this);
         // 初始化
         LitePal.initialize(this);
+        //屏幕适配
+        MagicScreenAdapter.initDesignWidthInDp(400);
         mContext = this.getBaseContext();
         context = this;
         instance=this;

@@ -1,8 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,13 +27,21 @@ public class SettingActivity extends BaseActivity {
     TextView tv_size;
     CheckBox checkbox;
     private CenterDialog centerDialog;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
-        setImmersionStatusBar();
+    public Object offerLayout() {
+        return R.layout.activity_setting;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         initView();
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     private void initView() {

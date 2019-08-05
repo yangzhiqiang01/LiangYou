@@ -70,13 +70,15 @@ public class RadioActivity extends BaseActivity implements
     final String encoding = "UTF-8";
     private String title ;
     private String description;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Object offerLayout() {
+        return R.layout.activity_radio;
+    }
+    @Override
+    public void onBindView() {
+        hideActionBar();
         gson = new Gson();
-        setContentView(R.layout.activity_radio);
-        setImmersionStatusBar();
         initView();
         businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
@@ -85,6 +87,11 @@ public class RadioActivity extends BaseActivity implements
         } else {
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
         }
+    }
+
+    @Override
+    public void destory() {
+        JCVideoPlayer.releaseAllVideos();
     }
 
     private void getReaderInfo(int readerId) {
@@ -209,11 +216,6 @@ public class RadioActivity extends BaseActivity implements
                 myBusinessInfoDid.updateAll("readerId = ?", businessInfoDid.getReaderId());
             }
         }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        JCVideoPlayer.releaseAllVideos();
     }
     public int getDuration() {
         //视频总时间
