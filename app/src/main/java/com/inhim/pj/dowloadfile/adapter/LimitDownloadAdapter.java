@@ -3,6 +3,7 @@ package com.inhim.pj.dowloadfile.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -92,7 +93,8 @@ public class LimitDownloadAdapter extends BaseRecyclerDidViewAdapter<DownloadInf
     }
     @Override
     public UploadHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_download_info,null);
+        View view = LayoutInflater.from(context).inflate(
+                R.layout.item_download_info, parent, false);
         return new UploadHolder(view);
     }
 

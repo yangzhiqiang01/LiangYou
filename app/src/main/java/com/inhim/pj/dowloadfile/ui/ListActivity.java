@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.inhim.pj.R;
+import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.utils.StatusBarUtils;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 /**
  * How to use Android Downloader in RecyclerView.
  */
-public class ListActivity extends FragmentActivity implements View.OnClickListener{
+public class ListActivity extends BaseActivity implements View.OnClickListener{
 
 
   private TextView tvCourse,tv_edit;
@@ -35,11 +37,16 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
   private boolean isOneFragment=true;
   private Fragment goOutFragment;
   private Fragment goOutTwoFragment;
-  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_list);
+  public Object offerLayout() {
+    return R.layout.activity_list;
+  }
+
+  @Override
+  public void onBindView() {
+    hideActionBar();
+    StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
     initView();
     fs=new ArrayList<>();
     goOutFragment=new HaveDownloadedFragment();
@@ -54,6 +61,12 @@ public class ListActivity extends FragmentActivity implements View.OnClickListen
     viewPager.setAdapter(adapter);
     setListener();
   }
+
+  @Override
+  public void destory() {
+
+  }
+
   private void setListener() {
     // TODO Auto-generated method stub
     viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

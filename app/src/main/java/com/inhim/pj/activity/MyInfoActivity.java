@@ -34,6 +34,7 @@ import com.inhim.pj.utils.GlideCircleUtils;
 import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.OkhttpUploadUtils;
 import com.inhim.pj.utils.PermissionUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.utils.ViewShowUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.ChooseDialog;
@@ -84,6 +85,7 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
         userInfo = (UserInfo.User) getIntent().getSerializableExtra("result");

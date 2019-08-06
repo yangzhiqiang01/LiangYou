@@ -26,6 +26,7 @@ import com.inhim.pj.entity.ReaderInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CustomRoundAngleImageView;
@@ -61,6 +62,7 @@ public class ArticleActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson=new Gson();
         initView();
         getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
@@ -199,25 +201,22 @@ public class ArticleActivity extends BaseActivity {
         });
     }
     private void getReaderInfo(int readerId) {
-        showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                hideLoading();
                 BToast.showText("网络错误",false);
             }
 
             @Override
             public void onSuccess(Request request, String result) {
-                hideLoading();
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 if(readerInfos.getCode()==0){
                     readerInfo=readerInfos.getReader();
                     Glide.with(ArticleActivity.this).load(readerInfo.getCover()).into(custImageview);
                     title=readerInfo.getTitle() ;
                     description=readerInfo.getSynopsis();
-                    if(description!=null&&"".equals(description)){
+                    if(description!=null&&!"".equals(description)){
                         textview.setVisibility(View.VISIBLE);
                         textview.setText(description);
                     }

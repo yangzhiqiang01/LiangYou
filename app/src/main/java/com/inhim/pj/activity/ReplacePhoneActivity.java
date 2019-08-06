@@ -30,6 +30,7 @@ import com.inhim.pj.entity.SMSResult;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 
@@ -58,6 +59,7 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
     }

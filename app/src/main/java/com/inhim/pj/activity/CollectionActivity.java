@@ -31,6 +31,7 @@ import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.entity.CollectionTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 import com.inhim.pj.view.MyGridView;
@@ -80,6 +81,7 @@ public class CollectionActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         mRecyclerView = findViewById(R.id.onceTask_member_ycView);
         cb_doload = findViewById(R.id.cb_doload);
         lin_caozuo = findViewById(R.id.lin_caozuo);

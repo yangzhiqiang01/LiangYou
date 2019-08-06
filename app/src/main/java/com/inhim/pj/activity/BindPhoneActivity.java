@@ -28,6 +28,7 @@ import com.inhim.pj.entity.WeChatEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 
 import org.json.JSONException;
@@ -56,6 +57,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         openId=getIntent().getStringExtra("openId");
         MyApplication.instance.addActivity(this);
         gson = new Gson();

@@ -201,12 +201,6 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
             }
         });
         tvFile.setText("存储路径:" + Urls.getFilePath());
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        }
         initData();
         return view;
     }

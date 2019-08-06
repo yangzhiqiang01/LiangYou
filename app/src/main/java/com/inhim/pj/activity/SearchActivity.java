@@ -20,6 +20,7 @@ import com.inhim.pj.entity.HistoricalRecordEntity;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.SearchView;
 
@@ -89,6 +90,7 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initViews();
         //初始化热搜版数据

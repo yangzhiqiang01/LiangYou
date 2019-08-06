@@ -23,6 +23,7 @@ import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -78,6 +79,7 @@ public class RadioActivity extends BaseActivity implements
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
         businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
@@ -95,17 +97,14 @@ public class RadioActivity extends BaseActivity implements
     }
 
     private void getReaderInfo(int readerId) {
-        showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
-                hideLoading();
                 ReaderInfo readerInfos = gson.fromJson(result, ReaderInfo.class);
                 if (readerInfos.getCode() == 000) {
                     results = result;

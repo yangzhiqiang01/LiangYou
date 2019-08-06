@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.inhim.pj.R;
 import com.inhim.pj.app.BaseActivity;
+import com.inhim.pj.utils.StatusBarUtils;
 
 public class BannerWebViewActivity extends BaseActivity {
     WebView webView;
@@ -22,6 +23,7 @@ public class BannerWebViewActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         url=getIntent().getStringExtra("url");
         initView();
     }

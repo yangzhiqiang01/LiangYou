@@ -12,6 +12,7 @@ import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.AboutEntity;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import java.io.IOException;
 
@@ -34,6 +35,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         Type=getIntent().getStringExtra("Type");
         initView();
         getAppAbout();

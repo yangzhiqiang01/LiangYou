@@ -17,6 +17,7 @@ import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 
 import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
 import org.yczbj.ycrefreshviewlib.view.YCRefreshView;
@@ -41,6 +42,7 @@ public class ProjectActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         ycRefreshView=findViewById(R.id.ycRefreshView);
         tvCourse=findViewById(R.id.tvCourse);
         tvCourse.setText("系列专题");

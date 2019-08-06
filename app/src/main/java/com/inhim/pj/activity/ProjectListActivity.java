@@ -19,6 +19,7 @@ import com.inhim.pj.entity.ReaderStyle;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 
 import org.yczbj.ycrefreshviewlib.inter.OnItemClickListener;
 import org.yczbj.ycrefreshviewlib.inter.OnLoadMoreListener;
@@ -51,14 +52,8 @@ public class ProjectListActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson=new Gson();
-        ImageView iv_back=findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         ycRefreshView=findViewById(R.id.ycRefreshView);
         readerstyle= (ReaderStyle.List) getIntent().getSerializableExtra("ReaderStyle");
         readerType= (ReaderTypeList.List) getIntent().getSerializableExtra("ReaderTypeList");

@@ -21,6 +21,7 @@ import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.entity.CollectionList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 
@@ -60,6 +61,7 @@ public class HistoryActivity extends BaseActivity {
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         tv_clean=findViewById(R.id.tv_clean);
         tv_clean.setOnClickListener(new View.OnClickListener() {
             @Override

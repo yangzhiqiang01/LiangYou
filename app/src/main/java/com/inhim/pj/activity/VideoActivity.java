@@ -35,6 +35,7 @@ import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -93,6 +94,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onBindView() {
         hideActionBar();
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         instance = this;
         TAG=getIntent().getStringExtra("TAG");
@@ -385,13 +387,11 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         checkbox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoading("收藏中");
                 MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
                 myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
                         new MyOkHttpClient.HttpCallBack() {
                             @Override
                             public void onError(Request request, IOException e) {
-                                hideLoading();
                                 if (checkbox.isChecked()) {
                                     checkbox.setChecked(false);
                                 } else {
@@ -401,7 +401,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
                             @Override
                             public void onSuccess(Request request, String result) {
-                                hideLoading();
                                 try {
                                     JSONObject jsonObject = new JSONObject(result);
                                     if (jsonObject.getInt("code") != 0) {

@@ -1,5 +1,6 @@
 package com.inhim.pj.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +26,8 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
 
     private ReaderStyle.List readerStyle;
     private ReaderTypeList.List readerType;
-    private Context context;
-    public ProjectListAdapter(Context context) {
+    private Activity context;
+    public ProjectListAdapter(Activity context) {
         super(context);
         this.context=context;
     }
@@ -50,6 +51,12 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             titleHolder.tv_num.setText("共"+readerStyle.getTotal()+"篇文章");
             titleHolder.tv_content.setText(readerStyle.getReaderStyleValue().getSynopsis());
             titleHolder.tv_title.setText(readerStyle.getReaderStyleValue().getValue());
+            titleHolder.iv_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.finish();
+                }
+            });
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
         }
@@ -62,6 +69,12 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
             );
             ImageLoaderUtils.setImage(readerType.getIcon(),titleHolder.iv_title);
             titleHolder.tv_title.setText(readerType.getName());
+            titleHolder.iv_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.finish();
+                }
+            });
             viewGroup.addView(view,0,layoutParams);
             return personViewHolder;
         }
@@ -71,23 +84,25 @@ public class ProjectListAdapter extends RecyclerArrayAdapter<ReaderList.List> {
         public TextView tv_title;
         public TextView tv_content;
         public TextView tv_num;
-        public ImageView iv_title;
+        public ImageView iv_title,iv_back;
         public TitleHolder(View itemView) {
             super(itemView);
             tv_title=itemView.findViewById(R.id.tv_title);
             tv_content=itemView.findViewById(R.id.tv_content);
             tv_num=itemView.findViewById(R.id.tv_num);
             iv_title=itemView.findViewById(R.id.iv_title);
+            iv_back=itemView.findViewById(R.id.iv_back);
         }
     }
 
     class TitleTypeHolder extends RecyclerView.ViewHolder {
         public TextView tv_title;
-        public ImageView iv_title;
+        public ImageView iv_title,iv_back;
         public TitleTypeHolder(View itemView) {
             super(itemView);
             tv_title=itemView.findViewById(R.id.tv_title);
             iv_title=itemView.findViewById(R.id.iv_title);
+            iv_back=itemView.findViewById(R.id.iv_back);
         }
     }
 
