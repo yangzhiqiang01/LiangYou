@@ -1,5 +1,6 @@
 package com.inhim.pj.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import com.google.gson.Gson;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.CollectionActivity;
 import com.inhim.pj.activity.HistoryActivity;
+import com.inhim.pj.activity.HomeActivity;
 import com.inhim.pj.activity.LoginActivity;
 import com.inhim.pj.activity.MyInfoActivity;
 import com.inhim.pj.activity.SettingActivity;
@@ -35,6 +37,7 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.LoadingView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 
@@ -206,8 +209,15 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent4);
                 break;
             case R.id.dowload_list:
-                Intent intent5=new Intent(getActivity(), ListActivity.class);
-                startActivity(intent5);
+                RxPermissions rxPermissions = new RxPermissions(getActivity());
+                rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+                    if (granted) {
+                        Intent intent5=new Intent(getActivity(), ListActivity.class);
+                        startActivity(intent5);
+                    } else {
+                        BToast.showText("读写权限被拒绝",true);
+                    }
+                });
                 break;
             case R.id.lin_6:
                 /***** 检查更新 *****/

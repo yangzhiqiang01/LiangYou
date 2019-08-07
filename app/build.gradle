@@ -50,6 +50,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -100,5 +104,5 @@ dependencies {
     //屏幕适配
     implementation 'com.github.jarryleo:MagicScreenAdapter:v1.5'
     //设置字体
-    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 }

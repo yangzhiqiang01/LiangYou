@@ -4,8 +4,12 @@ import android.util.Log;
 
 
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 
 import org.greenrobot.eventbus.EventBus;
+import org.litepal.LitePal;
+
+import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -53,6 +57,25 @@ public class DownloadLimitObserver implements Observer<DownloadInfo> {
     public void onComplete() {
         Log.d("My_Log","onComplete");
         if (downloadInfo != null){
+            List<DownloadInfo> person = LitePal.where("url = ?", downloadInfo.getUrl()).find(DownloadInfo.class);
+            if(person!=null&&person.size()>0){
+                for(int i=0;i<person.size();i++){
+                    MyBusinessInfoDid infosDid = new MyBusinessInfoDid();
+                    infosDid.setContent(person.get(i).getContent());
+                    infosDid.setCover(person.get(i).getCover());
+                    infosDid.setFilePath(person.get(i).getFilePath());
+                    //infosDid.setProgress(infos.get(i).getProgress());
+                    infosDid.setReaderId(person.get(i).getReaderId());
+                    infosDid.setReaderTypeId(person.get(i).getReaderTypeId());
+                    infosDid.setTitle(person.get(i).getTitle());
+                    infosDid.setUrl(person.get(i).getUrl());
+                    infosDid.setSynopsis(person.get(i).getSynopsis());
+                    infosDid.setType(person.get(i).getType());
+                    infosDid.setTotal(person.get(i).getTotal());
+                    infosDid.save();
+                    person.get(i).delete();
+                }
+            }
             downloadInfo.setDownloadStatus(DownloadInfo.DOWNLOAD_OVER);
             EventBus.getDefault().post(downloadInfo);
         }

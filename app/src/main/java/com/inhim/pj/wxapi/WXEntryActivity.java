@@ -12,6 +12,7 @@ import com.inhim.pj.R;
 import com.inhim.pj.activity.BindPhoneActivity;
 import com.inhim.pj.activity.HomeActivity;
 import com.inhim.pj.activity.LoginActivity;
+import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.app.MyApplication;
 import com.inhim.pj.entity.LoginEntity;
 import com.inhim.pj.entity.WXAccessTokenEntity;
@@ -39,7 +40,7 @@ import java.util.HashMap;
 import okhttp3.Headers;
 import okhttp3.Request;
 
-public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
+public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler {
 
     private IWXAPI wxapi;
     private Gson gson;
@@ -51,13 +52,22 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wxentry);
+    public Object offerLayout() {
+        return R.layout.activity_wxentry;
+    }
+
+    @Override
+    public void onBindView() {
+        hideActionBar();
         MyApplication.instance.addActivity(this);
         gson=new Gson();
         wxapi = WXAPIFactory.createWXAPI(this, MyApplication.appID);
         wxapi.handleIntent(getIntent(), this);
+    }
+
+    @Override
+    public void destory() {
+
     }
 
     /**

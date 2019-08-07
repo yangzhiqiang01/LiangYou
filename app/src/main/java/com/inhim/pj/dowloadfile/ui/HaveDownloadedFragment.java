@@ -21,15 +21,18 @@ import com.inhim.pj.R;
 import com.inhim.pj.dowloadfile.adapter.BaseRecyclerViewAdapter;
 import com.inhim.pj.dowloadfile.adapter.LimitDownloadAdapter;
 import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.limit.DownloadLimitManager;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
+import com.inhim.pj.view.LoadingView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +59,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     private TextView textview1, textview2;
     private CenterDialog centerDialog;
     private ExecutorService mLimitThreadPool;
+    private List<DownloadInfo> downloadInfoList;
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static HaveDownloadedFragment newInstance(int columnCount) {
@@ -78,6 +82,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         if (getActivity() != null) {
             getActivity().registerReceiver(srearchreceiver, filter);
         }
+        downloadInfoList=getDownloadListData();
         IntentFilter deleteFilter = new IntentFilter();
         deleteFilter.addAction("one.fragment.delete");
         //注册广播接收
@@ -95,25 +100,17 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         View outerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_deletes, null);
         Button btn_ok = outerView.findViewById(R.id.btn_ok);
         Button btn_cancel = outerView.findViewById(R.id.btn_cancel);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
-                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
-                    mDeviceHeaderMap.put(i, checkBox.isChecked());
-                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
-                }
+        btn_ok.setOnClickListener(v -> {
+            centerDialog.dismiss();
+            Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
+                CheckBox checkBox = layout.findViewById(R.id.checkbox);
+                mDeviceHeaderMap.put(i, checkBox.isChecked());
             }
+            deleteFiles(mDeviceHeaderMap);
         });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-            }
-        });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
         //防止弹出两个窗口
         if (centerDialog != null && centerDialog.isShowing()) {
             return;
@@ -123,6 +120,32 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         //将布局设置给Dialog
         centerDialog.setContentView(outerView);
         centerDialog.show();//显示对话框
+    }
+    public void deleteFiles(Map<Integer, Boolean> deleteMap){
+        LoadingView loadingView=new LoadingView();
+        loadingView.showLoading("删除中",getActivity());
+        for(int i=0;i<deleteMap.size();i++){
+            if (deleteMap.get(i)) {
+                try{
+                    File file = new File(downloadInfoList.get(i).getFilePath());
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try{
+                    DownloadLimitManager.getInstance().cancelDownload(downloadInfoList.get(i));
+                    downloadInfoList.get(i).delete();
+                    downloadInfoList.remove(i);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        loadingView.hideLoading();
+        loadingView=null;
+        downloadListAdapter.notifyDataSetChanged();
     }
 
     class DeleteReceiver extends BroadcastReceiver {
@@ -155,6 +178,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        //downloadListAdapter.pauseDowload();
         if (getActivity() != null) {
             getActivity().unregisterReceiver(srearchreceiver);
             getActivity().unregisterReceiver(deleteReceiver);
@@ -162,8 +186,7 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
     }
 
     public void initData() {
-
-        downloadListAdapter = new LimitDownloadAdapter(getActivity(),getDownloadListData());
+        downloadListAdapter = new LimitDownloadAdapter(getActivity(),downloadInfoList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(downloadListAdapter);
         downloadListAdapter.notifyDataSetChanged();
@@ -187,19 +210,11 @@ public class HaveDownloadedFragment extends Fragment implements BaseRecyclerView
         tvFile = view.findViewById(R.id.tvFile);
         textview1 = view.findViewById(R.id.textview1);
         textview2 = view.findViewById(R.id.textview2);
-        textview1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadListAdapter.setCheck(true, true);
-                downloadListAdapter.notifyDataSetChanged();
-            }
+        textview1.setOnClickListener(v -> {
+            downloadListAdapter.setCheck(true, true);
+            downloadListAdapter.notifyDataSetChanged();
         });
-        textview2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDiaglog();
-            }
-        });
+        textview2.setOnClickListener(v -> setDiaglog());
         tvFile.setText("存储路径:" + Urls.getFilePath());
         initData();
         return view;

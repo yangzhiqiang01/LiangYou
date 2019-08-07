@@ -75,50 +75,45 @@ public class ArticleActivity extends BaseActivity {
 
     private void initView() {
         checkbox = findViewById(R.id.checkbox);
-        checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoading("收藏中");
-                MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
-                myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
-                        new MyOkHttpClient.HttpCallBack() {
-                            @Override
-                            public void onError(Request request, IOException e) {
-                                hideLoading();
-                                if(checkbox.isChecked()){
-                                    checkbox.setChecked(false);
-                                }else{
-                                    checkbox.setChecked(true);
-                                }
+        checkbox.setOnClickListener(v -> {
+            MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
+            myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
+                    new MyOkHttpClient.HttpCallBack() {
+                        @Override
+                        public void onError(Request request, IOException e) {
+                            if(checkbox.isChecked()){
+                                checkbox.setChecked(false);
+                            }else{
+                                checkbox.setChecked(true);
                             }
+                        }
 
-                            @Override
-                            public void onSuccess(Request request, String result) {
-                                hideLoading();
-                                try {
-                                    JSONObject jsonObject=new JSONObject(result);
-                                    if(jsonObject.getInt("code")!=0){
-                                        BToast.showText(jsonObject.getString("msg"),false);
-                                        //收藏失败时将按钮状态还原
-                                        if(checkbox.isChecked()){
-                                            checkbox.setChecked(false);
-                                        }else{
-                                            checkbox.setChecked(true);
-                                        }
+                        @Override
+                        public void onSuccess(Request request, String result) {
+                            hideLoading();
+                            try {
+                                JSONObject jsonObject=new JSONObject(result);
+                                if(jsonObject.getInt("code")!=0){
+                                    BToast.showText(jsonObject.getString("msg"),false);
+                                    //收藏失败时将按钮状态还原
+                                    if(checkbox.isChecked()){
+                                        checkbox.setChecked(false);
                                     }else{
-                                        if(checkbox.isChecked()){
-                                            BToast.showText("收藏成功",true);
-                                        }else{
-                                            BToast.showText("已取消收藏",true);
-                                        }
+                                        checkbox.setChecked(true);
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                }else{
+                                    if(checkbox.isChecked()){
+                                        BToast.showText("收藏成功",true);
+                                    }else{
+                                        BToast.showText("已取消收藏",true);
+                                    }
                                 }
-
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        });
-            }
+
+                        }
+                    });
         });
         textview1 = findViewById(R.id.textview1);
         textview2 = findViewById(R.id.textview2);
@@ -133,19 +128,9 @@ public class ArticleActivity extends BaseActivity {
         // 开启 DOM storage API 功能
         webView.getSettings().setDomStorageEnabled(true);*/
         iv_share = findViewById(R.id.iv_share);
-        iv_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WXShareUtils.show(ArticleActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description);
-            }
-        });
+        iv_share.setOnClickListener(v -> WXShareUtils.show(ArticleActivity.this,Urls.shareH5(readerInfo.getReaderId()),title,description));
         iv_back=findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(v -> finish());
         textview=findViewById(R.id.textview);
     }
     @SuppressLint("SetJavaScriptEnabled")

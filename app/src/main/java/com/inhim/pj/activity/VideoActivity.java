@@ -1,5 +1,6 @@
 package com.inhim.pj.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,6 +41,8 @@ import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pili.pldroid.player.AVOptions;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
@@ -220,40 +223,51 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void dowload() {
-        //查找所有年龄小于25岁的人
-        List<DownloadInfo> person = null;
-        if(businessInfoDid!=null){
-            person = LitePal.where("url = ?", businessInfoDid.getUrl()).find(DownloadInfo.class);
-        }else{
-            try{
-                person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        if (videoFile.exists()||(person!=null&&person.size()>0)) {
-            BToast.showText("您已下载该视频");
-        } else {
-            try {
-                JSONObject jsonObject = new JSONObject(results);
-                DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
-                businessInfo.setFilePath(videoPath);
-                businessInfo.setProgress(0);
-                businessInfo.setProgressText("0");
-                businessInfo.setFileName(businessInfo.getUrl().substring(businessInfo.getUrl().lastIndexOf("/")));
-                businessInfo.setDownloadStatus("wait");
-                boolean istrue = businessInfo.save();
-                if (istrue) {
+        RxPermissions rxPermissions = new RxPermissions(VideoActivity.this);
+        rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {
+                //查找当前url文件是否正在下载中
+                List<DownloadInfo> person = null;
+                if(businessInfoDid!=null){
+                    person = LitePal.where("url = ?", businessInfoDid.getUrl()).find(DownloadInfo.class);
+                }else{
+                    try{
+                        person = LitePal.where("url = ?", readerInfo.getUrl()).find(DownloadInfo.class);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                if (videoFile.exists()) {
+                    BToast.showText("您已下载该视频");
+                } else if((person!=null&&person.size()>0)){
                     Intent intent = new Intent(VideoActivity.this, ListActivity.class);
                     startActivity(intent);
-                } else {
-                    BToast.showText("下载失败");
-                }
+                }else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(results);
+                        DownloadInfo businessInfo = gson.fromJson(jsonObject.getJSONObject("reader").toString(), DownloadInfo.class);
+                        businessInfo.setFilePath(videoPath);
+                        businessInfo.setProgress(0);
+                        businessInfo.setProgressText("0");
+                        businessInfo.setFileName(businessInfo.getUrl().substring(businessInfo.getUrl().lastIndexOf("/")));
+                        businessInfo.setDownloadStatus("wait");
+                        boolean istrue = businessInfo.save();
+                        if (istrue) {
+                            Intent intent = new Intent(VideoActivity.this, ListActivity.class);
+                            startActivity(intent);
+                        } else {
+                            BToast.showText("下载失败");
+                        }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                BToast.showText("读写权限被拒绝",true);
             }
-        }
+        });
+
     }
 
     @Override
@@ -361,69 +375,58 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     private void initView() {
         iv_share = findViewById(R.id.iv_share);
-        iv_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (businessInfoDid != null) {
-                    WXShareUtils.show(VideoActivity.this, Urls.shareH5(Integer.valueOf(businessInfoDid.getReaderId())), title, description);
-                } else {
-                    WXShareUtils.show(VideoActivity.this, Urls.shareH5(readerInfo.getReaderId()), title, description);
-                }
+        iv_share.setOnClickListener(v -> {
+            if (businessInfoDid != null) {
+                WXShareUtils.show(VideoActivity.this, Urls.shareH5(Integer.valueOf(businessInfoDid.getReaderId())), title, description);
+            } else {
+                WXShareUtils.show(VideoActivity.this, Urls.shareH5(readerInfo.getReaderId()), title, description);
             }
         });
         iv_back = findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(v -> finish());
         checkbox = findViewById(R.id.checkbox);
         mulu = findViewById(R.id.mulu);
         jiangyi = findViewById(R.id.jiangyi);
         viewPager = findViewById(R.id.viewpager);
         mJcVideoPlayerStandard = findViewById(R.id.jc_video);
         mJcVideoPlayerStandard.setListener(VideoActivity.this);
-        checkbox.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
-                myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
-                        new MyOkHttpClient.HttpCallBack() {
-                            @Override
-                            public void onError(Request request, IOException e) {
-                                if (checkbox.isChecked()) {
-                                    checkbox.setChecked(false);
-                                } else {
-                                    checkbox.setChecked(true);
-                                }
+        checkbox.setOnClickListener(v -> {
+            MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
+            myOkHttpClient.asyncJsonPost(Urls.collectionReader(readerInfo.getReaderId()), new HashMap(),
+                    new MyOkHttpClient.HttpCallBack() {
+                        @Override
+                        public void onError(Request request, IOException e) {
+                            if (checkbox.isChecked()) {
+                                checkbox.setChecked(false);
+                            } else {
+                                checkbox.setChecked(true);
                             }
+                        }
 
-                            @Override
-                            public void onSuccess(Request request, String result) {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(result);
-                                    if (jsonObject.getInt("code") != 0) {
-                                        BToast.showText(jsonObject.getString("msg"), false);
-                                        //收藏失败时将按钮状态还原
-                                        if(checkbox.isChecked()){
-                                            checkbox.setChecked(false);
-                                        }else{
-                                            checkbox.setChecked(true);
-                                        }
+                        @Override
+                        public void onSuccess(Request request, String result) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(result);
+                                if (jsonObject.getInt("code") != 0) {
+                                    BToast.showText(jsonObject.getString("msg"), false);
+                                    //收藏失败时将按钮状态还原
+                                    if(checkbox.isChecked()){
+                                        checkbox.setChecked(false);
                                     }else{
-                                        if(checkbox.isChecked()){
-                                            BToast.showText("收藏成功",true);
-                                        }else{
-                                            BToast.showText("已取消收藏",true);
-                                        }
+                                        checkbox.setChecked(true);
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                }else{
+                                    if(checkbox.isChecked()){
+                                        BToast.showText("收藏成功",true);
+                                    }else{
+                                        BToast.showText("已取消收藏",true);
+                                    }
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        });
-            }
+                        }
+                    });
         });
     }
 

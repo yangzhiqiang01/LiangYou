@@ -1,12 +1,10 @@
 package com.inhim.pj.activity;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.Manifest;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -15,6 +13,8 @@ import com.inhim.pj.app.BaseActivity;
 import com.inhim.pj.fragment.MyFragment;
 import com.inhim.pj.fragment.ReadingFragment;
 import com.inhim.pj.utils.StatusBarUtils;
+import com.inhim.pj.view.BToast;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 
@@ -34,13 +34,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         hideActionBar();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         initView();
+        rxPermissionWriteAndRead();
     }
 
     @Override
     public void destory() {
 
     }
-
+    private void rxPermissionWriteAndRead() {
+        RxPermissions rxPermissions = new RxPermissions(HomeActivity.this);
+        rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {
+            } else {
+                BToast.showText("读写权限被拒绝",true);
+            }
+        });
+    }
     private void initView() {
         viewPager=findViewById(R.id.viewPager);
         radio1=findViewById(R.id.radio1);

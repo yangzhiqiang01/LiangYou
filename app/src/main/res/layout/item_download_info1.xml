@@ -46,7 +46,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/base_dimen_0"
-            android:layout_marginTop="@dimen/base_dimen_0"
             android:layout_marginRight="@dimen/base_dimen_0"
             android:lines="2"
             android:ellipsize="end"
@@ -54,7 +53,7 @@
             android:textSize="@dimen/text_size_16"
             app:layout_constraintLeft_toRightOf="@+id/imageview1"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="@+id/imageview1"/>
 
         <TextView
             android:id="@+id/tv_status"

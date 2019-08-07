@@ -16,6 +16,8 @@ import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.utils.FileUtil;
 import com.inhim.pj.utils.GlideUtils;
 import com.inhim.pj.utils.ImageLoaderUtils;
+import com.inhim.pj.utils.ViewShowUtils;
+import com.inhim.pj.view.LoadingView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.litepal.LitePal;
@@ -114,17 +116,26 @@ public class DownloadListDidAdapter extends
         }
     }
     public void deleteFiles(Map<Integer, Boolean> deleteMap){
+        LoadingView loadingView=new LoadingView();
+        loadingView.showLoading("删除中",context);
         List<MyBusinessInfoDid> listInfo = getDownloadListData();
         for(int i=0;i<deleteMap.size();i++){
             if (deleteMap.get(i)) {
-                File file = new File(listInfo.get(i).getFilePath());
-                if(file.exists()){
-                    file.delete();
+                try{
+                    File file = new File(listInfo.get(i).getFilePath());
+                    if(file.exists()){
+                        file.delete();
+                    }
+                    //删除数据库movie表中id为1的记录
+                    listInfo.get(i).delete();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                //删除数据库movie表中id为1的记录
-                listInfo.get(i).delete();
+
             }
         }
+        loadingView.hideLoading();
+        loadingView=null;
         setData(getDownloadListData());
     }
     private List<MyBusinessInfoDid> getDownloadListData() {

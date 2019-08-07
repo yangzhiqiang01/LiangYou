@@ -120,25 +120,17 @@ public class DidNotDownloadFragment extends Fragment implements BaseRecyclerDidV
         View outerView = LayoutInflater.from( getActivity()).inflate(R.layout.dialog_deletes, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);
         Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-                Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
-                    CheckBox checkBox = layout.findViewById(R.id.checkbox);
-                    mDeviceHeaderMap.put(i, checkBox.isChecked());
-                    downloadListAdapter.deleteFiles(mDeviceHeaderMap);
-                }
+        btn_ok.setOnClickListener(v -> {
+            centerDialog.dismiss();
+            Map<Integer, Boolean> mDeviceHeaderMap = new HashMap<>();
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                ConstraintLayout layout = (ConstraintLayout) recyclerView.getChildAt(i);
+                CheckBox checkBox = layout.findViewById(R.id.checkbox);
+                mDeviceHeaderMap.put(i, checkBox.isChecked());
             }
+            downloadListAdapter.deleteFiles(mDeviceHeaderMap);
         });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-            }
-        });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
         //防止弹出两个窗口
         if (centerDialog !=null && centerDialog.isShowing()) {
             return;

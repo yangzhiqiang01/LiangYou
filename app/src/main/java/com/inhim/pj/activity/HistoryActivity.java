@@ -92,21 +92,13 @@ public class HistoryActivity extends BaseActivity {
         View outerView = LayoutInflater.from(HistoryActivity.this).inflate(R.layout.dialog_deletes, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);
         Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
-        TextView tv_title=findViewById(R.id.tv_title);
+        TextView tv_title=outerView.findViewById(R.id.tv_title);
         tv_title.setText("是否确认清空？");
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-                deleteAllHistory();
-            }
+        btn_ok.setOnClickListener(v -> {
+            centerDialog.dismiss();
+            deleteAllHistory();
         });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-            }
-        });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
         //防止弹出两个窗口
         if (centerDialog !=null && centerDialog.isShowing()) {
             return;
