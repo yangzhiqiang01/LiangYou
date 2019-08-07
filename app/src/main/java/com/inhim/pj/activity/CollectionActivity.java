@@ -164,6 +164,7 @@ public class CollectionActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.getInt("code") == 0) {
+                        refresh=true;
                         getCollectionList(TypeId);
                     } else {
                         BToast.showText(jsonObject.getString("msg"));

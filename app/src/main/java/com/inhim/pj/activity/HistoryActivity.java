@@ -124,6 +124,7 @@ public class HistoryActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.getInt("code") == 0) {
+                        refresh=true;
                         getHistoryList();
                     } else {
                         BToast.showText(jsonObject.getString("msg"));
