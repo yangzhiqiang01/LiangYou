@@ -127,6 +127,10 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0) {
                     resultData1=readerList.getPage().getList();
+                    if(null==resultData1||resultData1.size()==0){
+                        BToast.showText("未搜索到相关内容", false);
+                        return;
+                    }
                     lvResults.setVisibility(View.VISIBLE);
                     resultAdapter = new SearchAdapter(SearchActivity.this, resultData1,keyword);
                     lvResults.setAdapter(resultAdapter);
@@ -194,11 +198,18 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
      */
     @Override
     public void onSearch(String text) {
-        List<HistoricalRecordEntity> historicalRecordEntityList=new ArrayList<>();
-        HistoricalRecordEntity historicalRecordEntity=new HistoricalRecordEntity();
-        historicalRecordEntity.setText(text);
-        historicalRecordEntityList.add(historicalRecordEntity);
-        historicalRecordEntity.save();
+        //如果当前搜索字段已存在数据库中则不再重新加入
+        List<HistoricalRecordEntity>  person = LitePal.where("text = ?", text).find(HistoricalRecordEntity.class);
+        if((person==null||person.size()==0)){
+            List<HistoricalRecordEntity> historicalRecordEntityList=new ArrayList<>();
+            HistoricalRecordEntity historicalRecordEntity=new HistoricalRecordEntity();
+            historicalRecordEntity.setText(text);
+            historicalRecordEntityList.add(historicalRecordEntity);
+            historicalRecordEntity.save();
+            List<HistoricalRecordEntity> historList= LitePal.findAll(HistoricalRecordEntity.class);
+            hintAdapter = new SearchTwoAdapter(this, R.layout.listvie_popuwindow, historList);
+            searchView.setAutoCompleteAdapter(hintAdapter);
+        }
         getReaderList(text);
         lvResults.setVisibility(View.GONE);
     }

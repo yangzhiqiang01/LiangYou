@@ -21,6 +21,10 @@ import android.widget.TextView;
 import com.inhim.pj.R;
 import com.inhim.pj.entity.HistoricalRecordEntity;
 
+import org.litepal.LitePal;
+
+import java.util.List;
+
 /**
  * Created by hsmacmini on 2018/4/8.
  */
@@ -89,32 +93,26 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
         btnBack =  findViewById(R.id.tv_finish);
         lvTips = findViewById(R.id.search_lv_tips);
 
-        lvTips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //set edit text
-                HistoricalRecordEntity text = (HistoricalRecordEntity)lvTips.getAdapter().getItem(i);
-                etInput.setText(text.getText());
-                etInput.setSelection(text.getText().length());
-                //hint list view gone and result list view show
-                lvTips.setVisibility(View.GONE);
-                notifyStartSearching(text.getText());
-            }
+        lvTips.setOnItemClickListener((adapterView, view, i, l) -> {
+            //set edit text
+            HistoricalRecordEntity text = (HistoricalRecordEntity)lvTips.getAdapter().getItem(i);
+            etInput.setText(text.getText());
+            etInput.setSelection(text.getText().length());
+            //hint list view gone and result list view show
+            lvTips.setVisibility(View.GONE);
+            notifyStartSearching(text.getText());
         });
 
         ivDelete.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         etInput.addTextChangedListener(new EditChangedListener());
         etInput.setOnClickListener(this);
-        etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    lvTips.setVisibility(GONE);
-                    notifyStartSearching(etInput.getText().toString());
-                }
-                return true;
+        etInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                lvTips.setVisibility(GONE);
+                notifyStartSearching(etInput.getText().toString());
             }
+            return true;
         });
     }
 
@@ -139,6 +137,7 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
         if (lvTips.getAdapter() == null) {
             lvTips.setAdapter(mHintAdapter);
         }
+        lvTips.setVisibility(VISIBLE);
     }
 
     /**
@@ -179,7 +178,6 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
         public void afterTextChanged(Editable editable) {
         }
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -190,18 +188,20 @@ public class SearchView extends LinearLayout implements View.OnClickListener {
                 lvTips.setVisibility(VISIBLE);
                 mHintAdapter.notifyDataSetChanged();
                 break;
-            case R.id.search_iv_delete:
+           /* case R.id.search_iv_delete:
                 lvTips.setVisibility(View.GONE);
                 if (mListener != null) {
                     mListener.onTvSearch(etInput.getText().toString());
                 }
-                break;
+                break;*/
             case R.id.tv_finish:
                 ((Activity) mContext).finish();
                 break;
         }
     }
-
+    public interface AddHistoryListener{
+        void refresh();
+    }
     /**
      * search view回调方法
      */

@@ -119,7 +119,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                             tv_name.setText(userInfo.getUsername());
                         }
                         if(userInfo.getHeadimgurl()==null||"".equals(userInfo.getHeadimgurl())){
-                            ImageLoaderUtils.setImage(userInfo.getWechatUser().getHeadimgurl(),iv_photo);
+                            if(userInfo.getWechatUser()!=null&&userInfo.getWechatUser().getHeadimgurl()!=null
+                                    &&"".equals(userInfo.getWechatUser().getHeadimgurl())){
+                                ImageLoaderUtils.setImage(userInfo.getWechatUser().getHeadimgurl(),iv_photo);
+                            }
                         }else{
                             ImageLoaderUtils.setImage(userInfo.getHeadimgurl(),iv_photo);
                         }

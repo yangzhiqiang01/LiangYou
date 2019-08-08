@@ -61,12 +61,10 @@ public class SearchTwoAdapter extends ArrayAdapter{
 				TitleHolder normalHolder = new TitleHolder();
 				normalHolder.iv_delete=view.findViewById(R.id.iv_delete);
 				holder.lin_1.addView(view,0);
-				normalHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						LitePal.deleteAll(HistoricalRecordEntity.class);
-						notifyDataSetChanged();
-					}
+				normalHolder.iv_delete.setOnClickListener(v -> {
+					LitePal.deleteAll(HistoricalRecordEntity.class);
+					list.clear();
+					notifyDataSetChanged();
 				});
 			}
 
