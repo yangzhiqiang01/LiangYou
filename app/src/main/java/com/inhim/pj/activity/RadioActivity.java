@@ -81,7 +81,6 @@ public class RadioActivity extends BaseActivity implements
     }
     @Override
     public void onBindView() {
-        hideActionBar();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
@@ -93,9 +92,19 @@ public class RadioActivity extends BaseActivity implements
             getReaderInfo(getIntent().getIntExtra("ReaderId", 0));
         }
     }
-
     @Override
     public void destory() {
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hideActionBar();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         JCVideoPlayer.releaseAllVideos();
     }
 

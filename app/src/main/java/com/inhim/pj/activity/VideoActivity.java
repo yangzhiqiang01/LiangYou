@@ -96,7 +96,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void onBindView() {
-        hideActionBar();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         instance = this;
@@ -118,6 +117,16 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     @Override
     public void destory() {
         unregisterReceiver(srearchreceiver);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hideActionBar();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         JCVideoPlayer.releaseAllVideos();
     }
 
