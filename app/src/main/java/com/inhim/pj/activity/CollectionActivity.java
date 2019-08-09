@@ -93,37 +93,21 @@ public class CollectionActivity extends BaseActivity {
         collectionTypeList();
         TypeId = 0;
         getCollectionList(TypeId);
-        cb_doload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    showPopuwindow(CollectionActivity.this, cb_doload);
-                }
+        cb_doload.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                showPopuwindow(CollectionActivity.this, cb_doload);
             }
         });
-        textview1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.setCheck(true, true);
-                mAdapter.notifyDataSetChanged();
-                for (int i = 0; i < colleList.size(); i++) {
-                    vipCollectionIdsMap.put(i, colleList.get(i).getVipCollectionId());
-                }
+        textview1.setOnClickListener(v -> {
+            mAdapter.setCheck(true, true);
+            mAdapter.notifyDataSetChanged();
+            for (int i = 0; i < colleList.size(); i++) {
+                vipCollectionIdsMap.put(i, colleList.get(i).getVipCollectionId());
             }
         });
-        textview2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDiaglog();
-            }
-        });
+        textview2.setOnClickListener(v -> setDiaglog());
         ImageView iv_back = findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(v -> finish());
     }
 
     @Override

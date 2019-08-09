@@ -87,6 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showLoading(String text) {
         if (mProgressDialog == null) {
             mProgressDialog = new TransparentProgressDialog(this,text);
+            mProgressDialog.getWindow().setDimAmount(0f);
             mProgressDialog.setCancelable(false);
             mProgressDialog.setCanceledOnTouchOutside(false);
         }
@@ -155,7 +156,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             throw new IllegalArgumentException("offerLayout only be View or be Resource Id");
         }
-        //StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
+        StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
+        hideActionBar();
         return view;
     }
 

@@ -18,14 +18,10 @@ public class StartActivity extends BaseActivity {
     @Override
     public void onBindView() {
         if (Utils.isExistNetwork(this)) {
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    Intent intent=new Intent(StartActivity.this,HomeActivity.class);
-                    startActivity(intent);
-                }
-
+            new Handler().postDelayed(() -> {
+                Intent intent=new Intent(StartActivity.this,HomeActivity.class);
+                startActivity(intent);
+                finish();
             }, SPLASH_DISPLAY_LENGHT);
         } else {
             Utils.displayToast(this, "请检查网络……");

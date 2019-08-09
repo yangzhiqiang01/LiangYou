@@ -15,12 +15,9 @@ import com.inhim.pj.base.ClassicsHeader;
 import com.inhim.pj.entity.BannerList;
 import com.inhim.pj.entity.ReaderList;
 import com.inhim.pj.entity.ReaderStyle;
-import com.inhim.pj.entity.ReaderTypeList;
-import com.inhim.pj.entity.TitleAndSize;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.view.BToast;
-import com.inhim.pj.view.LoadingView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -51,7 +48,6 @@ public class ReadingTwoFragment extends Fragment {
     private int mPageNum = 1;
     private Boolean refresh = true;
     private ReaderStyle rederType;
-    private LoadingView loadingView;
     private String TAG="ReadingTwoFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +110,6 @@ public class ReadingTwoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getReaderStyle("special"), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                loadingView.hideLoading();
             }
 
             @Override
@@ -126,10 +121,8 @@ public class ReadingTwoFragment extends Fragment {
                         homeList.add(rederType);
                         getReaderList(rederType.getList().get(0));
                     }else{
-                        loadingView.hideLoading();
                     }
                 }else{
-                    loadingView.hideLoading();
                 }
             }
         });
@@ -145,12 +138,10 @@ public class ReadingTwoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(mPageNum, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                loadingView.hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
-                loadingView.hideLoading();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0&&readerList.getPage().getList().size()>0) {
                     homeList.addAll(readerList.getPage().getList());
@@ -194,8 +185,6 @@ public class ReadingTwoFragment extends Fragment {
     }
 
     private void getBannerList() {
-        loadingView=new LoadingView();
-        loadingView.showLoading("加载中",getActivity());
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(2), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {

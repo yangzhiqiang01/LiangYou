@@ -51,7 +51,6 @@ public class ListenFragment extends Fragment {
     private int mPageNum = 1;
     private Boolean refresh = true;
     private ReaderStyle.List rederType;
-    private LoadingView loadingView;
     private String TAG="ListenFragment";
     @Override
     public void onCreate (Bundle savedInstanceState){
@@ -110,8 +109,6 @@ public class ListenFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
     }
     private void getBannerList () {
-        loadingView=new LoadingView();
-        loadingView.showLoading("加载中",getActivity());
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(4), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
@@ -146,7 +143,6 @@ public class ListenFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(url, postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                loadingView.hideLoading();
             }
 
             @Override
@@ -159,10 +155,7 @@ public class ListenFragment extends Fragment {
                         getReaderList(readerTypeList.getPage().getList().get(i),i);
                     }
                 } else if(readerTypeList.getCode() != 0){
-                    loadingView.hideLoading();
                     BToast.showText(readerTypeList.getMsg(), false);
-                }else{
-                    loadingView.hideLoading();
                 }
             }
         });
@@ -180,7 +173,6 @@ public class ListenFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(Urls.getReaderList(1, 10,"desc"), postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                loadingView.hideLoading();
             }
 
             @Override
@@ -194,7 +186,6 @@ public class ListenFragment extends Fragment {
                     BToast.showText(readerList.getMsg(), false);
                 }
                 if(position==size-1){
-                    loadingView.hideLoading();
                     mAdapter.notifyDataSetChanged();
                 }
             }

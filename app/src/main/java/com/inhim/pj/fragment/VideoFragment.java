@@ -50,7 +50,6 @@ public class VideoFragment extends Fragment {
     private int mPageNum = 1;
     private Boolean refresh = true;
     private ReaderStyle.List rederType;
-    private LoadingView loadingView;
     private String TAG="VideoFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,12 +153,10 @@ public class VideoFragment extends Fragment {
         MyOkHttpClient.getInstance().asyncJsonPostNoToken(url,postMap, new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {
-                loadingView.hideLoading();
             }
 
             @Override
             public void onSuccess(Request request, String result) {
-                loadingView.hideLoading();
                 Gson gson = new Gson();
                 ReaderList readerList = gson.fromJson(result, ReaderList.class);
                 if (readerList.getCode() == 0&&readerList.getPage().getList().size()>0) {
@@ -176,8 +173,6 @@ public class VideoFragment extends Fragment {
     }
 
     private void getBannerList() {
-        loadingView=new LoadingView();
-        loadingView.showLoading("加载中",getActivity());
         MyOkHttpClient.getInstance().asyncGetNoToken(Urls.getBannerList(3), new MyOkHttpClient.HttpCallBack() {
             @Override
             public void onError(Request request, IOException e) {

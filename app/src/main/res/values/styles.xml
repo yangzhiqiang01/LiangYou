@@ -3,16 +3,17 @@
     tools:ignore="NewApi">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:typeface">serif</item>
+        <item name="android:textColor">@color/color333</item>
         <item name="android:fitsSystemWindows">true</item>
         <!--添加此属性会导致YCRefreshView闪退1-->
         <!--<item name="android:clipToPadding">false</item>-->
-        <item name="android:statusBarColor">@color/white</item>
+        <!--<item name="android:statusBarColor">@color/white</item>-->
     </style>
     <style name="tab_style">
         <item name="android:textSize">@dimen/text_size_20</item>
