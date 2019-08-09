@@ -58,7 +58,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
 
     @Override
     public void onBindView() {
-        hideActionBar();
         MyApplication.instance.addActivity(this);
         gson=new Gson();
         wxapi = WXAPIFactory.createWXAPI(this, MyApplication.appID);

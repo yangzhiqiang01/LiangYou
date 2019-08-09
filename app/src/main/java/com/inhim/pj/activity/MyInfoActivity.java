@@ -91,8 +91,6 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
         userInfo = (UserInfo.User) getIntent().getSerializableExtra("result");

@@ -39,8 +39,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson=new Gson();
         initView();
     }

@@ -89,8 +89,6 @@ public class SearchActivity extends BaseActivity implements SearchView.SearchVie
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initViews();
         //初始化热搜版数据

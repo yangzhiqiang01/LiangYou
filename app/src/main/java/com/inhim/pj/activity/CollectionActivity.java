@@ -80,8 +80,6 @@ public class CollectionActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         mRecyclerView = findViewById(R.id.onceTask_member_ycView);
         cb_doload = findViewById(R.id.cb_doload);
         lin_caozuo = findViewById(R.id.lin_caozuo);
@@ -243,19 +241,11 @@ public class CollectionActivity extends BaseActivity {
         View outerView = LayoutInflater.from(CollectionActivity.this).inflate(R.layout.dialog_deletes, null);
         Button btn_ok=outerView.findViewById(R.id.btn_ok);
         Button btn_cancel=outerView.findViewById(R.id.btn_cancel);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-                deleteCollection();
-            }
+        btn_ok.setOnClickListener(v -> {
+            centerDialog.dismiss();
+            deleteCollection();
         });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
-            }
-        });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
         //防止弹出两个窗口
         if (centerDialog !=null && centerDialog.isShowing()) {
             return;
@@ -274,82 +264,67 @@ public class CollectionActivity extends BaseActivity {
         mAdapter = new CollectionAdapter(this);
         mRecyclerView.setEmptyView(R.layout.empty_view_layout);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPageNum = 1;
-                refresh = true;
-                getCollectionList(TypeId);
-            }
+        mRecyclerView.setRefreshListener(() -> {
+            mPageNum = 1;
+            refresh = true;
+            getCollectionList(TypeId);
         });
 
         //设置上拉加载更多时布局，以及监听事件
-        mAdapter.setMore(R.layout.view_more, new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //可以做请求下一页操作
-                mPageNum++;
-                refresh=false;
-                getCollectionList(TypeId);
-            }
+        mAdapter.setMore(R.layout.view_more, () -> {
+            //可以做请求下一页操作
+            mPageNum++;
+            refresh=false;
+            getCollectionList(TypeId);
         });
-        mAdapter.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(int position) {
-                if (!isCheck) {
-                    isCheck = true;
-                    mAdapter.setCheck(isCheck, false);
-                    mAdapter.notifyDataSetChanged();
-                    lin_caozuo.setVisibility(View.VISIBLE);
-                } else {
-                    isCheck = false;
-                    mAdapter.setCheck(isCheck, false);
-                    mAdapter.notifyDataSetChanged();
-                    lin_caozuo.setVisibility(View.GONE);
-                }
-                return false;
+        mAdapter.setOnItemLongClickListener(position -> {
+            if (!isCheck) {
+                isCheck = true;
+                mAdapter.setCheck(isCheck, false);
+                mAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.VISIBLE);
+            } else {
+                isCheck = false;
+                mAdapter.setCheck(isCheck, false);
+                mAdapter.notifyDataSetChanged();
+                lin_caozuo.setVisibility(View.GONE);
             }
+            return false;
         });
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                CollectionList.List data=mAdapter.getAllData().get(position);
-                Intent intent;
-                if(data.getStatus()!=null&&data.getStatus().equals("0")){
+        mAdapter.setOnItemClickListener(position -> {
+            CollectionList.List data=mAdapter.getAllData().get(position);
+            Intent intent;
+            if(data.getStatus()!=null&&data.getStatus().equals("0")){
 
+            }else{
+                if(data.getReaderEntity().getType().equals("2")){
+                    intent=new Intent(CollectionActivity.this, VideoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                }else if(data.getReaderEntity().getType().equals("3")){
+                    intent=new Intent(CollectionActivity.this, RadioActivity.class);
                 }else{
-                    if(data.getReaderEntity().getType().equals("2")){
-                        intent=new Intent(CollectionActivity.this, VideoActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    }else if(data.getReaderEntity().getType().equals("3")){
-                        intent=new Intent(CollectionActivity.this, RadioActivity.class);
-                    }else{
-                        intent=new Intent(CollectionActivity.this, ArticleActivity.class);
-                    }
-                    intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
-                    startActivity(intent);
+                    intent=new Intent(CollectionActivity.this, ArticleActivity.class);
                 }
+                intent.putExtra("ReaderId",data.getReaderEntity().getReaderId());
+                startActivity(intent);
             }
         });
 
-        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(View view, int position) {
-                CollectionList.List collection = mAdapter.getAllData().get(position);
-                switch (view.getId()) {
-                    case R.id.checkbox:
-                        CheckBox checkBox = (CheckBox) view;
-                        if (checkBox.isChecked()) {
-                            vipCollectionIdsMap.put(position, collection.getVipCollectionId());
-                        } else {
-                            try {
-                                vipCollectionIdsMap.remove(position);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+        mAdapter.setOnItemChildClickListener((view, position) -> {
+            CollectionList.List collection = mAdapter.getAllData().get(position);
+            switch (view.getId()) {
+                case R.id.checkbox:
+                    CheckBox checkBox = (CheckBox) view;
+                    if (checkBox.isChecked()) {
+                        vipCollectionIdsMap.put(position, collection.getVipCollectionId());
+                    } else {
+                        try {
+                            vipCollectionIdsMap.remove(position);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        break;
-                }
+                    }
+                    break;
             }
         });
 
@@ -368,22 +343,20 @@ public class CollectionActivity extends BaseActivity {
         popupwindow.showAsDropDown(view1, 0, 0);
         //消失监听听
         popupwindow.setOnDismissListener(mDismissListener);
+        lin.setOnClickListener(v -> popupwindow.dismiss());
         MyGridView gridView = popupwindow_view.findViewById(R.id.gridView);
         popupwindowAdapter = new RadioGridViewAdapter(context);
         popupwindowAdapter.setSeclection(selectedPosition);//传值更新
         popupwindowAdapter.setData(typeList);//传数组, 并指定默认值
         gridView.setAdapter(popupwindowAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                popupwindowAdapter.setSeclection(position);//传值更新
-                popupwindowAdapter.notifyDataSetChanged();
-                CollectionTypeList.TypeList type = typeList.get(position);
-                TypeId = type.getReaderTypeId();
-                getCollectionList(TypeId);
-                selectedPosition=position;
-                popupwindow.dismiss();
-            }
+        gridView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            popupwindowAdapter.setSeclection(position);//传值更新
+            popupwindowAdapter.notifyDataSetChanged();
+            CollectionTypeList.TypeList type = typeList.get(position);
+            TypeId = type.getReaderTypeId();
+            getCollectionList(TypeId);
+            selectedPosition=position;
+            popupwindow.dismiss();
         });
     }
 

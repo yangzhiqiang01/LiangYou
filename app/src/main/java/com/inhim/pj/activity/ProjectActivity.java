@@ -41,8 +41,6 @@ public class ProjectActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         ycRefreshView=findViewById(R.id.ycRefreshView);
         tvCourse=findViewById(R.id.tvCourse);
         tvCourse.setText("系列专题");

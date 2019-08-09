@@ -56,8 +56,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         openId=getIntent().getStringExtra("openId");
         MyApplication.instance.addActivity(this);
         gson = new Gson();

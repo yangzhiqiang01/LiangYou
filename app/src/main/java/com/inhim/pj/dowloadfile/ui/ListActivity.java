@@ -45,8 +45,6 @@ public class ListActivity extends BaseActivity implements View.OnClickListener{
 
   @Override
   public void onBindView() {
-    hideActionBar();
-    StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
     initView();
     fs=new ArrayList<>();
     goOutFragment=new HaveDownloadedFragment();

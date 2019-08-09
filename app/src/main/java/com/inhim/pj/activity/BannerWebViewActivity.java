@@ -22,8 +22,6 @@ public class BannerWebViewActivity extends BaseActivity {
     }
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         url=getIntent().getStringExtra("url");
         initView();
     }

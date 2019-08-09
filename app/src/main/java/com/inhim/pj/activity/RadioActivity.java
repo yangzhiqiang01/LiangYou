@@ -81,7 +81,6 @@ public class RadioActivity extends BaseActivity implements
     }
     @Override
     public void onBindView() {
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
         businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
@@ -94,11 +93,6 @@ public class RadioActivity extends BaseActivity implements
     }
     @Override
     public void destory() {
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        hideActionBar();
     }
 
 

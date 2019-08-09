@@ -45,6 +45,7 @@ public class MyApplication extends LitePalApplication {
     public static IWXAPI api;
     private static Stack<Activity> activityStack;
     public static MyApplication instance;
+    public static boolean dark=true;
     @Override
     public void onCreate() {
         super.onCreate();

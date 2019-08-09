@@ -70,8 +70,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         MyApplication.instance.addActivity(this);
         gson = new Gson();
         if (PrefUtils.getBoolean("isLogin", false)) {

@@ -51,8 +51,6 @@ public class ProjectListActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson=new Gson();
         ycRefreshView=findViewById(R.id.ycRefreshView);
         readerstyle= (ReaderStyle.List) getIntent().getSerializableExtra("ReaderStyle");

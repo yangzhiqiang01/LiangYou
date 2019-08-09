@@ -17,7 +17,6 @@ public class StartActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
         if (Utils.isExistNetwork(this)) {
             new Handler().postDelayed(new Runnable() {
 

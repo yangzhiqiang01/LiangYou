@@ -60,8 +60,6 @@ public class HistoryActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         tv_clean=findViewById(R.id.tv_clean);
         tv_clean.setOnClickListener(new View.OnClickListener() {
             @Override

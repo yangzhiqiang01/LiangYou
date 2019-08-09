@@ -58,8 +58,6 @@ public class ReplacePhoneActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         initView();
     }

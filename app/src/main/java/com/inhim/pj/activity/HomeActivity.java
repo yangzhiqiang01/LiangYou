@@ -31,8 +31,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         initView();
         rxPermissionWriteAndRead();
     }

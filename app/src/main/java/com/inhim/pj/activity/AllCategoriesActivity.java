@@ -1,8 +1,5 @@
 package com.inhim.pj.activity;
 
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -15,7 +12,6 @@ import com.inhim.pj.base.ModeType;
 import com.inhim.pj.entity.ReaderTypeList;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
-import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -45,8 +41,6 @@ public class AllCategoriesActivity extends BaseActivity implements AllCategories
     }
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         categoriesList1 = new ArrayList();
         categoriesList2 = new ArrayList();
         categoriesList3 = new ArrayList();

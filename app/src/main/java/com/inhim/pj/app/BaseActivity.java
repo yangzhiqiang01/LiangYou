@@ -26,23 +26,11 @@ import android.widget.TextView;
 import com.inhim.pj.R;
 import com.inhim.pj.activity.LoginActivity;
 import com.inhim.pj.utils.FontUtils;
+import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.TransparentProgressDialog;
 @SuppressLint("Registered")
 public abstract class BaseActivity extends AppCompatActivity {
 
-    /**
-     * 修改状态栏颜色，支持4.4以上版本
-     * @param activity
-     * @param colorId
-     */
-    public static void setStatusBarColor(Activity activity, int colorId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = activity.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(colorId));
-        }
-    }
     /**
      * 沉浸式状态栏
      */
@@ -89,6 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             setContentView(mConvertView);
 //            StatusBarUtils.setWindowStatusBarColor(this,R.color.color9999);
             onBindView();
+            StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
         }
 //        EventBus.getDefault().register(this);
         alertDialog = new AlertDialog.Builder(this);

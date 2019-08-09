@@ -36,8 +36,6 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         initView();
     }
 

@@ -34,8 +34,6 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     public void onBindView() {
-        hideActionBar();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         Type=getIntent().getStringExtra("Type");
         initView();
         getAppAbout();

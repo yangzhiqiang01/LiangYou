@@ -96,7 +96,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void onBindView() {
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         gson = new Gson();
         instance = this;
         TAG=getIntent().getStringExtra("TAG");
@@ -117,11 +116,6 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
     @Override
     public void destory() {
         unregisterReceiver(srearchreceiver);
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        hideActionBar();
     }
 
     @Override
