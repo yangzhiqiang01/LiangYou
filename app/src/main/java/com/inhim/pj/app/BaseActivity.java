@@ -77,7 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             setContentView(mConvertView);
 //            StatusBarUtils.setWindowStatusBarColor(this,R.color.color9999);
             onBindView();
-            StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
         }
 //        EventBus.getDefault().register(this);
         alertDialog = new AlertDialog.Builder(this);
@@ -156,6 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             throw new IllegalArgumentException("offerLayout only be View or be Resource Id");
         }
+        //StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
         return view;
     }
 

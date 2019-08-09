@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activity.SettingActivity">
 
     <RelativeLayout
@@ -15,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/base_dimen_0"
+            android:padding="@dimen/base_dimen_0"
             android:src="@mipmap/back" />
 
         <TextView
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/base_dimen_5dp"
+            android:layout_margin="@dimen/base_dimen_0"
             android:text="设置"
             android:textColor="@color/color333"
             android:textSize="@dimen/text_size_18" />

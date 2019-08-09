@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activity.CollectionActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,6 +23,7 @@
             android:textColor="@color/color333"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_margin="@dimen/base_dimen_0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
