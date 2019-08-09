@@ -68,7 +68,7 @@ public class RadioActivity extends BaseActivity implements
     private CheckBox checkbox;
     private Gson gson;
     //下载得视频 课程
-    private DownloadInfo businessInfoDid;
+    private MyBusinessInfoDid businessInfoDid;
     WebView webView;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
@@ -83,7 +83,7 @@ public class RadioActivity extends BaseActivity implements
     public void onBindView() {
         gson = new Gson();
         initView();
-        businessInfoDid = (DownloadInfo) getIntent().getSerializableExtra("result");
+        businessInfoDid = (MyBusinessInfoDid) getIntent().getSerializableExtra("result");
         //判断 是已下载视频 且内存中视频未被删除
         if (businessInfoDid != null && (new File(businessInfoDid.getFilePath())).exists()) {
             loadDownloadContent(businessInfoDid);
@@ -101,7 +101,11 @@ public class RadioActivity extends BaseActivity implements
         super.onStop();
         JCVideoPlayer.releaseAllVideos();
     }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hideActionBar();
+    }
     private void getReaderInfo(int readerId) {
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
@@ -120,7 +124,7 @@ public class RadioActivity extends BaseActivity implements
         });
     }
 
-    private void loadDownloadContent(DownloadInfo businessInfoDid) {
+    private void loadDownloadContent(MyBusinessInfoDid businessInfoDid) {
         title=businessInfoDid.getTitle() ;
         description=businessInfoDid.getSynopsis();
         checkbox.setChecked(Boolean.valueOf(businessInfoDid.getCollectionStatus()));
@@ -141,7 +145,7 @@ public class RadioActivity extends BaseActivity implements
         name = readerInfo.getTitle();
         if (readerInfo.getUrl() != null) {
             videoUrl = readerInfo.getUrl();
-            vedioName = name + videoUrl.substring(videoUrl.length() - 4);
+            vedioName = readerInfo.getUrl().substring(readerInfo.getUrl().lastIndexOf("/"));
         }
         contents = readerInfo.getContent();
         photoUrl = readerInfo.getCover();

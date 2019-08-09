@@ -124,6 +124,12 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         JCVideoPlayer.releaseAllVideos();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hideActionBar();
+    }
+
     private void getReaderInfo(int readerId, final boolean isOne) {
         showLoading("加载中");
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
