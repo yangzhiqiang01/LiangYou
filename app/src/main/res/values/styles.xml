@@ -10,7 +10,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:typeface">serif</item>
         <item name="android:fitsSystemWindows">true</item>
-        <!--添加此属性会导致YCRefreshView闪退-->
+        <!--添加此属性会导致YCRefreshView闪退1-->
         <!--<item name="android:clipToPadding">false</item>-->
         <item name="android:statusBarColor">@color/white</item>
     </style>
