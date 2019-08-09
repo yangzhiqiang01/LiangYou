@@ -105,4 +105,5 @@ dependencies {
     implementation 'com.github.jarryleo:MagicScreenAdapter:v1.5'
     //设置字体
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.4'
 }
