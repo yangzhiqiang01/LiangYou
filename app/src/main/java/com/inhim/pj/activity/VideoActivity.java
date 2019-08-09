@@ -169,6 +169,7 @@ public class VideoActivity extends BaseActivity implements OnClickListener,
         fs = new ArrayList<>();
         JIangyiFragment jiangyiFm = new JIangyiFragment();
         MuluFragment muluFragment = new MuluFragment();
+        //监听目录列表点击切换视频 和文章内容
         muluFragment.setvedioLinear(VideoActivity.this);
         jiangyiFm.setArguments(jiangyiBl);
         muluFragment.setArguments(muluBl);
