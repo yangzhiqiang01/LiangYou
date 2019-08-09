@@ -47,13 +47,10 @@ public class VideoTypeItemProvider extends BaseItemProvider<ReaderTypeList.List,
             tv_title.setText(news.getName());
             tv_time.setText(news.getCreateTime());
             ConstraintLayout constran=helper.getView(R.id.constran);
-            constran.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(context, ProjectListActivity.class);
-                    intent.putExtra("ReaderTypeList",news);
-                    context.startActivity(intent);
-                }
+            constran.setOnClickListener(v -> {
+                Intent intent=new Intent(context, ProjectListActivity.class);
+                intent.putExtra("ReaderTypeList",news);
+                context.startActivity(intent);
             });
         }catch (Exception e){
             e.printStackTrace();

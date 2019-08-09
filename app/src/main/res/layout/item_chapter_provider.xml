@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/base_dimen_0"
         tools:ignore="MissingConstraints"/>
    <!-- <LinearLayout
         android:layout_width="match_parent"
