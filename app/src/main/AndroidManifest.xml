@@ -70,6 +70,7 @@
         <activity
             android:name=".activity.VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard|screenLayout"
+            android:theme="@style/VideoAppTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RadioActivity"

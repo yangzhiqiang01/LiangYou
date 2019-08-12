@@ -6,8 +6,8 @@ android {
         applicationId "com.inhim.pj"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex
         multiDexEnabled true

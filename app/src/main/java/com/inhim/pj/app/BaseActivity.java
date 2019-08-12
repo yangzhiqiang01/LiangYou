@@ -157,7 +157,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             throw new IllegalArgumentException("offerLayout only be View or be Resource Id");
         }
         StatusBarUtils.setLightStatusBar(this, MyApplication.dark);
-        hideActionBar();
+        try{
+            //视频页面在切换视频时会导致actionbar出现，这里使用noactionbar  them，再调用隐藏会导致错误
+            hideActionBar();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return view;
     }
 
@@ -187,7 +193,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 隐藏actionbar
      * */
     public void hideActionBar(){
-        getSupportActionBar().hide();
+        try{
+            getSupportActionBar().hide();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

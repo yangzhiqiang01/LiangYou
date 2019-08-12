@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -208,6 +207,7 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     public void onClick(View v) {
         super.onClick(v);
         int i = v.getId();
+
         if (i == R.id.thumb) {
 
 

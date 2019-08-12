@@ -15,7 +15,6 @@ import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.http.Urls;
 import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.utils.PrefUtils;
-import com.inhim.pj.utils.StatusBarUtils;
 import com.inhim.pj.view.BToast;
 import com.inhim.pj.view.CenterDialog;
 
@@ -49,18 +48,8 @@ public class SettingActivity extends BaseActivity {
         tv_size = findViewById(R.id.tv_size);
         tv_size.setText(FileUtils.getAutoFileOrFilesSize(Urls.getFilePath()));
         checkbox = findViewById(R.id.checkbox);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtils.putBoolean("isPlay", isChecked);
-            }
-        });
-        rela_clean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDiaglog();
-            }
-        });
+        checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> PrefUtils.putBoolean("isPlay", isChecked));
+        rela_clean.setOnClickListener(v -> setDiaglog());
     }
 
     private void setDiaglog() {
@@ -69,37 +58,29 @@ public class SettingActivity extends BaseActivity {
         Button btn_cancel = outerView.findViewById(R.id.btn_cancel);
         TextView tvTitle=outerView.findViewById(R.id.tv_title);
         tvTitle.setText("确定要清除缓存吗？");
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoading("删除中");
-                try{
-                    FileUtils.DeleteFile(new File(Urls.getFilePath()));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                try{
-                    LitePal.deleteAll(DownloadInfo.class);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                try{
-                    LitePal.deleteAll(MyBusinessInfoDid.class);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                //删除下载的信息
-                hideLoading();
-                tv_size.setText("0B");
-                BToast.showText("已删除缓存文件");
+        btn_ok.setOnClickListener(v -> {
+            showLoading("删除中");
+            try{
+                FileUtils.DeleteFile(new File(Urls.getFilePath()));
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerDialog.dismiss();
+            try{
+                LitePal.deleteAll(DownloadInfo.class);
+            }catch (Exception e){
+                e.printStackTrace();
             }
+            try{
+                LitePal.deleteAll(MyBusinessInfoDid.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            //删除下载的信息
+            hideLoading();
+            tv_size.setText("0B");
+            BToast.showText("已删除缓存文件");
         });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
         //防止弹出两个窗口
         if (centerDialog != null && centerDialog.isShowing()) {
             return;

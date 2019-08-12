@@ -39,7 +39,7 @@ public class MyApplication extends LitePalApplication {
     private ImageLoader imageLoader;
     public static String appID = "wx1562f6cc73ae0dcd";
     public static String AppSecret="085ca383ef4f07809817493c592fb88e";
-    public static final String APP_ID = "c60234e621"; // TODO 替换成bugly上注册的appid
+    public static final String APP_ID = "ba6fd4ed69"; // TODO 替换成bugly上注册的appid
     // TODO 自定义渠道
     public static final String APP_CHANNEL = "lyxy";
     public static IWXAPI api;

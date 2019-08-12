@@ -101,11 +101,6 @@ public class RadioActivity extends BaseActivity implements
         super.onStop();
         JCVideoPlayer.releaseAllVideos();
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        hideActionBar();
-    }
     private void getReaderInfo(int readerId) {
         MyOkHttpClient myOkHttpClient = MyOkHttpClient.getInstance();
         myOkHttpClient.asyncGet(Urls.getReaderInfo(readerId, PrefUtils.getString("token", "")), new MyOkHttpClient.HttpCallBack() {
