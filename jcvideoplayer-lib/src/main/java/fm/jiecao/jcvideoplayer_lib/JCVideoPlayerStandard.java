@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
-
 /**
  * Created by Nathen
  * On 2016/04/18 16:15
@@ -53,6 +52,7 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
     @Override
     public void init(Context context) {
         super.init(context);
+        WIFI_TIP_DIALOG_SHOWED=false;
         bottomProgressBar = findViewById(R.id.bottom_progress);
         titleTextView = findViewById(R.id.title);
         backButton = findViewById(R.id.back);

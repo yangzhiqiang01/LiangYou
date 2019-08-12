@@ -27,14 +27,18 @@ import com.inhim.pj.activity.MyInfoActivity;
 import com.inhim.pj.activity.SettingActivity;
 import com.inhim.pj.activity.WebViewActivity;
 import com.inhim.pj.app.MyApplication;
+import com.inhim.pj.dowloadfile.download.DownloadInfo;
+import com.inhim.pj.dowloadfile.download.MyBusinessInfoDid;
 import com.inhim.pj.dowloadfile.ui.ListActivity;
 import com.inhim.pj.entity.UserInfo;
 import com.inhim.pj.http.MyOkHttpClient;
 import com.inhim.pj.http.Urls;
+import com.inhim.pj.utils.FileUtils;
 import com.inhim.pj.utils.ImageLoaderUtils;
 import com.inhim.pj.utils.PrefUtils;
 import com.inhim.pj.utils.WXShareUtils;
 import com.inhim.pj.view.BToast;
+import com.inhim.pj.view.CenterDialog;
 import com.inhim.pj.view.LoadingView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -43,7 +47,9 @@ import com.tencent.bugly.beta.UpgradeInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -57,7 +63,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private LinearLayout lin_2,lin_3,lin_7,lin_4,lin_5,lin_6,lin_8;
     private Button btn_back_login;
     private Context mContext;
-    private TextView tv_setting,mycollection,dowload_list,tv_code;
+    private TextView tv_setting,mycollection,dowload_list,tv_code,lin_kj,clean;
 
     private UserInfo.User userInfo;
     private ImageView iv_photo;
@@ -68,6 +74,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private String title = "良友学院下载页";
     private String description = "请点击网页进入并点击右上角\"···\"按钮,在浏览器打开，下载。";
     private LoadingView loadingView;
+    private CenterDialog centerDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +150,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
+        lin_kj=view.findViewById(R.id.lin_kj);
+        lin_kj.setText(FileUtils.getAutoFileOrFilesSize(Urls.getFilePath()));
+        clean=view.findViewById(R.id.clean);
+        clean.setOnClickListener(this);
         rela1=view.findViewById(R.id.rela1);
         rela1.setOnClickListener(this);
         tv_name=view.findViewById(R.id.tv_name);
@@ -254,9 +265,56 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 }
 
                 break;
+            case R.id.clean:
+                setDiaglog();
+                break;
+                default:
+                    break;
         }
     }
+    private void setDiaglog() {
+        View outerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_deletes, null);
+        Button btn_ok = outerView.findViewById(R.id.btn_ok);
+        Button btn_cancel = outerView.findViewById(R.id.btn_cancel);
+        TextView tvTitle=outerView.findViewById(R.id.tv_title);
+        tvTitle.setText("确定要清除缓存吗？");
+        btn_ok.setOnClickListener(v -> {
+            centerDialog.dismiss();
+            if(loadingView==null){
+                loadingView=new LoadingView();
+            }
+            loadingView.showLoading("删除中",getActivity());
+            try{
+                FileUtils.DeleteFile(new File(Urls.getFilePath()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                LitePal.deleteAll(DownloadInfo.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            try{
+                LitePal.deleteAll(MyBusinessInfoDid.class);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            //删除下载的信息
+            loadingView.hideLoading();
+            lin_kj.setText("0B");
+            BToast.showText("已删除缓存文件");
+        });
+        btn_cancel.setOnClickListener(v -> centerDialog.dismiss());
+        //防止弹出两个窗口
+        if (centerDialog != null && centerDialog.isShowing()) {
+            return;
+        }
 
+        centerDialog = new CenterDialog(getActivity(), R.style.ActionSheetDialogBotoomStyle);
+        //将布局设置给Dialog
+        centerDialog.setContentView(outerView);
+        centerDialog.show();//显示对话框
+    }
     private void outLogin() {
         loadingView=new LoadingView();
         loadingView.showLoading("退出中",getActivity());
